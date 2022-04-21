@@ -18,7 +18,7 @@ public class Opcion implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idopcion;
 
-  @Column(length = 80)
+  @Column(length = 80, nullable = false)
   private String enunciadoopcion;
 
   private boolean respuesta;
