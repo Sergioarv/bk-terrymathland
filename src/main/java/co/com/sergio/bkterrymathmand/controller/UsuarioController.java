@@ -1,8 +1,15 @@
 package co.com.sergio.bkterrymathmand.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import co.com.sergio.bkterrymathmand.entity.Opcion;
+import co.com.sergio.bkterrymathmand.entity.Usuario;
+import co.com.sergio.bkterrymathmand.service.UsuarioService;
+import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @project bk-terrymathmand
@@ -15,4 +22,43 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/usuario")
 @CrossOrigin("*")
 public class UsuarioController {
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @GetMapping("/usuarionombre")
+    public ResponseEntity<Usuario> usuarioByNombre(@RequestParam(value = "nombre") String nombre) {
+
+        HttpStatus status = null;
+        Usuario data = null;
+
+        data = usuarioService.usuarioByNombre(nombre);
+
+        if (data != null) {
+            status = HttpStatus.OK;
+        } else {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(data, status);
+    }
+
+    @GetMapping("/opciones")
+    public ResponseEntity<GeneralResponse<List<Opcion>>> allOpciones(@RequestParam(value = "idpregunta") String idpregunta){
+
+        GeneralResponse<List<Opcion>> response = new GeneralResponse<>();
+        HttpStatus status = null;
+        List<Opcion> data = null;
+
+        data = usuarioService.opcionesQuery(idpregunta);
+
+        if (data != null) {
+            response.setData(data);
+            status = HttpStatus.OK;
+        } else {
+            status = HttpStatus.NOT_FOUND;
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
 }
