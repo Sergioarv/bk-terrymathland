@@ -23,6 +23,10 @@ public class Opcion implements Serializable {
 
   private boolean respuesta;
 
+  @ManyToOne
+  @JoinColumn(name = "idpregunta")
+  private Pregunta pregunta;
+
   /** Getter y Setter **/
 
   public int getIdopcion() {
@@ -48,4 +52,5 @@ public class Opcion implements Serializable {
   public void setRespuesta(boolean respuesta) {
     this.respuesta = respuesta;
   }
+
 }

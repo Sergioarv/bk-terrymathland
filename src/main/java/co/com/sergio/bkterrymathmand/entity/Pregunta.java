@@ -2,6 +2,7 @@ package co.com.sergio.bkterrymathmand.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @project bk-terrymathmand
@@ -23,21 +24,8 @@ public class Pregunta implements Serializable {
 
   private String urlImg;
 
-  @OneToOne
-  @JoinColumn(name = "opcionA", nullable = false)
-  private Opcion opcionA;
-
-  @OneToOne
-  @JoinColumn(name = "opcionB",nullable = false)
-  private Opcion opcionB;
-
-  @OneToOne
-  @JoinColumn(name = "opcionC", nullable = false)
-  private Opcion opcionC;
-
-  @OneToOne
-  @JoinColumn(name = "opcionD", nullable = false)
-  private Opcion opcionD;
+  @OneToMany(mappedBy = "pregunta")
+  private List<Opcion> opciones;
 
   /** Getter y Setter **/
 
@@ -57,36 +45,12 @@ public class Pregunta implements Serializable {
     this.enunciado = enunciado;
   }
 
-  public Opcion getOpcionA() {
-    return opcionA;
+  public List<Opcion> getOpciones() {
+    return opciones;
   }
 
-  public void setOpcionA(Opcion opcionA) {
-    this.opcionA = opcionA;
-  }
-
-  public Opcion getOpcionB() {
-    return opcionB;
-  }
-
-  public void setOpcionB(Opcion opcionB) {
-    this.opcionB = opcionB;
-  }
-
-  public Opcion getOpcionC() {
-    return opcionC;
-  }
-
-  public void setOpcionC(Opcion opcionC) {
-    this.opcionC = opcionC;
-  }
-
-  public Opcion getOpcionD() {
-    return opcionD;
-  }
-
-  public void setOpcionD(Opcion opcionD) {
-    this.opcionD = opcionD;
+  public void setOpciones(List<Opcion> opciones) {
+    this.opciones = opciones;
   }
 
   public String getUrlImg() {
