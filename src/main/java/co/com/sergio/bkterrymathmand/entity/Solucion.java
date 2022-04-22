@@ -26,5 +26,39 @@ public class Solucion implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idrespuesta")
-    private Respuesta idrespuesta;
+    private Respuesta respuesta;
+
+    /* Getter y Setter */
+
+    public int getIdsolucion() {
+        return idsolucion;
+    }
+
+    public void setIdsolucion(int idsolucion) {
+        this.idsolucion = idsolucion;
+    }
+
+    public String getEnunciadoPre() {
+        return enunciadoPre;
+    }
+
+    public void setEnunciadoPre(String enunciadoPre) {
+        this.enunciadoPre = enunciadoPre;
+    }
+
+    public String getRespuestaPre() {
+        return respuestaPre;
+    }
+
+    public void setRespuestaPre(String respuestaPre) {
+        this.respuestaPre = respuestaPre;
+    }
+
+    public String getRespuestaEst() {
+        return respuestaEst;
+    }
+
+    public void setRespuestaEst(String respuestaEst) {
+        this.respuestaEst = respuestaEst;
+    }
 }

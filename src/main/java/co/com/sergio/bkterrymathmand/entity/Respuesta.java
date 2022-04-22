@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @project bk-terrymathmand
@@ -23,7 +24,10 @@ public class Respuesta implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idusuario")
-    private Usuario idusuario;
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "respuesta")
+    private List<Solucion> soluciones;
 
     private int acertadas;
 
@@ -31,6 +35,8 @@ public class Respuesta implements Serializable {
 
     @DateTimeFormat(pattern = "%Y-%m-%d")
     private Date fecha;
+
+    /* Getter y Setter */
 
     public int getIdrespuesta() {
         return idrespuesta;
@@ -40,12 +46,28 @@ public class Respuesta implements Serializable {
         this.idrespuesta = idrespuesta;
     }
 
-    public Usuario getIdusuario() {
-        return idusuario;
+    public List<Solucion> getSoluciones() {
+        return soluciones;
     }
 
-    public void setIdusuario(Usuario idusuario) {
-        this.idusuario = idusuario;
+    public void setSoluciones(List<Solucion> soluciones) {
+        this.soluciones = soluciones;
+    }
+
+    public int getAcertadas() {
+        return acertadas;
+    }
+
+    public void setAcertadas(int acertadas) {
+        this.acertadas = acertadas;
+    }
+
+    public float getNota() {
+        return nota;
+    }
+
+    public void setNota(float nota) {
+        this.nota = nota;
     }
 
     public Date getFecha() {

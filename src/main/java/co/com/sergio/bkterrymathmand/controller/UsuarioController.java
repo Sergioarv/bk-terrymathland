@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.List;
 
@@ -25,6 +26,24 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @GetMapping
+    public ResponseEntity<GeneralResponse<List<Usuario>>> getAllUsuarios(){
+
+        GeneralResponse<List<Usuario>> response = new GeneralResponse<>();
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        List<Usuario> data = null;
+
+        data = usuarioService.getAllUsuarios();
+
+        if(data != null){
+            response.setData(data);
+            status = HttpStatus.OK;
+        }
+
+        return new ResponseEntity<>(response, status);
+
+    }
 
     @GetMapping("/usuarionombre")
     public ResponseEntity<Usuario> usuarioByNombre(@RequestParam(value = "nombre") String nombre) {

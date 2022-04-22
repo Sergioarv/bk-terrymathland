@@ -13,6 +13,8 @@ import java.util.List;
  **/
 public interface UsuarioService {
 
+  public List<Usuario> getAllUsuarios();
+
   public Usuario usuarioByNombre(String nombre);
 
   public List<Opcion> allOpciones();

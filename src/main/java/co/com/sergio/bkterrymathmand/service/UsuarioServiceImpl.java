@@ -26,6 +26,11 @@ public class UsuarioServiceImpl implements UsuarioService {
     private OpcionRepository opcionRepository;
 
     @Override
+    public List<Usuario> getAllUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
+    @Override
     public Usuario usuarioByNombre(String nombre) {
         return usuarioRepository.usuarioByNombre(nombre);
     }

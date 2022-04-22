@@ -2,6 +2,7 @@ package co.com.sergio.bkterrymathmand.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @project bk-terrymathmand
@@ -21,6 +22,11 @@ public class Usuario implements Serializable {
   @Column(nullable = false)
   private String nombre;
 
+  @OneToMany(mappedBy = "usuario")
+  private List<Respuesta> respuestas;
+
+  /* Getter y Setter */
+
   public int getIdusuario() {
     return idusuario;
   }
@@ -35,5 +41,13 @@ public class Usuario implements Serializable {
 
   public void setNombre(String nombre) {
     this.nombre = nombre;
+  }
+
+  public List<Respuesta> getRespuestas() {
+    return respuestas;
+  }
+
+  public void setRespuestas(List<Respuesta> respuestas) {
+    this.respuestas = respuestas;
   }
 }
