@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
+import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.RespuestaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,23 +62,34 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
+    @PutMapping
+    public ResponseEntity<Respuesta> saveRespuesta(@RequestBody Respuesta respuesta){
+
+        Respuesta data = null;
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        data = respuestaService.saveRespuesta(respuesta);
+
+        if(data != null){
+            status = HttpStatus.OK;
+        }
+
+        return new ResponseEntity<>(data, status);
+    }
     @GetMapping("/fechaUsuario")
-    public ResponseEntity<GeneralResponse<List<Respuesta>>> getRespuestaByFechaAndUsuario(
+    public ResponseEntity<Respuesta> getRespuestaByFechaAndUsuario(
             @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
             @RequestParam(value = "usuario") String usuario
     ) {
-
-        GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.NOT_FOUND;
-        List<Respuesta> data = null;
+        Respuesta data = null;
 
         data = respuestaService.getRespuestaByFechaAndUsuario(fecha, usuario);
 
         if (data != null) {
-            response.setData(data);
             status = HttpStatus.OK;
         }
 
-        return new ResponseEntity<>(response, status);
+        return new ResponseEntity<>(data, status);
     }
 }

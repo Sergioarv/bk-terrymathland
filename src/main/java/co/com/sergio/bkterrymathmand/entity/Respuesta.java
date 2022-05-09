@@ -77,4 +77,8 @@ public class Respuesta implements Serializable {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 }

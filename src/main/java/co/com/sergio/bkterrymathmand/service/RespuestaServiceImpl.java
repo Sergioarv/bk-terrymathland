@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
+import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,23 @@ public class RespuestaServiceImpl implements RespuestaService {
     }
 
     @Override
-    public List<Respuesta> getRespuestaByFechaAndUsuario(Date fecha, String usuario) {
+    public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String usuario) {
         return respuestaRepository.findRespuestaByFechaAndUsuario(fecha, usuario);
+    }
+
+    @Override
+    public Respuesta saveRespuesta(Respuesta respuesta) {
+
+        Respuesta data = respuestaRepository.findRespuestaByFechaAndUsuario(respuesta.getFecha(), usuario);
+
+        if(data != null ){
+            respuesta.setIdrespuesta(data.getIdrespuesta());
+        }
+
+        respuesta.setUsuario(usuario);
+
+        respuestaRepository.save(respuesta);
+
+        return null;
     }
 }

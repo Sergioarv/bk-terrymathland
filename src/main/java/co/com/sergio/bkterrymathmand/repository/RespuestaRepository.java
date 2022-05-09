@@ -18,5 +18,5 @@ import java.util.List;
 public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
     List<Respuesta> findRespuestaByFecha(Date fecha);
 
-    List<Respuesta> findRespuestaByFechaAndUsuario(Date fecha, String usuario);
+    Respuesta findRespuestaByFechaAndUsuario(Date fecha, String usuario);
 }

@@ -19,7 +19,7 @@ public class Pregunta implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idpregunta;
 
-  @Column(length = 120, nullable = false)
+  @Column(nullable = false)
   private String enunciado;
 
   private String urlImg;

@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
+import co.com.sergio.bkterrymathmand.entity.Usuario;
 
 import java.util.Date;
 import java.util.List;
@@ -18,5 +19,7 @@ public interface RespuestaService {
 
   public List<Respuesta> getRespuestaByFecha(Date fecha);
 
-  public List<Respuesta> getRespuestaByFechaAndUsuario(Date fecha, String usuario);
+  public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String usuario);
+
+  Respuesta saveRespuesta(Respuesta respuesta);
 }

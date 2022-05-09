@@ -53,4 +53,7 @@ public class Opcion implements Serializable {
     this.respuesta = respuesta;
   }
 
+  public void setPregunta(Pregunta pregunta) {
+    this.pregunta = pregunta;
+  }
 }
