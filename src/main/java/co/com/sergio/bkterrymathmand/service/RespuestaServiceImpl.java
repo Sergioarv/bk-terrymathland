@@ -33,20 +33,18 @@ public class RespuestaServiceImpl implements RespuestaService {
     }
 
     @Override
-    public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String usuario) {
-        return respuestaRepository.findRespuestaByFechaAndUsuario(fecha, usuario);
+    public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String idusuario) {
+        return respuestaRepository.findRespuestaByFechaAndUsuario(fecha, idusuario);
     }
 
     @Override
     public Respuesta saveRespuesta(Respuesta respuesta) {
 
-        Respuesta data = respuestaRepository.findRespuestaByFechaAndUsuario(respuesta.getFecha(), usuario);
+        Respuesta data = null;
 
         if(data != null ){
             respuesta.setIdrespuesta(data.getIdrespuesta());
         }
-
-        respuesta.setUsuario(usuario);
 
         respuestaRepository.save(respuesta);
 

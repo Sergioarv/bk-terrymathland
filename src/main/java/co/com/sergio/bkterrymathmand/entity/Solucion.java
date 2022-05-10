@@ -61,4 +61,8 @@ public class Solucion implements Serializable {
     public void setRespuestaEst(String respuestaEst) {
         this.respuestaEst = respuestaEst;
     }
+
+    public void setRespuesta(Respuesta respuesta) {
+        this.respuesta = respuesta;
+    }
 }

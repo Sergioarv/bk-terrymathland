@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Opcion;
+import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.UsuarioService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
@@ -43,6 +44,21 @@ public class UsuarioController {
 
         return new ResponseEntity<>(response, status);
 
+    }
+
+    @PutMapping(consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
+    public ResponseEntity<Usuario> saveUsuario(@RequestBody Usuario usuario){
+
+        Usuario u = null;
+        HttpStatus status = HttpStatus.NOT_FOUND;
+
+        u = usuarioService.saveUsuario(usuario);
+
+        if(u != null){
+            status = HttpStatus.OK;
+        }
+
+        return new ResponseEntity<>(u, status);
     }
 
     @GetMapping("/usuarionombre")

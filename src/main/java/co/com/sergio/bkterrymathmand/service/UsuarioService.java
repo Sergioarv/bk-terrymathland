@@ -13,11 +13,13 @@ import java.util.List;
  **/
 public interface UsuarioService {
 
-  public List<Usuario> getAllUsuarios();
+    public List<Usuario> getAllUsuarios();
 
-  public Usuario usuarioByNombre(String nombre);
+    public Usuario usuarioByNombre(String nombre);
 
-  public List<Opcion> allOpciones();
+    public List<Opcion> allOpciones();
 
-  public List<Opcion> opcionesQuery(String idpregunta);
+    public List<Opcion> opcionesQuery(String idpregunta);
+
+    public Usuario saveUsuario(Usuario usuario);
 }

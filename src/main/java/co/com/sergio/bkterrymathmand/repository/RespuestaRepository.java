@@ -2,6 +2,7 @@ package co.com.sergio.bkterrymathmand.repository;
 
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -18,5 +19,6 @@ import java.util.List;
 public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
     List<Respuesta> findRespuestaByFecha(Date fecha);
 
-    Respuesta findRespuestaByFechaAndUsuario(Date fecha, String usuario);
+    @Query(value = "select * from respuesta r where r.fecha = DATE_FORMAT(:fecha,\"%Y-%m-%d\") and r.idusuario = :idusuario", nativeQuery = true)
+    Respuesta findRespuestaByFechaAndUsuario(Date fecha, String idusuario);
 }

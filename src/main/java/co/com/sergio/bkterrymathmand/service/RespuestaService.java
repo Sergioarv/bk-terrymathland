@@ -19,7 +19,7 @@ public interface RespuestaService {
 
   public List<Respuesta> getRespuestaByFecha(Date fecha);
 
-  public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String usuario);
+  public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String idusuario);
 
   Respuesta saveRespuesta(Respuesta respuesta);
 }
