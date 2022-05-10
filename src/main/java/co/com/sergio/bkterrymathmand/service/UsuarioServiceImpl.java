@@ -2,15 +2,18 @@ package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Opcion;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
-import co.com.sergio.bkterrymathmand.entity.Solucion;
 import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.repository.OpcionRepository;
 import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
 import co.com.sergio.bkterrymathmand.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,6 +38,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private OpcionRepository opcionRepository;
 
+    @DateTimeFormat(pattern = "%Y-%m-%d")
+    Date fechaActual;
+
     @Override
     public List<Usuario> getAllUsuarios() {
         return usuarioRepository.findAll();
@@ -58,20 +64,26 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Override
     public Usuario saveUsuario(Usuario usuario) {
 
-        Respuesta data = respuestaRepository.findRespuestaByFechaAndUsuario(usuario.getRespuestas().get(0).getFecha(), String.valueOf(usuario.getIdusuario()));
+        LocalDate hoy = LocalDate.now();
+        fechaActual = java.sql.Date.valueOf(hoy);
+
+        Respuesta data = respuestaRepository.findRespuestaByFechaAndUsuario(fechaActual, String.valueOf(usuario.getIdusuario()));
+
+        usuario.getRespuestas().get(0).setFecha(fechaActual);
 
         if(data != null){
-            usuario.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
-            usuario.getRespuestas().get(0).setUsuario(usuario);
-
-            respuestaRepository.save(usuario.getRespuestas().get(0));
 
             for (int i = 0; i < data.getSoluciones().size(); i++) {
                 usuario.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(data.getSoluciones().get(i).getIdsolucion());
                 usuario.getRespuestas().get(0).getSoluciones().get(i).setRespuesta(data);
             }
 
-            solucionRepository.saveAll(usuario.getRespuestas().get(0).getSoluciones());
+            usuario.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(usuario.getRespuestas().get(0).getSoluciones()));
+
+            usuario.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
+            usuario.getRespuestas().get(0).setUsuario(usuario);
+
+            respuestaRepository.save(usuario.getRespuestas().get(0));
 
         }else{
             usuario.getRespuestas().get(0).setIdrespuesta(0);
@@ -84,7 +96,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                 usuario.getRespuestas().get(0).getSoluciones().get(i).setRespuesta(res);
             }
 
-            solucionRepository.saveAll(usuario.getRespuestas().get(0).getSoluciones());
+            usuario.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(usuario.getRespuestas().get(0).getSoluciones()));
         }
 
         return usuarioRepository.save(usuario);
