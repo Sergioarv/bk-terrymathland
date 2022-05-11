@@ -19,16 +19,13 @@ public class Pregunta implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idpregunta;
 
-  @Column(length = 80)
+  @Column(nullable = false)
   private String enunciado;
 
-  @OneToOne
-  @JoinColumn(name = "opcionA")
-  private Opcion opcionA;
+  private String urlImg;
 
-  @OneToOne
-  @JoinColumn(name = "opcionB")
-  private Opcion opcionB;
+  @OneToMany(mappedBy = "pregunta")
+  private List<Opcion> opciones;
 
   /** Getter y Setter **/
 
@@ -48,19 +45,19 @@ public class Pregunta implements Serializable {
     this.enunciado = enunciado;
   }
 
-  public Opcion getOpcionA() {
-    return opcionA;
+  public List<Opcion> getOpciones() {
+    return opciones;
   }
 
-  public void setOpcionA(Opcion opcionA) {
-    this.opcionA = opcionA;
+  public void setOpciones(List<Opcion> opciones) {
+    this.opciones = opciones;
   }
 
-  public Opcion getOpcionB() {
-    return opcionB;
+  public String getUrlImg() {
+    return urlImg;
   }
 
-  public void setOpcionB(Opcion opcionB) {
-    this.opcionB = opcionB;
+  public void setUrlImg(String urlImg) {
+    this.urlImg = urlImg;
   }
 }

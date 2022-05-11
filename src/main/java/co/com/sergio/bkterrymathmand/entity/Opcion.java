@@ -18,10 +18,14 @@ public class Opcion implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idopcion;
 
-  @Column(length = 80)
+  @Column(length = 80, nullable = false)
   private String enunciadoopcion;
 
   private boolean respuesta;
+
+  @ManyToOne
+  @JoinColumn(name = "idpregunta")
+  private Pregunta pregunta;
 
   /** Getter y Setter **/
 
@@ -47,5 +51,9 @@ public class Opcion implements Serializable {
 
   public void setRespuesta(boolean respuesta) {
     this.respuesta = respuesta;
+  }
+
+  public void setPregunta(Pregunta pregunta) {
+    this.pregunta = pregunta;
   }
 }
