@@ -2,6 +2,7 @@ package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Opcion;
+import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,24 +51,31 @@ public class EstudianteController {
     }
 
     @PutMapping(consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
-    public ResponseEntity<Estudiante> saveEstudiante(@RequestBody Estudiante estudiante){
+    public ResponseEntity<GeneralResponse<Estudiante>> saveEstudiante(@RequestBody Estudiante estudiante){
 
+        GeneralResponse response = new GeneralResponse();
         Estudiante nuevoEstudiante;
-        HttpStatus status = HttpStatus.NOT_FOUND;
+        HttpStatus status = HttpStatus.OK;
 
         nuevoEstudiante = estudianteService.saveEstudiante(estudiante);
 
         if(nuevoEstudiante != null){
-            status = HttpStatus.OK;
+            response.setData(nuevoEstudiante);
+            response.setSuccess(true);
+            response.setMessage("Estudiante actualizado con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("No se pudo actualizar el estudiante");
         }
 
-        return new ResponseEntity<>(nuevoEstudiante, status);
+        return new ResponseEntity<>(response, status);
     }
 
     @GetMapping("/estudiantenombre")
-    public ResponseEntity<GeneralResponse<Estudiante>> estudianteByNombre(@RequestParam(value = "nombre") String nombre) {
+    public ResponseEntity<GeneralResponse<Usuario>> estudianteByNombre(@RequestParam(value = "nombre") String nombre) {
 
-        GeneralResponse<Estudiante> response = new GeneralResponse<>();
+        GeneralResponse<Usuario> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
         Estudiante data;
 

@@ -29,14 +29,19 @@ public class DocenteController {
     public ResponseEntity<GeneralResponse<List<Docente>>> getAllDocente(){
 
         GeneralResponse<List<Docente>> response = new GeneralResponse<>();
-        HttpStatus status = HttpStatus.NOT_FOUND;
+        HttpStatus status = HttpStatus.OK;
         List<Docente> data = null;
 
         data = docenteService.getAllDocente();
 
         if(data != null){
             response.setData(data);
-            status = HttpStatus.OK;
+            response.setSuccess(true);
+            response.setMessage("Lista de docentes obtenida con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(true);
+            response.setMessage("La lista de docentes esta vacia");
         }
 
         return new ResponseEntity<>(response, status);
