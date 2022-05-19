@@ -1,7 +1,6 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
-import co.com.sergio.bkterrymathmand.entity.Usuario;
 
 import java.util.Date;
 import java.util.List;

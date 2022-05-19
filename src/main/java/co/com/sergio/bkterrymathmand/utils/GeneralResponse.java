@@ -12,11 +12,22 @@ public class GeneralResponse<T> implements Serializable {
 
     private T data;
 
+    private boolean success;
+
+    private String message;
+
     public GeneralResponse() {
     }
 
-    public GeneralResponse(T data) {
+    public GeneralResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
+
+    public GeneralResponse(T data, boolean success, String message) {
         this.data = data;
+        this.success = success;
+        this.message = message;
     }
 
     public T getData() {
@@ -25,5 +36,21 @@ public class GeneralResponse<T> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

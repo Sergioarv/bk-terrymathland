@@ -1,53 +1,51 @@
 package co.com.sergio.bkterrymathmand.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * @project bk-terrymathmand
  * @Author Sergio Abelardo Rodríguez Vásquez
  * @Email ingsergiorodriguezv@gmail.com
- * @Date 21/04/2022 11:44
+ * @Date 19/05/2022 10:41
  **/
 
+@Inheritance
 @Entity
 @Table(name = "usuario")
-public class Usuario implements Serializable {
+public class Usuario {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int idusuario;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idusuario;
 
-  @Column(nullable = false)
-  private String nombre;
+    @Column(nullable = false)
+    private String nombre;
 
-  @OneToMany(mappedBy = "usuario")
-  private List<Respuesta> respuestas;
+    public Usuario(int idusuario, String nombre) {
+        this.idusuario = idusuario;
+        this.nombre = nombre;
+    }
 
-  /* Getter y Setter */
+    public Usuario(String nombre) {
+        this.nombre = nombre;
+    }
 
-  public int getIdusuario() {
-    return idusuario;
-  }
+    public Usuario() {
+    }
 
-  public void setIdusuario(int idusuario) {
-    this.idusuario = idusuario;
-  }
+    public int getIdusuario() {
+        return idusuario;
+    }
 
-  public String getNombre() {
-    return nombre;
-  }
+    public void setIdusuario(int idusuario) {
+        this.idusuario = idusuario;
+    }
 
-  public void setNombre(String nombre) {
-    this.nombre = nombre;
-  }
+    public String getNombre() {
+        return nombre;
+    }
 
-  public List<Respuesta> getRespuestas() {
-    return respuestas;
-  }
-
-  public void setRespuestas(List<Respuesta> respuestas) {
-    this.respuestas = respuestas;
-  }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 }
