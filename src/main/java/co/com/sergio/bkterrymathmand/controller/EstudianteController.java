@@ -88,7 +88,7 @@ public class EstudianteController {
         }else{
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("El parametro buscado no existe en la base de datos");
+            response.setMessage("El parametro buscado no existe en la base de datos, por favor verificar");
         }
 
         return new ResponseEntity<>(response, status);

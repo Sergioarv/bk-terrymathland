@@ -1,7 +1,7 @@
 package co.com.sergio.bkterrymathmand.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @project bk-terrymathmand
@@ -11,7 +11,7 @@ import javax.persistence.Entity;
  **/
 
 @Entity
-public class Docente extends Usuario{
+public class Docente extends Usuario {
 
   @Column(nullable = false)
   private String correo;
