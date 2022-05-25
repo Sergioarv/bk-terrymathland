@@ -1,7 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
-import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.RespuestaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;

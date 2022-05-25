@@ -24,7 +24,7 @@ public class Respuesta implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "idusuario")
-    private Usuario usuario;
+    private Estudiante estudiante;
 
     @OneToMany(mappedBy = "respuesta")
     private List<Solucion> soluciones;
@@ -79,7 +79,7 @@ public class Respuesta implements Serializable {
         this.fecha = fecha;
     }
 
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setUsuario(Estudiante estudiante) {
+        this.estudiante = estudiante;
     }
 }

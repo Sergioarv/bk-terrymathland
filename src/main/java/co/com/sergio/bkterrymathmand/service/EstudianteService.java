@@ -1,7 +1,7 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Opcion;
-import co.com.sergio.bkterrymathmand.entity.Usuario;
+import co.com.sergio.bkterrymathmand.entity.Estudiante;
 
 import java.util.List;
 
@@ -11,15 +11,15 @@ import java.util.List;
  * @Email ingsergiorodriguezv@gmail.com
  * @Date 22/04/2022 11:32
  **/
-public interface UsuarioService {
+public interface EstudianteService {
 
-    public List<Usuario> getAllUsuarios();
+    public List<Estudiante> getAllEstudiantes();
 
-    public Usuario usuarioByNombre(String nombre);
+    public Estudiante estudianteByNombre(String nombre);
 
     public List<Opcion> allOpciones();
 
     public List<Opcion> opcionesQuery(String idpregunta);
 
-    public Usuario saveUsuario(Usuario usuario);
+    public Estudiante saveEstudiante(Estudiante estudiante);
 }
