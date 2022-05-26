@@ -12,6 +12,7 @@ import java.util.List;
  **/
 
 @Entity
+@DiscriminatorValue(value = "estudiante")
 public class Estudiante extends Usuario{
 
   @OneToMany(mappedBy = "estudiante")

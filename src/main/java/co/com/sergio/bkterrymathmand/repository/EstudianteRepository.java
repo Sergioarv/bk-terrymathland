@@ -15,6 +15,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface EstudianteRepository extends JpaRepository<Estudiante, Integer> {
 
-    @Query(value = "select * from estudiante as e where e.nombre = :nombre", nativeQuery = true)
+    @Query(value = "select * from usuario as e where e.nombre = :nombre", nativeQuery = true)
     public Estudiante estudianteByNombre(String nombre);
 }

@@ -12,7 +12,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "usuario")
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo", discriminatorType = DiscriminatorType.STRING)
 public class Usuario implements Serializable {
 
     @Id

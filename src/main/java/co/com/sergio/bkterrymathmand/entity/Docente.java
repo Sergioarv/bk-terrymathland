@@ -11,6 +11,7 @@ import java.io.Serializable;
  **/
 
 @Entity
+@DiscriminatorValue(value = "docente")
 public class Docente extends Usuario {
 
   @Column(nullable = false)
