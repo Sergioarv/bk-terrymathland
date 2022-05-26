@@ -53,7 +53,7 @@ public class EstudianteController {
     @PutMapping(consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
     public ResponseEntity<GeneralResponse<Estudiante>> saveEstudiante(@RequestBody Estudiante estudiante){
 
-        GeneralResponse response = new GeneralResponse();
+        GeneralResponse<Estudiante> response = new GeneralResponse<>();
         Estudiante nuevoEstudiante;
         HttpStatus status = HttpStatus.OK;
 

@@ -1,7 +1,8 @@
 package co.com.sergio.bkterrymathmand.entity;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 /**
  * @project bk-terrymathmand
