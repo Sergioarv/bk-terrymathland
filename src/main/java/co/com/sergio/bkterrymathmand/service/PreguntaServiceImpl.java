@@ -26,4 +26,41 @@ public class PreguntaServiceImpl implements PreguntaService {
     public List<Pregunta> findAllPregunta() {
         return preguntaRepository.findAll();
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pregunta> filtrarPorId(int id) {
+        return preguntaRepository.filtrarPorId(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pregunta> filtrarPor(String filtro) {
+        return preguntaRepository.filtrarPor(filtro);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado) {
+        return preguntaRepository.filtrarPorIdOEnunciado(id, enunciado);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pregunta> filtrarPregunta(String id, String enunciado) {
+
+        List<Pregunta> listResult = null;
+
+        if(id != null && enunciado != null){
+            listResult = filtrarPorIdOEnunciado(Integer.parseInt(id), enunciado);
+        }else if(id != null){
+            listResult = filtrarPorId(Integer.parseInt(id));
+        }else if( enunciado != null){
+            listResult = filtrarPor(enunciado);
+        }else{
+            listResult = findAllPregunta();
+        }
+
+        return listResult;
+    }
 }
