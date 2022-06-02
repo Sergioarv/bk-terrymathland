@@ -33,7 +33,7 @@ public class Respuesta implements Serializable {
 
     private float nota;
 
-    @DateTimeFormat(pattern = "%Y-%m-%d")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date fecha;
 

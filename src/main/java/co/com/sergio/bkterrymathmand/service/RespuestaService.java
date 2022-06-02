@@ -18,7 +18,7 @@ public interface RespuestaService {
 
   public List<Respuesta> getRespuestaByFecha(Date fecha);
 
-  public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String idusuario);
+  public Respuesta getRespuestaByFechaAndUsuario(Date fecha, int idusuario);
 
   Respuesta saveRespuesta(Respuesta respuesta);
 }

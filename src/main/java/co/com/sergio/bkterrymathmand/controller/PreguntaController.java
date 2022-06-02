@@ -1,15 +1,13 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
+import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.service.PreguntaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,19 +29,57 @@ public class PreguntaController {
   @GetMapping
   public ResponseEntity<GeneralResponse<List<Pregunta>>> getPreguntas(){
 
-    GeneralResponse<List<Pregunta>> response = new GeneralResponse<>();
-    List<Pregunta> data;
-    HttpStatus status;
+    GeneralResponse<List<Pregunta>> response = new GeneralResponse();
+    List<Pregunta> data = null;
+    HttpStatus status = HttpStatus.OK;
 
     data = preguntaService.findAllPregunta();
 
+
     if(data != null){
-      status = HttpStatus.OK;
       response.setData(data);
+      response.setSuccess(true);
+      response.setMessage("Lista de preguntas obtenida con exito");
     }else{
-      status = HttpStatus.NOT_FOUND;
+      response.setData(null);
+      response.setSuccess(false);
+      response.setMessage("La lista de preguntas esta vacia");
     }
 
     return new ResponseEntity<>(response, status);
   }
+
+  @GetMapping("/filtrar")
+  public ResponseEntity<GeneralResponse<List<Pregunta>>> filtrar(
+          @RequestParam(value = "id", required = false) String id,
+          @RequestParam(value = "enunciado", required = false) String enunciado ){
+
+    GeneralResponse<List<Pregunta>> response = new GeneralResponse<>();
+    HttpStatus status = HttpStatus.OK;
+    List<Pregunta> data = null;
+
+    data = preguntaService.filtrarPregunta(id, enunciado);
+
+    if(data != null){
+        response.setData(data);
+        response.setSuccess(true);
+
+        if(data.size() > 1){
+            response.setMessage("Lista de preguntas obtenida con exito");
+        }else if(data.size() == 1){
+            response.setMessage("Preguntaa obtenida con exito");
+        }else{
+            response.setSuccess(false);
+            response.setMessage("No se encontro ninguna pregunta");
+        }
+    }else{
+      response.setData(null);
+      response.setSuccess(false);
+      response.setMessage("La lista de preguntas esta vacia");
+    }
+
+    return new ResponseEntity<>(response, status);
+
+  }
+
 }

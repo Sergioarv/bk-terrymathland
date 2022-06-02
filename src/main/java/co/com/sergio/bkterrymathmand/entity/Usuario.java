@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @project bk-terrymathmand
@@ -9,29 +10,19 @@ import javax.persistence.*;
  * @Date 19/05/2022 10:41
  **/
 
-@Inheritance
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+public class Usuario implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idusuario")
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private int idusuario;
 
     @Column(nullable = false)
     private String nombre;
-
-    public Usuario(int idusuario, String nombre) {
-        this.idusuario = idusuario;
-        this.nombre = nombre;
-    }
-
-    public Usuario(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Usuario() {
-    }
 
     public int getIdusuario() {
         return idusuario;

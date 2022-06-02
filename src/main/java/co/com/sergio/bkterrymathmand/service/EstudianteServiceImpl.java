@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Opcion;
+import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.repository.OpcionRepository;
@@ -37,6 +38,9 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Autowired
     private OpcionRepository opcionRepository;
 
+    @Autowired
+    private PreguntaService preguntaService;
+
     @DateTimeFormat(pattern = "%Y-%m-%d")
     Date fechaActual;
 
@@ -66,31 +70,34 @@ public class EstudianteServiceImpl implements EstudianteService {
         LocalDate hoy = LocalDate.now();
         fechaActual = java.sql.Date.valueOf(hoy);
 
-        Respuesta data = respuestaRepository.findRespuestaByFechaAndUsuario(fechaActual, String.valueOf(estudiante.getIdusuario()));
+        Respuesta data = respuestaRepository.findRespuestaByFechaAndUsuario(fechaActual, estudiante.getIdusuario());
 
         estudiante.getRespuestas().get(0).setFecha(fechaActual);
 
         if(data != null){
 
-            for (int i = 0; i < data.getSoluciones().size(); i++) {
-                estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(data.getSoluciones().get(i).getIdsolucion());
-                estudiante.getRespuestas().get(0).getSoluciones().get(i).setRespuesta(data);
+            if(estudiante.getRespuestas().get(0).getNota() >= data.getNota()) {
+
+                for (int i = 0; i < data.getSoluciones().size(); i++) {
+                    estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(data.getSoluciones().get(i).getIdsolucion());
+                    estudiante.getRespuestas().get(0).getSoluciones().get(i).setRespuesta(data);
+                }
+
+                estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
+
+                estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
+                estudiante.getRespuestas().get(0).setUsuario(estudiante);
+
+                respuestaRepository.save(estudiante.getRespuestas().get(0));
             }
-
-            estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
-
-            estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
-            estudiante.getRespuestas().get(0).setUsuario(estudiante);
-
-            respuestaRepository.save(estudiante.getRespuestas().get(0));
-
         }else{
             estudiante.getRespuestas().get(0).setIdrespuesta(0);
             estudiante.getRespuestas().get(0).setUsuario(estudiante);
 
             Respuesta res = respuestaRepository.save(estudiante.getRespuestas().get(0));
+            List<Pregunta> pre = preguntaService.findAllPregunta();
 
-            for (int i = 0; i < estudiante.getRespuestas().get(0).getSoluciones().size(); i++) {
+            for (int i = 0; i < pre.size(); i++) {
                 estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(0);
                 estudiante.getRespuestas().get(0).getSoluciones().get(i).setRespuesta(res);
             }

@@ -18,7 +18,7 @@ import java.util.List;
 @Repository
 public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
     List<Respuesta> findRespuestaByFecha(Date fecha);
-
-    @Query(value = "select * from respuesta r where r.fecha = DATE_FORMAT(:fecha,\"%Y-%m-%d\") and r.idusuario = :idusuario", nativeQuery = true)
-    Respuesta findRespuestaByFechaAndUsuario(Date fecha, String idusuario);
+// DATE_FORMAT(:fecha, \"%Y-%m-%d\")"
+    @Query(value = "select * from respuesta r where r.fecha = :fechaS and r.idusuario = :idusuario", nativeQuery = true)
+    Respuesta findRespuestaByFechaAndUsuario(Date fechaS, int idusuario);
 }

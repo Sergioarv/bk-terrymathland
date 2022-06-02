@@ -78,7 +78,7 @@ public class RespuestaController {
     @GetMapping("/fechaUsuario")
     public ResponseEntity<Respuesta> getRespuestaByFechaAndUsuario(
             @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
-            @RequestParam(value = "usuario") String idusuario
+            @RequestParam(value = "usuario") int idusuario
     ) {
         HttpStatus status = HttpStatus.NOT_FOUND;
         Respuesta data = null;

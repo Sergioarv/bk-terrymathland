@@ -32,7 +32,7 @@ public class RespuestaServiceImpl implements RespuestaService {
     }
 
     @Override
-    public Respuesta getRespuestaByFechaAndUsuario(Date fecha, String idusuario) {
+    public Respuesta getRespuestaByFechaAndUsuario(Date fecha, int idusuario) {
         return respuestaRepository.findRespuestaByFechaAndUsuario(fecha, idusuario);
     }
 
