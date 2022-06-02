@@ -12,7 +12,6 @@ import javax.persistence.Entity;
  **/
 
 @Entity
-@DiscriminatorValue(value = "docente")
 public class Docente extends Usuario {
 
   @Column(nullable = false)

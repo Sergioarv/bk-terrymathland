@@ -10,10 +10,10 @@ import java.io.Serializable;
  * @Date 19/05/2022 10:41
  **/
 
-@Entity
-@Table(name = "usuario")
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
+
+
+@MappedSuperclass
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Usuario implements Serializable {
 
     @Id
