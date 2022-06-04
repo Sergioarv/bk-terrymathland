@@ -1,6 +1,8 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.entity.Opcion;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
+import co.com.sergio.bkterrymathmand.repository.OpcionRepository;
 import co.com.sergio.bkterrymathmand.repository.PreguntaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class PreguntaServiceImpl implements PreguntaService {
 
     @Autowired
     private PreguntaRepository preguntaRepository;
+
+    @Autowired
+    private OpcionRepository opcionRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -49,7 +54,7 @@ public class PreguntaServiceImpl implements PreguntaService {
     @Transactional(readOnly = true)
     public List<Pregunta> filtrarPregunta(String id, String enunciado) {
 
-        List<Pregunta> listResult = null;
+        List<Pregunta> listResult;
 
         if(id != null && enunciado != null){
             listResult = filtrarPorIdOEnunciado(Integer.parseInt(id), enunciado);
@@ -62,5 +67,21 @@ public class PreguntaServiceImpl implements PreguntaService {
         }
 
         return listResult;
+    }
+
+    @Override
+    public Pregunta editarPregunta(Pregunta pregunta) {
+
+        List<Opcion> result;
+        Pregunta newPregunta = null;
+        result = opcionRepository.saveAll(pregunta.getOpciones());
+
+        if(result != null){
+            newPregunta = preguntaRepository.save(pregunta);
+        }else{
+            newPregunta.setOpciones(null);
+        }
+
+        return newPregunta;
     }
 }

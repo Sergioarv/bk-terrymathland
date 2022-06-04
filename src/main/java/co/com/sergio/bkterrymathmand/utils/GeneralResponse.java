@@ -19,17 +19,6 @@ public class GeneralResponse<T> implements Serializable {
     public GeneralResponse() {
     }
 
-    public GeneralResponse(boolean success, String message) {
-        this.success = success;
-        this.message = message;
-    }
-
-    public GeneralResponse(T data, boolean success, String message) {
-        this.data = data;
-        this.success = success;
-        this.message = message;
-    }
-
     public T getData() {
         return data;
     }

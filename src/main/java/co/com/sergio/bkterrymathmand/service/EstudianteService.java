@@ -13,13 +13,9 @@ import java.util.List;
  **/
 public interface EstudianteService {
 
-    public List<Estudiante> getAllEstudiantes();
+    List<Estudiante> getAllEstudiantes();
 
-    public Estudiante estudianteByNombre(String nombre);
+    Estudiante estudianteByNombre(String nombre);
 
-    public List<Opcion> allOpciones();
-
-    public List<Opcion> opcionesQuery(String idpregunta);
-
-    public Estudiante saveEstudiante(Estudiante estudiante);
+    Estudiante saveEstudiante(Estudiante estudiante);
 }

@@ -12,9 +12,9 @@ import java.util.List;
  **/
 public interface DocenteService {
 
-    public List<Docente> getAllDocente();
+    List<Docente> getAllDocente();
 
-    public Docente docenteByNombre(String nombre);
+    Docente docenteByNombre(String nombre);
 
-    public Docente saveDocente(Docente docente);
+    Docente saveDocente(Docente docente);
 }

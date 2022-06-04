@@ -32,7 +32,7 @@ public class RespuestaController {
 
         GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.NOT_FOUND;
-        List<Respuesta> data = null;
+        List<Respuesta> data;
 
         data = respuestaService.getAllRespuesta();
 
@@ -49,7 +49,7 @@ public class RespuestaController {
 
         GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.NOT_FOUND;
-        List<Respuesta> data = null;
+        List<Respuesta> data;
 
         data = respuestaService.getRespuestaByFecha(fecha);
 
@@ -61,27 +61,13 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
-//    @PutMapping
-//    public ResponseEntity<Respuesta> saveRespuesta(@RequestBody Respuesta respuesta){
-//
-//        Respuesta data = null;
-//        HttpStatus status = HttpStatus.NOT_FOUND;
-//
-//        data = respuestaService.saveRespuesta(respuesta);
-//
-//        if(data != null){
-//            status = HttpStatus.OK;
-//        }
-//
-//        return new ResponseEntity<>(data, status);
-//    }
-    @GetMapping("/fechaUsuario")
+@GetMapping("/fechaUsuario")
     public ResponseEntity<Respuesta> getRespuestaByFechaAndUsuario(
             @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
             @RequestParam(value = "usuario") int idusuario
     ) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        Respuesta data = null;
+        Respuesta data;
 
         data = respuestaService.getRespuestaByFechaAndUsuario(fecha, idusuario);
 

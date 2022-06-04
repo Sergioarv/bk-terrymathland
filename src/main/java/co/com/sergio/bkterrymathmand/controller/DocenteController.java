@@ -30,7 +30,7 @@ public class DocenteController {
 
         GeneralResponse<List<Docente>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
-        List<Docente> data = null;
+        List<Docente> data;
 
         data = docenteService.getAllDocente();
 
@@ -51,7 +51,7 @@ public class DocenteController {
     @PutMapping(consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
     public ResponseEntity<Docente> saveDocente(@RequestBody Docente docente){
 
-        Docente nuevoDocente = null;
+        Docente nuevoDocente;
         HttpStatus status = HttpStatus.NOT_FOUND;
 
         nuevoDocente = docenteService.saveDocente(docente);
@@ -66,8 +66,8 @@ public class DocenteController {
     @GetMapping("/docentenombre")
     public ResponseEntity<Docente> docenteByNombre(@RequestParam(value = "nombre") String nombre) {
 
-        HttpStatus status = null;
-        Docente data = null;
+        HttpStatus status;
+        Docente data;
 
         data = docenteService.docenteByNombre(nombre);
 

@@ -1,7 +1,6 @@
 package co.com.sergio.bkterrymathmand.entity;
 
 import javax.persistence.Column;
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**

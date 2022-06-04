@@ -18,5 +18,5 @@ import java.util.List;
 public interface OpcionRepository extends JpaRepository<Opcion, Integer> {
 
     @Query(value = "select * from opcion as o where o.idpregunta = :idpregunta", nativeQuery = true)
-    public List<Opcion> opcionesQuery(String idpregunta);
+    List<Opcion> obtenerOpcionesDePregunta(int idpregunta);
 }
