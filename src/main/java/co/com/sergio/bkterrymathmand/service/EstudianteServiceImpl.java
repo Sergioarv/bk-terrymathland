@@ -92,4 +92,17 @@ public class EstudianteServiceImpl implements EstudianteService {
 
         return estudianteRepository.save(estudiante);
     }
+
+    @Override
+    public List<Estudiante> filtrarEstudiante(String nombre) {
+
+        List<Estudiante> listResult;
+
+        if( nombre != null ){
+            listResult = estudianteRepository.estudiantePorFiltro(nombre);
+        }else{
+            listResult = estudianteRepository.findAll();
+        }
+        return listResult;
+    }
 }

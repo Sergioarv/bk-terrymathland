@@ -18,4 +18,6 @@ public interface EstudianteService {
     Estudiante estudianteByNombre(String nombre);
 
     Estudiante saveEstudiante(Estudiante estudiante);
+
+    List<Estudiante> filtrarEstudiante(String nombre);
 }

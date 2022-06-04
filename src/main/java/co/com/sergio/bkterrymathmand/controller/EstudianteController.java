@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
+import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
@@ -90,6 +91,42 @@ public class EstudianteController {
             response.setMessage("El parametro buscado no existe en la base de datos, por favor verificar");
         }
 
+        return new ResponseEntity<>(response, status);
+    }
+
+    @GetMapping("/filtrar")
+    public ResponseEntity<GeneralResponse<List<Estudiante>>> filtrar(
+            @RequestParam(value = "nombre", required = false) String nombre) {
+
+        GeneralResponse<List<Estudiante>> response = new GeneralResponse<>();
+        HttpStatus status = HttpStatus.OK;
+        List<Estudiante> data;
+
+        try {
+            data = estudianteService.filtrarEstudiante(nombre);
+
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+
+                if (data.size() > 1) {
+                    response.setMessage("Lista de estudiantes obtenida con exito");
+                } else if (data.size() == 1) {
+                    response.setMessage("Estudiante obtenido con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("No se encontro ningun estudiante");
+                }
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("La lista de estudiantes esta vacia");
+            }
+        }catch (NumberFormatException nfe){
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
+        }
         return new ResponseEntity<>(response, status);
     }
 }
