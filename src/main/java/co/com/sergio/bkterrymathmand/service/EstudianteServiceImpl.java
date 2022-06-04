@@ -1,13 +1,11 @@
 package co.com.sergio.bkterrymathmand.service;
 
-import co.com.sergio.bkterrymathmand.entity.Opcion;
+import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
-import co.com.sergio.bkterrymathmand.entity.Estudiante;
-import co.com.sergio.bkterrymathmand.repository.OpcionRepository;
+import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
 import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
-import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
@@ -36,9 +34,6 @@ public class EstudianteServiceImpl implements EstudianteService {
     private SolucionRepository solucionRepository;
 
     @Autowired
-    private OpcionRepository opcionRepository;
-
-    @Autowired
     private PreguntaService preguntaService;
 
     @DateTimeFormat(pattern = "%Y-%m-%d")
@@ -52,16 +47,6 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Override
     public Estudiante estudianteByNombre(String nombre) {
         return estudianteRepository.estudianteByNombre(nombre);
-    }
-
-    @Override
-    public List<Opcion> allOpciones() {
-        return opcionRepository.findAll();
-    }
-
-    @Override
-    public List<Opcion> opcionesQuery(String idpregunta) {
-        return opcionRepository.opcionesQuery(idpregunta);
     }
 
     @Override

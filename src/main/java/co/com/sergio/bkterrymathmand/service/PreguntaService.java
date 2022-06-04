@@ -14,13 +14,15 @@ import java.util.List;
 
 public interface PreguntaService {
 
-    public List<Pregunta> findAllPregunta();
+    List<Pregunta> findAllPregunta();
 
-    public List<Pregunta> filtrarPorId(int id);
+    List<Pregunta> filtrarPorId(int id);
 
-    public List<Pregunta> filtrarPor(String filtro);
+    List<Pregunta> filtrarPor(String filtro);
 
-    public List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado);
+    List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado);
 
     List<Pregunta> filtrarPregunta(String id, String enunciado);
+
+    Pregunta editarPregunta(Pregunta pregunta);
 }

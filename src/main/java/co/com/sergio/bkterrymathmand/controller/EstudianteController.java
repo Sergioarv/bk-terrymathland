@@ -1,7 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
-import co.com.sergio.bkterrymathmand.entity.Opcion;
 import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
@@ -89,25 +88,6 @@ public class EstudianteController {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("El parametro buscado no existe en la base de datos, por favor verificar");
-        }
-
-        return new ResponseEntity<>(response, status);
-    }
-
-    @GetMapping("/opciones")
-    public ResponseEntity<GeneralResponse<List<Opcion>>> allOpciones(@RequestParam(value = "idpregunta") String idpregunta){
-
-        GeneralResponse<List<Opcion>> response = new GeneralResponse<>();
-        HttpStatus status;
-        List<Opcion> data;
-
-        data = estudianteService.opcionesQuery(idpregunta);
-
-        if (data != null) {
-            response.setData(data);
-            status = HttpStatus.OK;
-        } else {
-            status = HttpStatus.NOT_FOUND;
         }
 
         return new ResponseEntity<>(response, status);

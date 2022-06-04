@@ -30,7 +30,7 @@ public class SolucionController {
 
         GeneralResponse<List<Solucion>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.NOT_FOUND;
-        List<Solucion> data = null;
+        List<Solucion> data;
 
         data = solucionService.getAllSolucion();
 

@@ -1,6 +1,6 @@
 package co.com.sergio.bkterrymathmand.service;
 
-import co.com.sergio.bkterrymathmand.entity.Solucion;
+import co.com.sergio.bkterrymathmand.entity.Opcion;
 
 import java.util.List;
 
@@ -8,10 +8,9 @@ import java.util.List;
  * @project bk-terrymathmand
  * @Author Sergio Abelardo Rodríguez Vásquez
  * @Email ingsergiorodriguezv@gmail.com
- * @Date 22/04/2022 14:52
+ * @Date 4/06/2022 11:27
  **/
+public interface OpcionService {
 
-public interface SolucionService {
-
-  List<Solucion> getAllSolucion();
+    List<Opcion> obtenerOpcionesDePregunta(int idpregunta);
 }
