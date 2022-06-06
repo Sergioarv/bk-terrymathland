@@ -6,10 +6,12 @@ import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -96,14 +98,15 @@ public class EstudianteController {
 
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<List<Estudiante>>> filtrar(
-            @RequestParam(value = "nombre", required = false) String nombre) {
+            @RequestParam(value = "nombre", required = false) String nombre,
+            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
 
         GeneralResponse<List<Estudiante>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
         List<Estudiante> data;
 
         try {
-            data = estudianteService.filtrarEstudiante(nombre);
+            data = estudianteService.filtrarEstudiante(nombre, fecha);
 
             if (data != null) {
                 response.setData(data);

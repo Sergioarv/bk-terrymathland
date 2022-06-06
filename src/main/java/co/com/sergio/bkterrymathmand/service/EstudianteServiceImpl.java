@@ -94,13 +94,17 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
 
     @Override
-    public List<Estudiante> filtrarEstudiante(String nombre) {
+    public List<Estudiante> filtrarEstudiante(String nombre, Date fecha) {
 
         List<Estudiante> listResult;
 
-        if( nombre != null ){
+        if(nombre != null && fecha != null){
+            listResult = estudianteRepository.estudiantePorNombreYFecha(nombre, fecha);
+        } else if( nombre != null ){
             listResult = estudianteRepository.estudiantePorFiltro(nombre);
-        }else{
+        } else if (fecha != null){
+            listResult = estudianteRepository.estudiantePorFechaRespuesta(fecha);
+        } else{
             listResult = estudianteRepository.findAll();
         }
         return listResult;

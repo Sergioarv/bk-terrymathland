@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,4 +23,10 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Integer>
 
     @Query(value = "select * from estudiante as e where e.nombre like %:nombre%", nativeQuery = true)
     List<Estudiante> estudiantePorFiltro(String nombre);
+
+    @Query(value = "select * from estudiante as e left join respuesta as r on e.nombre like %:nombre% or r.fecha = :fecha", nativeQuery = true)
+    List<Estudiante> estudiantePorNombreYFecha(String nombre, Date fecha);
+
+    @Query(value = "select * from estudiante as e inner join respuesta as r on r.fecha = :fecha", nativeQuery = true)
+    List<Estudiante> estudiantePorFechaRespuesta(Date fecha);
 }
