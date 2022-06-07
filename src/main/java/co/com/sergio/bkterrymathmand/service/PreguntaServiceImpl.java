@@ -28,7 +28,7 @@ public class PreguntaServiceImpl implements PreguntaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Pregunta> findAllPregunta() {
+    public List<Pregunta> obtenerPreguntas() {
         return preguntaRepository.findAll();
     }
 
@@ -63,13 +63,14 @@ public class PreguntaServiceImpl implements PreguntaService {
         }else if( enunciado != null){
             listResult = filtrarPor(enunciado);
         }else{
-            listResult = findAllPregunta();
+            listResult = obtenerPreguntas();
         }
 
         return listResult;
     }
 
     @Override
+    @Transactional
     public Pregunta editarPregunta(Pregunta pregunta) {
 
         List<Opcion> result;

@@ -18,15 +18,15 @@ import java.util.List;
 @Repository
 public interface EstudianteRepository extends JpaRepository<Estudiante, Integer> {
 
-    @Query(value = "select * from estudiante as e where e.nombre = :nombre", nativeQuery = true)
+    @Query(value = "select e from estudiante as e where e.nombre = :nombre", nativeQuery = true)
     Estudiante estudianteByNombre(String nombre);
 
-    @Query(value = "select * from estudiante as e where e.nombre like %:nombre%", nativeQuery = true)
+    @Query(value = "select * from estudiante as e where e.nombre like %:nombre% ORDER BY idusuario", nativeQuery = true)
     List<Estudiante> estudiantePorFiltro(String nombre);
 
-    @Query(value = "select * from estudiante as e left join respuesta as r on e.nombre like %:nombre% or r.fecha = :fecha", nativeQuery = true)
+    @Query(value = "select * from (select * from estudiante as e where e.nombre like %:nombre%) as c1 inner join (select * from respuesta as r where r.fecha = :fecha) as c2 on c1.idusuario = c2.idusuario order by c2.fecha", nativeQuery = true)
     List<Estudiante> estudiantePorNombreYFecha(String nombre, Date fecha);
 
-    @Query(value = "select * from estudiante as e inner join respuesta as r on r.fecha = :fecha", nativeQuery = true)
+    @Query(value = "select * from estudiante as e inner join (select * from respuesta as r where r.fecha = :fecha) as rs on e.idusuario = rs.idusuario order by e.idusuario", nativeQuery = true)
     List<Estudiante> estudiantePorFechaRespuesta(Date fecha);
 }

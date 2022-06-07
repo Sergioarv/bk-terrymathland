@@ -14,11 +14,11 @@ import java.util.List;
 
 public interface RespuestaService {
 
-  List<Respuesta> getAllRespuesta();
+  List<Respuesta> obtenerRespuestas();
 
-  List<Respuesta> getRespuestaByFecha(Date fecha);
+  List<Respuesta> obtenerRespuestaPorFecha(Date fecha);
 
-  Respuesta getRespuestaByFechaAndUsuario(Date fecha, int idusuario);
+  Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario);
 
   Respuesta saveRespuesta(Respuesta respuesta);
 }

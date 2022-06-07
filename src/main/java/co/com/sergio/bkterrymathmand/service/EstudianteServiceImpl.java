@@ -7,8 +7,10 @@ import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
 import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -40,22 +42,52 @@ public class EstudianteServiceImpl implements EstudianteService {
     Date fechaActual;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Estudiante> getAllEstudiantes() {
         return estudianteRepository.findAll();
     }
 
     @Override
+    public Estudiante agregarEstudiante(Estudiante estudiante){
+
+        Estudiante result = estudianteRepository.estudianteByNombre(estudiante.getNombre());
+
+        if(result == null){
+            return estudianteRepository.save(estudiante);
+        }
+
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public Estudiante actualizarEstudiante(Estudiante estudiante) {
+        return estudianteRepository.save(estudiante);
+    }
+
+    @Override
+    @Transactional
+    public boolean eliminarEstudiante(Estudiante estudiante) {
+
+        estudianteRepository.delete(estudiante);
+
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Estudiante estudianteByNombre(String nombre) {
         return estudianteRepository.estudianteByNombre(nombre);
     }
 
     @Override
-    public Estudiante saveEstudiante(Estudiante estudiante) {
+    @Transactional
+    public Estudiante guardarRespuesta(Estudiante estudiante) {
 
         LocalDate hoy = LocalDate.now();
         fechaActual = java.sql.Date.valueOf(hoy);
 
-        Respuesta data = respuestaRepository.findRespuestaByFechaAndUsuario(fechaActual, estudiante.getIdusuario());
+        Respuesta data = respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fechaActual, estudiante.getIdusuario());
 
         estudiante.getRespuestas().get(0).setFecha(fechaActual);
 
@@ -80,7 +112,7 @@ public class EstudianteServiceImpl implements EstudianteService {
             estudiante.getRespuestas().get(0).setUsuario(estudiante);
 
             Respuesta res = respuestaRepository.save(estudiante.getRespuestas().get(0));
-            List<Pregunta> pre = preguntaService.findAllPregunta();
+            List<Pregunta> pre = preguntaService.obtenerPreguntas();
 
             for (int i = 0; i < pre.size(); i++) {
                 estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(0);
@@ -94,19 +126,19 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Estudiante> filtrarEstudiante(String nombre, Date fecha) {
 
         List<Estudiante> listResult;
 
         if(nombre != null && fecha != null){
-            listResult = estudianteRepository.estudiantePorNombreYFecha(nombre, fecha);
+            return listResult = estudianteRepository.estudiantePorNombreYFecha(nombre, fecha);
         } else if( nombre != null ){
-            listResult = estudianteRepository.estudiantePorFiltro(nombre);
+            return listResult = estudianteRepository.estudiantePorFiltro(nombre);
         } else if (fecha != null){
-            listResult = estudianteRepository.estudiantePorFechaRespuesta(fecha);
+            return listResult = estudianteRepository.estudiantePorFechaRespuesta(fecha);
         } else{
-            listResult = estudianteRepository.findAll();
+            return listResult = estudianteRepository.findAll(Sort.by(Sort.Direction.ASC, "idusuario"));
         }
-        return listResult;
     }
 }

@@ -13,5 +13,5 @@ import java.util.List;
 
 public interface SolucionService {
 
-  List<Solucion> getAllSolucion();
+  List<Solucion> obtenerSoluciones();
 }

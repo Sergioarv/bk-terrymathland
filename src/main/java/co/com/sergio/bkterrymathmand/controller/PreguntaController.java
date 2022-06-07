@@ -3,6 +3,7 @@ package co.com.sergio.bkterrymathmand.controller;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.service.PreguntaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,20 +20,21 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pregunta")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT, RequestMethod.DELETE})
 public class PreguntaController {
 
     @Autowired
     private PreguntaService preguntaService;
 
+    @ApiOperation(value = "Método encargado de obtener la lista de preguntas", response = ResponseEntity.class)
     @GetMapping
-    public ResponseEntity<GeneralResponse<List<Pregunta>>> getPreguntas() {
+    public ResponseEntity<GeneralResponse<List<Pregunta>>> obtenerPreguntas() {
 
         GeneralResponse<List<Pregunta>> response = new GeneralResponse<>();
         List<Pregunta> data;
         HttpStatus status = HttpStatus.OK;
 
-        data = preguntaService.findAllPregunta();
+        data = preguntaService.obtenerPreguntas();
 
         if (data != null) {
             response.setData(data);
@@ -46,6 +48,7 @@ public class PreguntaController {
         return new ResponseEntity<>(response, status);
     }
 
+    @ApiOperation(value = "Método encargado de obtener la lista de preguntas por filtro (id, enunciado)", response = ResponseEntity.class)
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<List<Pregunta>>> filtrar(
             @RequestParam(value = "id", required = false) String id,
@@ -83,6 +86,7 @@ public class PreguntaController {
         return new ResponseEntity<>(response, status);
     }
 
+    @ApiOperation(value = "Método encargado de actualizar una pregunnta", response = ResponseEntity.class)
     @PutMapping(consumes = { "application/json;charset=UTF-8;application/x-www-form-urlencoded; multipart/form-data"} )
     public ResponseEntity<GeneralResponse<Pregunta>> editarPregunta(@RequestBody Pregunta pregunta){
 

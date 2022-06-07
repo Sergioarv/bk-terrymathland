@@ -3,6 +3,7 @@ package co.com.sergio.bkterrymathmand.controller;
 import co.com.sergio.bkterrymathmand.entity.Opcion;
 import co.com.sergio.bkterrymathmand.service.OpcionService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +19,16 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/opcion")
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT, RequestMethod.DELETE})
 public class OpcionController {
 
     @Autowired
     private OpcionService opcionService;
 
+    @ApiOperation(value = "Método encargado de lista las opciones", response = ResponseEntity.class)
     @GetMapping("/pregunta")
-    public ResponseEntity<GeneralResponse<List<Opcion>>> obtenerOpcionesDePregunta(@RequestParam(value = "idpregunta") int idpregunta) {
+    public ResponseEntity<GeneralResponse<List<Opcion>>> obtenerOpcionesDePregunta(
+            @RequestParam(value = "idpregunta") int idpregunta) {
 
         GeneralResponse<List<Opcion>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
