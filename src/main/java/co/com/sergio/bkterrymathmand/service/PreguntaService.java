@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface PreguntaService {
 
-    List<Pregunta> findAllPregunta();
+    List<Pregunta> obtenerPreguntas();
 
     List<Pregunta> filtrarPorId(int id);
 

@@ -22,18 +22,18 @@ public class RespuestaServiceImpl implements RespuestaService {
     private RespuestaRepository respuestaRepository;
 
     @Override
-    public List<Respuesta> getAllRespuesta() {
+    public List<Respuesta> obtenerRespuestas() {
         return respuestaRepository.findAll();
     }
 
     @Override
-    public List<Respuesta> getRespuestaByFecha(Date fecha) {
-        return respuestaRepository.findRespuestaByFecha(fecha);
+    public List<Respuesta> obtenerRespuestaPorFecha(Date fecha) {
+        return respuestaRepository.obtenerRespuestasPorFecha(fecha);
     }
 
     @Override
-    public Respuesta getRespuestaByFechaAndUsuario(Date fecha, int idusuario) {
-        return respuestaRepository.findRespuestaByFechaAndUsuario(fecha, idusuario);
+    public Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario) {
+        return respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fecha, idusuario);
     }
 
     @Override

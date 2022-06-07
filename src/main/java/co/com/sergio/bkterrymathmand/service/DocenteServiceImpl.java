@@ -21,17 +21,17 @@ public class DocenteServiceImpl implements DocenteService {
     private DocenteRepository docenteRepository;
 
     @Override
-    public List<Docente> getAllDocente() {
+    public List<Docente> obtenerDocentes() {
         return docenteRepository.findAll();
     }
 
     @Override
-    public Docente docenteByNombre(String nombre) {
-        return docenteRepository.docenteByNombre(nombre);
+    public Docente docentePorNombre(String nombre) {
+        return docenteRepository.docentePorNombre(nombre);
     }
 
     @Override
-    public Docente saveDocente(Docente docente) {
+    public Docente agregarDocente(Docente docente) {
         return docenteRepository.save(docente);
     }
 }

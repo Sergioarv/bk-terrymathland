@@ -1,8 +1,8 @@
 package co.com.sergio.bkterrymathmand.service;
 
-import co.com.sergio.bkterrymathmand.entity.Opcion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,7 +15,15 @@ public interface EstudianteService {
 
     List<Estudiante> getAllEstudiantes();
 
+    Estudiante agregarEstudiante(Estudiante estudiante);
+
     Estudiante estudianteByNombre(String nombre);
 
-    Estudiante saveEstudiante(Estudiante estudiante);
+    Estudiante guardarRespuesta(Estudiante estudiante);
+
+    List<Estudiante> filtrarEstudiante(String nombre, Date fecha);
+
+    Estudiante actualizarEstudiante(Estudiante estudiante);
+
+    boolean eliminarEstudiante(Estudiante estudiante);
 }

@@ -21,7 +21,7 @@ public class SolucionServiceImpl implements SolucionService {
     private SolucionRepository solucionRepository;
 
     @Override
-    public List<Solucion> getAllSolucion() {
+    public List<Solucion> obtenerSoluciones() {
         return solucionRepository.findAll();
     }
 }

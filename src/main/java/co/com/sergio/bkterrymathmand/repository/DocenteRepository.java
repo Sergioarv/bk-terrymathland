@@ -16,5 +16,5 @@ import org.springframework.stereotype.Repository;
 public interface DocenteRepository extends JpaRepository<Docente, Integer> {
 
     @Query(value = "select * from docente as d where d.nombre = :nombre", nativeQuery = true)
-    Docente docenteByNombre(String nombre);
+    Docente docentePorNombre(String nombre);
 }

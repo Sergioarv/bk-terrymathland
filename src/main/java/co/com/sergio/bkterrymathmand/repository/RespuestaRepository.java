@@ -17,8 +17,10 @@ import java.util.List;
 
 @Repository
 public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
-    List<Respuesta> findRespuestaByFecha(Date fecha);
+
+    @Query(value = "select * from respuesta r where r.fecha = :fecha", nativeQuery = true)
+    List<Respuesta> obtenerRespuestasPorFecha(Date fecha);
 
     @Query(value = "select * from respuesta r where r.fecha = :fechaS and r.idusuario = :idusuario", nativeQuery = true)
-    Respuesta findRespuestaByFechaAndUsuario(Date fechaS, int idusuario);
+    Respuesta obtenerRespuestaPorFechaYidUsuario(Date fechaS, int idusuario);
 }
