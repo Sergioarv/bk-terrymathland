@@ -129,16 +129,14 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Transactional(readOnly = true)
     public List<Estudiante> filtrarEstudiante(String nombre, Date fecha) {
 
-        List<Estudiante> listResult;
-
         if(nombre != null && fecha != null){
-            return listResult = estudianteRepository.estudiantePorNombreYFecha(nombre, fecha);
+            return estudianteRepository.estudiantePorNombreYFecha(nombre, fecha);
         } else if( nombre != null ){
-            return listResult = estudianteRepository.estudiantePorFiltro(nombre);
+            return estudianteRepository.estudiantePorFiltro(nombre);
         } else if (fecha != null){
-            return listResult = estudianteRepository.estudiantePorFechaRespuesta(fecha);
+            return estudianteRepository.estudiantePorFechaRespuesta(fecha);
         } else{
-            return listResult = estudianteRepository.findAll(Sort.by(Sort.Direction.ASC, "idusuario"));
+            return estudianteRepository.findAll(Sort.by(Sort.Direction.ASC, "idusuario"));
         }
     }
 }

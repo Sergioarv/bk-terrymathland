@@ -1,8 +1,10 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -48,5 +50,19 @@ public class RespuestaServiceImpl implements RespuestaService {
         respuestaRepository.save(respuesta);
 
         return null;
+    }
+
+    @Override
+    public List<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha) {
+
+        if(estudiante != null && fecha != null){
+            return respuestaRepository.respuestasPorEstudianteYFecha(Integer.valueOf(estudiante.getIdusuario()), fecha);
+        }else if(estudiante != null){
+            return  respuestaRepository.respuestaPorEstudiante(Integer.valueOf(estudiante.getIdusuario()));
+        } else if (fecha != null) {
+            return respuestaRepository.obtenerRespuestasPorFecha(fecha);
+        }else{
+            return respuestaRepository.findAll(Sort.by(Sort.Direction.ASC, "fecha"));
+        }
     }
 }

@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
+import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.service.RespuestaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
@@ -41,11 +42,46 @@ public class RespuestaController {
         if (data != null) {
             response.setData(data);
             response.setSuccess(true);
-            response.setMessage("Lista de respuestas obtenida con exito");
+            response.setMessage("Lista de respuestas obtenida con éxito");
         }else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Hubo un error al obtener la lista de respuestas");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ApiOperation(value = "Método encargado de obtener la lista de respuestas pot filtro")
+    @GetMapping("/filtrar")
+    public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestasPorFiltro(
+            @RequestParam(value = "estudiante", required = false)Estudiante estudiante,
+            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha
+            ){
+
+        GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
+        List<Respuesta> data;
+        HttpStatus status = HttpStatus.OK;
+
+        data = respuestaService.obtenerRespuestasPorFiltro(estudiante, fecha);
+
+        if (data != null){
+
+            response.setData(data);
+            response.setSuccess(true);
+
+            if (data.size() > 1) {
+                response.setMessage("Lista de respuestas obtenida con exito");
+            } else if (data.size() == 1) {
+                response.setMessage("Respuesta obtenido con exito");
+            } else {
+                response.setSuccess(false);
+                response.setMessage("No se encontro ningun respuesata");
+            }
+        }else {
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("Lista de resultados esta vacia");
         }
 
         return new ResponseEntity<>(response, status);
