@@ -1,8 +1,9 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.dto.IDatosaGraficar;
+import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
-import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.entity.Solucion;
 import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
@@ -46,16 +47,19 @@ public class RespuestaServiceImpl implements RespuestaService {
     Date fechaActual;
 
     @Override
+    @Transactional(readOnly = true)
     public List<Respuesta> obtenerRespuestas() {
         return respuestaRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Respuesta> obtenerRespuestaPorFecha(Date fecha) {
         return respuestaRepository.obtenerRespuestasPorFecha(fecha);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario) {
         return respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fecha, idusuario);
     }
@@ -75,6 +79,7 @@ public class RespuestaServiceImpl implements RespuestaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha) {
 
         if (estudiante != null && fecha != null) {
@@ -88,12 +93,29 @@ public class RespuestaServiceImpl implements RespuestaService {
         }
     }
 
+//    @Override
+//    @Transactional(readOnly = true)
+//    public IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha) {
+//
+//        if (estudiante != null) {
+//            return null;
+//        } else if (fecha != null) {
+//            return null;
+//        } else {
+//            List<IDatosaGraficar> d = (List<IDatosaGraficar>) respuestaRepository.graficarRespuestas();
+//            IDatosaGraficarDTO data = null;
+//            data.setCant(d);
+//            return data;
+//        }
+//    }
+
     /**
      * Método encargado de guardar la respuesta enviada por el minijuego
      *
      * @param estudiante, estudiante con la respuesta y la lista de soluciones enviada por el minijuego
      * @return
      */
+    @Override
     @Transactional
     public List<IRespuestaProyeccion> guardarRespuestaEstudiante(Estudiante estudiante) {
 

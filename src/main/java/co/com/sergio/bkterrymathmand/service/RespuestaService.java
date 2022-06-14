@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
@@ -27,4 +28,6 @@ public interface RespuestaService {
     List<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha);
 
     public List<IRespuestaProyeccion> guardarRespuestaEstudiante(Estudiante estudiante);
+
+//    IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha);
 }

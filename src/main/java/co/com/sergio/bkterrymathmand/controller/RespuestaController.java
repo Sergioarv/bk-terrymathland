@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
+import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
@@ -53,7 +54,7 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de obtener la lista de respuestas pot filtro")
+    @ApiOperation(value = "Método encargado de obtener la lista de respuestas por filtro")
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestasPorFiltro(
             @RequestParam(value = "estudiante", required = false)Estudiante estudiante,
@@ -160,5 +161,33 @@ public class RespuestaController {
 
         return new ResponseEntity<>(response, status);
     }
+
+//    @ApiOperation(value = "Método encargado de obtener la lista de respuestas para graficar")
+//    @GetMapping("/graficarRespuestas")
+//    public ResponseEntity<GeneralResponse<IDatosaGraficarDTO>> graficarRespuestas(
+//            @RequestParam(value = "estudiante", required = false)Estudiante estudiante,
+//            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha
+//    ){
+//
+//        GeneralResponse<IDatosaGraficarDTO> response = new GeneralResponse<>();
+//        IDatosaGraficarDTO data;
+//        HttpStatus status = HttpStatus.OK;
+//
+//        data = respuestaService.graficarRespuestas(estudiante, fecha);
+//
+//        if (data != null){
+//
+//            response.setData(data);
+//            response.setSuccess(true);
+//
+//
+//        }else {
+//            response.setData(null);
+//            response.setSuccess(false);
+//            response.setMessage("Lista de resultados esta vacia");
+//        }
+//
+//        return new ResponseEntity<>(response, status);
+//    }
 
 }
