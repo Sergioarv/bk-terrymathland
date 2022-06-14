@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 
@@ -15,13 +16,15 @@ import java.util.List;
 
 public interface RespuestaService {
 
-  List<Respuesta> obtenerRespuestas();
+    List<Respuesta> obtenerRespuestas();
 
-  List<Respuesta> obtenerRespuestaPorFecha(Date fecha);
+    List<Respuesta> obtenerRespuestaPorFecha(Date fecha);
 
-  Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario);
+    Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario);
 
-  Respuesta saveRespuesta(Respuesta respuesta);
+    Respuesta saveRespuesta(Respuesta respuesta);
 
     List<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha);
+
+    public List<IRespuestaProyeccion> guardarRespuestaEstudiante(Estudiante estudiante);
 }

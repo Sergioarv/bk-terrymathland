@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.repository;
 
+import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,4 +30,7 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
 
     @Query(value = "select * from respuesta as r where r.idusuario = :idusuario order by r.fecha", nativeQuery = true)
     List<Respuesta> respuestaPorEstudiante(int idusuario);
+
+    @Query(value = "select * from respuesta as r where r.idusuario = :idusuario order by r.fecha desc limit 3", nativeQuery = true)
+    List<IRespuestaProyeccion> respuestaGuardadaPorEstudiante(int idusuario);
 }

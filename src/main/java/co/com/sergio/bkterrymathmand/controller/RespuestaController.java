@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
+import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.service.RespuestaService;
@@ -135,4 +136,29 @@ public class RespuestaController {
 
         return new ResponseEntity<>(response, status);
     }
+
+
+    @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante", response = ResponseEntity.class)
+    @PutMapping(value = "/guardarRespuestaEstudiante", consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
+    public ResponseEntity<GeneralResponse<List<IRespuestaProyeccion>>> guardarRespuesta(@RequestBody Estudiante estudiante){
+
+        GeneralResponse<List<IRespuestaProyeccion>> response = new GeneralResponse<>();
+        List<IRespuestaProyeccion> nuevoEstudiante;
+        HttpStatus status = HttpStatus.OK;
+
+        nuevoEstudiante = respuestaService.guardarRespuestaEstudiante(estudiante);
+
+        if(nuevoEstudiante != null){
+            response.setData(nuevoEstudiante);
+            response.setSuccess(true);
+            response.setMessage("Se agrego la respuesta con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("No se pudo agregar o actualiza la respuesta del estudiante");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
 }

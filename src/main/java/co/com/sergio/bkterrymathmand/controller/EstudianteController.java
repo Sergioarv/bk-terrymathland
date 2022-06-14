@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
+import co.com.sergio.bkterrymathmand.dto.IEstudianteProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
@@ -31,7 +32,7 @@ public class EstudianteController {
 
     @ApiOperation(value = "Método encargado de obtener la lista de estudiantes", response = ResponseEntity.class)
     @GetMapping
-    public ResponseEntity<GeneralResponse<List<Estudiante>>> getAllEstudiantes(){
+    public ResponseEntity<GeneralResponse<List<Estudiante>>> obtenerEstudiantes(){
 
         GeneralResponse<List<Estudiante>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
@@ -122,36 +123,13 @@ public class EstudianteController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante", response = ResponseEntity.class)
-    @PutMapping(value = "/guardarRespuesta", consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
-    public ResponseEntity<GeneralResponse<Estudiante>> guardarRespuesta(@RequestBody Estudiante estudiante){
-
-        GeneralResponse<Estudiante> response = new GeneralResponse<>();
-        Estudiante nuevoEstudiante;
-        HttpStatus status = HttpStatus.OK;
-
-        nuevoEstudiante = estudianteService.guardarRespuesta(estudiante);
-
-        if(nuevoEstudiante != null){
-            response.setData(nuevoEstudiante);
-            response.setSuccess(true);
-            response.setMessage("Se agrego la respuesta con exito");
-        }else{
-            response.setData(null);
-            response.setSuccess(false);
-            response.setMessage("No se pudo agregar o actualiza la respuesta del estudiante");
-        }
-
-        return new ResponseEntity<>(response, status);
-    }
-
     @ApiOperation(value = "Método encargado de ontener un estudiante por el nombre", response = ResponseEntity.class)
     @GetMapping("/estudiantenombre")
-    public ResponseEntity<GeneralResponse<Usuario>> estudianteByNombre(@RequestParam(value = "nombre") String nombre) {
+    public ResponseEntity<GeneralResponse<IEstudianteProyeccion>> estudianteByNombre(@RequestParam(value = "nombre") String nombre) {
 
-        GeneralResponse<Usuario> response = new GeneralResponse<>();
+        GeneralResponse<IEstudianteProyeccion> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
-        Estudiante data;
+        IEstudianteProyeccion data;
 
         data = estudianteService.estudianteByNombre(nombre);
 
