@@ -44,6 +44,12 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
 //            "(select count(*) as cant from (select cast(avg(nota) as decimal(10,1)) as promedio from respuesta group by idusuario) as c1 where promedio < 3)", nativeQuery = true)
 //    IDatosaGraficar graficarRespuestas();
 
+//    @Query(value = "", nativeQuery = true)
+//    IDatosaGraficar graficarRespuestas();
+//
+//    @Query(value = "select fecha from respuesta where fecha = '2022-06-03' group by fecha", nativeQuery = true)
+//    List<Respuesta> respuestasValidas();
+
 
     //List<IDatosaGraficar> graficarRespuestasPorEstudiante(int idusuario);
 

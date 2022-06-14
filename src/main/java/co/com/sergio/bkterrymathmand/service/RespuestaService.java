@@ -29,5 +29,5 @@ public interface RespuestaService {
 
     public List<IRespuestaProyeccion> guardarRespuestaEstudiante(Estudiante estudiante);
 
-//    IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha);
+    IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha);
 }

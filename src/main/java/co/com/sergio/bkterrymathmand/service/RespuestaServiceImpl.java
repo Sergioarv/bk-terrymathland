@@ -89,25 +89,22 @@ public class RespuestaServiceImpl implements RespuestaService {
         } else if (fecha != null) {
             return respuestaRepository.obtenerRespuestasPorFecha(fecha);
         } else {
-            return respuestaRepository.findAll(Sort.by(Sort.Direction.ASC, "fecha"));
+            return respuestaRepository.findAll(Sort.by(Sort.Direction.DESC, "fecha"));
         }
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha) {
-//
-//        if (estudiante != null) {
-//            return null;
-//        } else if (fecha != null) {
-//            return null;
-//        } else {
-//            List<IDatosaGraficar> d = (List<IDatosaGraficar>) respuestaRepository.graficarRespuestas();
-//            IDatosaGraficarDTO data = null;
-//            data.setCant(d);
-//            return data;
-//        }
-//    }
+    @Override
+    @Transactional(readOnly = true)
+    public IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha) {
+
+        if (estudiante != null) {
+            return null;
+        } else if (fecha != null) {
+            return null;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * Método encargado de guardar la respuesta enviada por el minijuego
