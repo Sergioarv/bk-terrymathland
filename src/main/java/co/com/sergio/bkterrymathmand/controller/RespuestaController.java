@@ -1,5 +1,7 @@
 package co.com.sergio.bkterrymathmand.controller;
 
+import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
+import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.service.RespuestaService;
@@ -52,7 +54,7 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de obtener la lista de respuestas pot filtro")
+    @ApiOperation(value = "Método encargado de obtener la lista de respuestas por filtro")
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestasPorFiltro(
             @RequestParam(value = "estudiante", required = false)Estudiante estudiante,
@@ -135,4 +137,57 @@ public class RespuestaController {
 
         return new ResponseEntity<>(response, status);
     }
+
+
+    @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante", response = ResponseEntity.class)
+    @PutMapping(value = "/guardarRespuestaEstudiante", consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
+    public ResponseEntity<GeneralResponse<List<IRespuestaProyeccion>>> guardarRespuesta(@RequestBody Estudiante estudiante){
+
+        GeneralResponse<List<IRespuestaProyeccion>> response = new GeneralResponse<>();
+        List<IRespuestaProyeccion> nuevoEstudiante;
+        HttpStatus status = HttpStatus.OK;
+
+        nuevoEstudiante = respuestaService.guardarRespuestaEstudiante(estudiante);
+
+        if(nuevoEstudiante != null){
+            response.setData(nuevoEstudiante);
+            response.setSuccess(true);
+            response.setMessage("Se agrego la respuesta con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("No se pudo agregar o actualiza la respuesta del estudiante");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
+//    @ApiOperation(value = "Método encargado de obtener la lista de respuestas para graficar")
+//    @GetMapping("/graficarRespuestas")
+//    public ResponseEntity<GeneralResponse<IDatosaGraficarDTO>> graficarRespuestas(
+//            @RequestParam(value = "estudiante", required = false)Estudiante estudiante,
+//            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha
+//    ){
+//
+//        GeneralResponse<IDatosaGraficarDTO> response = new GeneralResponse<>();
+//        IDatosaGraficarDTO data;
+//        HttpStatus status = HttpStatus.OK;
+//
+//        data = respuestaService.graficarRespuestas(estudiante, fecha);
+//
+//        if (data != null){
+//
+//            response.setData(data);
+//            response.setSuccess(true);
+//
+//
+//        }else {
+//            response.setData(null);
+//            response.setSuccess(false);
+//            response.setMessage("Lista de resultados esta vacia");
+//        }
+//
+//        return new ResponseEntity<>(response, status);
+//    }
+
 }

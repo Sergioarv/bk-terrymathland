@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.repository;
 
+import co.com.sergio.bkterrymathmand.dto.IEstudianteProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,8 +19,8 @@ import java.util.List;
 @Repository
 public interface EstudianteRepository extends JpaRepository<Estudiante, Integer> {
 
-    @Query(value = "select e from estudiante as e where e.nombre = :nombre", nativeQuery = true)
-    Estudiante estudianteByNombre(String nombre);
+    @Query(value = "select * from estudiante as e where lower(e.nombre) = lower(:nombre)", nativeQuery = true)
+    IEstudianteProyeccion estudianteByNombre(String nombre);
 
     @Query(value = "select * from estudiante as e where e.nombre like %:nombre% ORDER BY idusuario", nativeQuery = true)
     List<Estudiante> estudiantePorFiltro(String nombre);

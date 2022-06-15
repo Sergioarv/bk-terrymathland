@@ -1,18 +1,15 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.dto.IEstudianteProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
-import co.com.sergio.bkterrymathmand.entity.Pregunta;
-import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
 import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -30,16 +27,10 @@ public class EstudianteServiceImpl implements EstudianteService {
     private EstudianteRepository estudianteRepository;
 
     @Autowired
-    private RespuestaRepository respuestaRepository;
-
-    @Autowired
     private SolucionRepository solucionRepository;
 
     @Autowired
     private PreguntaService preguntaService;
-
-    @DateTimeFormat(pattern = "%Y-%m-%d")
-    Date fechaActual;
 
     @Override
     @Transactional(readOnly = true)
@@ -50,7 +41,7 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Override
     public Estudiante agregarEstudiante(Estudiante estudiante){
 
-        Estudiante result = estudianteRepository.estudianteByNombre(estudiante.getNombre());
+        IEstudianteProyeccion result = estudianteRepository.estudianteByNombre(estudiante.getNombre());
 
         if(result == null){
             return estudianteRepository.save(estudiante);
@@ -76,53 +67,8 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Estudiante estudianteByNombre(String nombre) {
+    public IEstudianteProyeccion estudianteByNombre(String nombre) {
         return estudianteRepository.estudianteByNombre(nombre);
-    }
-
-    @Override
-    @Transactional
-    public Estudiante guardarRespuesta(Estudiante estudiante) {
-
-        LocalDate hoy = LocalDate.now();
-        fechaActual = java.sql.Date.valueOf(hoy);
-
-        Respuesta data = respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fechaActual, estudiante.getIdusuario());
-
-        estudiante.getRespuestas().get(0).setFecha(fechaActual);
-
-        if(data != null){
-
-            if(estudiante.getRespuestas().get(0).getNota() >= data.getNota()) {
-
-                for (int i = 0; i < data.getSoluciones().size(); i++) {
-                    estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(data.getSoluciones().get(i).getIdsolucion());
-                    estudiante.getRespuestas().get(0).getSoluciones().get(i).setRespuesta(data);
-                }
-
-                estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
-
-                estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
-                estudiante.getRespuestas().get(0).setUsuario(estudiante);
-
-                respuestaRepository.save(estudiante.getRespuestas().get(0));
-            }
-        }else{
-            estudiante.getRespuestas().get(0).setIdrespuesta(0);
-            estudiante.getRespuestas().get(0).setUsuario(estudiante);
-
-            Respuesta res = respuestaRepository.save(estudiante.getRespuestas().get(0));
-            List<Pregunta> pre = preguntaService.obtenerPreguntas();
-
-            for (int i = 0; i < pre.size(); i++) {
-                estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(0);
-                estudiante.getRespuestas().get(0).getSoluciones().get(i).setRespuesta(res);
-            }
-
-            estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
-        }
-
-        return estudianteRepository.save(estudiante);
     }
 
     @Override
