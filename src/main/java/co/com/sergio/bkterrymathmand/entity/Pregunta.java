@@ -27,6 +27,14 @@ public class Pregunta implements Serializable {
   @OneToMany(mappedBy = "pregunta")
   private List<Opcion> opciones;
 
+  @JoinTable(
+          name = "cartilla_pregunta",
+          joinColumns = @JoinColumn(name = "idpregunta", nullable = false),
+          inverseJoinColumns = @JoinColumn(name = "idcartilla", nullable = false)
+  )
+  @ManyToMany(cascade = CascadeType.ALL)
+  private List<Cartilla> catillas;
+
   /** Getter y Setter **/
 
   public int getIdpregunta() {
@@ -59,5 +67,9 @@ public class Pregunta implements Serializable {
 
   public void setUrlImg(String urlImg) {
     this.urlImg = urlImg;
+  }
+
+  public void setCatillas(List<Cartilla> catillas) {
+    this.catillas = catillas;
   }
 }
