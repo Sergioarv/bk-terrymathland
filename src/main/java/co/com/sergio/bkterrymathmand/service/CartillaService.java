@@ -12,4 +12,6 @@ public interface CartillaService {
     List<Pregunta> obtenerPreguntas(int idcartilla);
 
     List<Pregunta> filtrarPregunta(String idcartilla);
+
+    Boolean actualizarCartilla(Cartilla cartilla);
 }

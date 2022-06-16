@@ -22,7 +22,7 @@ public class Cartilla implements Serializable {
     @Column(nullable = false)
     private String nombre;
 
-    @ManyToMany(mappedBy = "catillas")
+    @ManyToMany(mappedBy = "cartillas")
     private List<Pregunta> preguntas;
 
     /** Getter y Setter **/

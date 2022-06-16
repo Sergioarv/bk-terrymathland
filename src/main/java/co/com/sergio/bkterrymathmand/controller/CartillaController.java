@@ -43,7 +43,7 @@ public class CartillaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de obtener la lista de cartillas por filtro", response = ResponseEntity.class)
+    @ApiOperation(value = "Método encargado de obtener la lista preguntas por filtro de cartilla", response = ResponseEntity.class)
     @GetMapping("/filtrarPreguntas")
     public ResponseEntity<GeneralResponse<List<Pregunta>>> filtrarPreguntas(
             @RequestParam(value = "idcartilla", required = false) String idcartilla) {
@@ -77,6 +77,30 @@ public class CartillaController {
             response.setSuccess(false);
             response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
         }
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ApiOperation(value = "Método encargado de actualizar las preguntas de la cartilla")
+    @PutMapping
+    public ResponseEntity<GeneralResponse<Boolean>> actualizarCartilla(
+            @RequestBody Cartilla cartilla
+    ){
+        GeneralResponse<Boolean> response = new GeneralResponse<>();
+        Boolean data;
+        HttpStatus status = HttpStatus.OK;
+
+        data = cartillaService.actualizarCartilla(cartilla);
+
+        if( data){
+            response.setData(true);
+            response.setSuccess(true);
+            response.setMessage("Lista de cartillas obtenida con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("No se obtuvo la lista de cartillas");
+        }
+
         return new ResponseEntity<>(response, status);
     }
 
