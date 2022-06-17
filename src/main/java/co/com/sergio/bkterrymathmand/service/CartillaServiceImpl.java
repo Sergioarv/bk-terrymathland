@@ -54,6 +54,7 @@ public class CartillaServiceImpl implements CartillaService {
     }
 
     @Override
+    @Transactional
     public Cartilla crearCartilla(Cartilla cartilla) {
 
         Cartilla result = cartillaRepository.save(cartilla);
@@ -63,11 +64,28 @@ public class CartillaServiceImpl implements CartillaService {
             cartilla.getPreguntas().get(j).agregarCartilla(result);
         }
 
-        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
-            //cartillaRepository.save(cartilla);
+        if (preguntaRepository.saveAll(cartilla.getPreguntas()) == null) {
+            return null;
         }
 
         return cartilla;
+    }
+
+    @Override
+    @Transactional
+    public Boolean eliminarCartilla(Cartilla cartilla) {
+
+        for (int i = 0; i < cartilla.getPreguntas().size(); i++) {
+            cartilla.getPreguntas().get(i).removerCartilla(cartilla);
+        }
+
+        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
+            cartillaRepository.delete(cartilla);
+        } else {
+            return null;
+        }
+
+        return true;
     }
 
     @Override

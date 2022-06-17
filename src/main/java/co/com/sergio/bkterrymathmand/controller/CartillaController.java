@@ -128,6 +128,29 @@ public class CartillaController {
         return new ResponseEntity<>(response, status);
     }
 
+    @ApiOperation(value = "Método encargado de crear una cartilla con sus preguntas")
+    @DeleteMapping
+    public ResponseEntity<GeneralResponse<Boolean>> eliminarCartilla(@RequestBody Cartilla cartilla){
+
+        GeneralResponse<Boolean> response = new GeneralResponse<>();
+        Boolean data;
+        HttpStatus status = HttpStatus.OK;
+
+        data = cartillaService.eliminarCartilla(cartilla);
+
+        if(data){
+            response.setData(true);
+            response.setSuccess(true);
+            response.setMessage("La cartilla se elimino exitosamente");
+        }else{
+            response.setData(false);
+            response.setSuccess(false);
+            response.setMessage("No he a podido eliminar la cartilla");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
     @ApiOperation(value = "Método encargado de obtener la lista de preguntas de una cartillas")
     @GetMapping("/obtenerPreguntas")
     public ResponseEntity<GeneralResponse<List<Pregunta>>> obtenerPreguntas(@RequestParam(value = "idcartilla") int idcartilla){

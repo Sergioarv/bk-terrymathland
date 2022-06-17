@@ -16,4 +16,6 @@ public interface CartillaService {
     Boolean actualizarCartilla(Cartilla cartilla);
 
     Cartilla crearCartilla(Cartilla cartilla);
+
+    Boolean eliminarCartilla(Cartilla cartilla);
 }
