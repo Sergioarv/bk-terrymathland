@@ -54,6 +54,23 @@ public class CartillaServiceImpl implements CartillaService {
     }
 
     @Override
+    public Cartilla crearCartilla(Cartilla cartilla) {
+
+        Cartilla result = cartillaRepository.save(cartilla);
+        cartilla.setIdcartilla(result.getIdcartilla());
+
+        for (int j = 0; j < cartilla.getPreguntas().size(); j++) {
+            cartilla.getPreguntas().get(j).agregarCartilla(result);
+        }
+
+        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
+            //cartillaRepository.save(cartilla);
+        }
+
+        return cartilla;
+    }
+
+    @Override
     @Transactional
     public Boolean actualizarCartilla(Cartilla cartilla) {
 
@@ -73,7 +90,7 @@ public class CartillaServiceImpl implements CartillaService {
         }
     }
 
-    private boolean guardarMayorIgualPreguntas(int tamPc,int tamPo, Cartilla cartilla, Cartilla original) {
+    private boolean guardarMayorIgualPreguntas(int tamPc, int tamPo, Cartilla cartilla, Cartilla original) {
 
         List<Pregunta> sobrantes = new ArrayList<>();
 

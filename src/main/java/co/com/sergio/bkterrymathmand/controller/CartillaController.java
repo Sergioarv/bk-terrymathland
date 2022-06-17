@@ -94,16 +94,39 @@ public class CartillaController {
         if( data){
             response.setData(true);
             response.setSuccess(true);
-            response.setMessage("Lista de cartillas obtenida con exito");
+            response.setMessage("Se ha actualizado la lista de preguntas de la cartilla");
         }else{
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("No se obtuvo la lista de cartillas");
+            response.setMessage("No se pudo editar la lista de preguntas de cartilla");
         }
 
         return new ResponseEntity<>(response, status);
     }
 
+    @ApiOperation(value = "Método encargado de crear una cartilla con sus preguntas")
+    @PostMapping
+    public ResponseEntity<GeneralResponse<Cartilla>> crearCartilla(
+            @RequestBody Cartilla cartilla
+    ){
+        GeneralResponse<Cartilla> response = new GeneralResponse<>();
+        Cartilla data;
+        HttpStatus status = HttpStatus.OK;
+
+        data = cartillaService.crearCartilla(cartilla);
+
+        if( data != null){
+            response.setData(data);
+            response.setSuccess(true);
+            response.setMessage("Se ha creado la cartilla con exito con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("Hubo un error al crear la cartilla");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
 
     @ApiOperation(value = "Método encargado de obtener la lista de preguntas de una cartillas")
     @GetMapping("/obtenerPreguntas")
