@@ -108,7 +108,7 @@ public class PreguntaController {
             }
         } else{
             response.setData(null);
-            response.setMessage("Huo un error al editar la pregunta");
+            response.setMessage("Hubo un error al editar la pregunta");
             response.setSuccess(false);
         }
 

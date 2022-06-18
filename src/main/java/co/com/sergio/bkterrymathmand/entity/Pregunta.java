@@ -2,6 +2,7 @@ package co.com.sergio.bkterrymathmand.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,52 +13,83 @@ import java.util.List;
  **/
 
 @Entity
-@Table(name="pregunta")
+@Table(name = "pregunta")
 public class Pregunta implements Serializable {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int idpregunta;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idpregunta;
 
-  @Column(nullable = false)
-  private String enunciado;
+    @Column(nullable = false)
+    private String enunciado;
 
-  private String urlImg;
+    private String urlImg;
 
-  @OneToMany(mappedBy = "pregunta")
-  private List<Opcion> opciones;
+    @OneToMany(mappedBy = "pregunta")
+    private List<Opcion> opciones;
 
-  /** Getter y Setter **/
+    @JoinTable(
+            name = "cartilla_pregunta",
+            joinColumns = @JoinColumn(name = "idpregunta", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "idcartilla", nullable = false)
+    )
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Cartilla> cartillas;
 
-  public int getIdpregunta() {
-    return idpregunta;
-  }
+    public void agregarCartilla(Cartilla cartilla) {
+        if (this.cartillas == null) {
+            this.cartillas = new ArrayList<>();
+        }
 
-  public void setIdpregunta(int idpregunta) {
-    this.idpregunta = idpregunta;
-  }
+        this.cartillas.add(cartilla);
+    }
 
-  public String getEnunciado() {
-    return enunciado;
-  }
+    public  void removerCartilla(Cartilla cartilla){
+        this.cartillas.remove(cartilla);
+        cartilla.getPreguntas().remove(this);
+    }
 
-  public void setEnunciado(String enunciado) {
-    this.enunciado = enunciado;
-  }
+    public List<Cartilla> obtenerCartillas(){
+        return this.cartillas;
+    }
 
-  public List<Opcion> getOpciones() {
-    return opciones;
-  }
+    /**
+     * Getter y Setter
+     **/
 
-  public void setOpciones(List<Opcion> opciones) {
-    this.opciones = opciones;
-  }
+    public int getIdpregunta() {
+        return idpregunta;
+    }
 
-  public String getUrlImg() {
-    return urlImg;
-  }
+    public void setIdpregunta(int idpregunta) {
+        this.idpregunta = idpregunta;
+    }
 
-  public void setUrlImg(String urlImg) {
-    this.urlImg = urlImg;
-  }
+    public String getEnunciado() {
+        return enunciado;
+    }
+
+    public void setEnunciado(String enunciado) {
+        this.enunciado = enunciado;
+    }
+
+    public List<Opcion> getOpciones() {
+        return opciones;
+    }
+
+    public void setOpciones(List<Opcion> opciones) {
+        this.opciones = opciones;
+    }
+
+    public String getUrlImg() {
+        return urlImg;
+    }
+
+    public void setUrlImg(String urlImg) {
+        this.urlImg = urlImg;
+    }
+
+    public void setCartillas(List<Cartilla> cartillas) {
+        this.cartillas = cartillas;
+    }
 }

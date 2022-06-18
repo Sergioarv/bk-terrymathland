@@ -1,6 +1,5 @@
 package co.com.sergio.bkterrymathmand.repository;
 
-import co.com.sergio.bkterrymathmand.dto.IDatosaGraficar;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import org.springframework.data.jpa.repository.JpaRepository;

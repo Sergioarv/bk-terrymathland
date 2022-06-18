@@ -2,7 +2,6 @@ package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.dto.IEstudianteProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
-import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
@@ -140,7 +139,7 @@ public class EstudianteController {
         }else{
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("El parametro buscado no existe en la base de datos, por favor verificar");
+            response.setMessage("El nombre buscado no existe en la base de datos, por favor verificar");
         }
 
         return new ResponseEntity<>(response, status);

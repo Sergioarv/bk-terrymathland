@@ -3,7 +3,7 @@ package co.com.sergio.bkterrymathmand.utils;
 import java.io.Serializable;
 
 /**
- * @project bk-aerolinea-bajocosto
+ * @project bk-terry-math-land
  * @Author Sergio Abelardo Rodríguez Vásquez
  * @Email ingsergiorodriguezv@gmail.com
  * @Date 14/03/2022 16:51

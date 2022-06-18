@@ -1,8 +1,7 @@
 package co.com.sergio.bkterrymathmand.dto;
 
-public interface IEstudianteProyeccion {
+public interface ICartillaProyeccion {
 
-    int getIdusuario();
+    int getIdcartilla();
     String getNombre();
-
 }
