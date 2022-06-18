@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class CartillaServiceImpl implements CartillaService {
@@ -61,7 +63,12 @@ public class CartillaServiceImpl implements CartillaService {
         cartilla.setIdcartilla(result.getIdcartilla());
 
         for (int j = 0; j < cartilla.getPreguntas().size(); j++) {
+            Pregunta pcartilla = preguntaRepository.getById(cartilla.getPreguntas().get(j).getIdpregunta());
             cartilla.getPreguntas().get(j).agregarCartilla(result);
+            List<Cartilla> listFinal = Stream.concat(cartilla.getPreguntas().get(j).obtenerCartillas().stream(), pcartilla.obtenerCartillas().stream())
+                    .distinct()
+                    .collect(Collectors.toList());
+            cartilla.getPreguntas().get(j).setCartillas(listFinal);
         }
 
         if (preguntaRepository.saveAll(cartilla.getPreguntas()) == null) {
@@ -75,17 +82,23 @@ public class CartillaServiceImpl implements CartillaService {
     @Transactional
     public Boolean eliminarCartilla(Cartilla cartilla) {
 
-        for (int i = 0; i < cartilla.getPreguntas().size(); i++) {
-            cartilla.getPreguntas().get(i).removerCartilla(cartilla);
-        }
+        Cartilla original = cartillaRepository.findById(cartilla.getIdcartilla()).orElse(null);
 
-        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
-            cartillaRepository.delete(cartilla);
-        } else {
-            return null;
-        }
+        if (original != null) {
+            for (int j = 0; j < cartilla.getPreguntas().size(); j++) {
+                Pregunta pcartilla = preguntaRepository.getById(cartilla.getPreguntas().get(j).getIdpregunta());
+                pcartilla.removerCartilla(original);
+                cartilla.getPreguntas().get(j).setCartillas(pcartilla.obtenerCartillas());
+            }
 
-        return true;
+            if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
+                cartillaRepository.delete(cartilla);
+            } else {
+                return null;
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -94,85 +107,88 @@ public class CartillaServiceImpl implements CartillaService {
 
         Cartilla original = cartillaRepository.findById(cartilla.getIdcartilla()).orElse(null);
 
-        if (original == null) {
-            return false;
-        } else {
+        if (original != null) {
+            List<Pregunta> sobrantes = new ArrayList<>();
+
             int tamPc = cartilla.getPreguntas().size();
             int tamPo = original.getPreguntas().size();
 
-            if (tamPc < tamPo) {
-                return guardarMenosPreguntas(tamPc, tamPo, cartilla, original);
-            } else {
-                return guardarMayorIgualPreguntas(tamPc, tamPo, cartilla, original);
-            }
-        }
-    }
-
-    private boolean guardarMayorIgualPreguntas(int tamPc, int tamPo, Cartilla cartilla, Cartilla original) {
-
-        List<Pregunta> sobrantes = new ArrayList<>();
-
-        for (int j = 0; j < tamPc; j++) {
-            cartilla.getPreguntas().get(j).agregarCartilla(original);
-        }
-
-        boolean isTrue = false;
-        for (int i = 0; i < tamPo; i++) {
-            isTrue = false;
-            Pregunta p = original.getPreguntas().get(i);
             for (int j = 0; j < tamPc; j++) {
-                Pregunta pc = cartilla.getPreguntas().get(j);
-                if (pc.getIdpregunta() == p.getIdpregunta()) {
-                    isTrue = true;
-                    break;
+                Pregunta pcartilla = preguntaRepository.getById(cartilla.getPreguntas().get(j).getIdpregunta());
+                cartilla.getPreguntas().get(j).agregarCartilla(original);
+                List<Cartilla> listFinal = Stream.concat(cartilla.getPreguntas().get(j).obtenerCartillas().stream(), pcartilla.obtenerCartillas().stream())
+                        .distinct()
+                        .collect(Collectors.toList());
+                cartilla.getPreguntas().get(j).setCartillas(listFinal);
+            }
+
+            boolean isTrue = false;
+            for (int i = 0; i < tamPo; i++) {
+                isTrue = false;
+                Pregunta p = original.getPreguntas().get(i);
+                for (int j = 0; j < tamPc; j++) {
+                    Pregunta pc = cartilla.getPreguntas().get(j);
+                    if (pc.getIdpregunta() == p.getIdpregunta()) {
+                        isTrue = true;
+                        break;
+                    }
+                }
+                if (!isTrue) {
+                    sobrantes.add(p);
                 }
             }
-            if (!isTrue) {
-                original.getPreguntas().get(i).removerCartilla(original);
-                tamPo = original.getPreguntas().size();
+
+            for (Pregunta sobrante : sobrantes) {
+                sobrante.removerCartilla(original);
             }
-        }
-        cartillaRepository.save(original);
 
-        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
-            cartillaRepository.save(cartilla);
-            return true;
-        } else {
-            return false;
-        }
-    }
+            preguntaRepository.saveAll(sobrantes);
 
-    private boolean guardarMenosPreguntas(int tamPc, int tamPo, Cartilla cartilla, Cartilla original) {
-
-        List<Pregunta> sobrantes = new ArrayList<>();
-
-        for (int j = 0; j < tamPc; j++) {
-            cartilla.getPreguntas().get(j).agregarCartilla(original);
-        }
-
-        boolean isTrue = false;
-        for (int i = 0; i < tamPo; i++) {
-            isTrue = false;
-            Pregunta p = original.getPreguntas().get(i);
-            for (int j = 0; j < tamPc; j++) {
-                Pregunta pc = cartilla.getPreguntas().get(j);
-                if (pc.getIdpregunta() == p.getIdpregunta()) {
-                    isTrue = true;
-                    break;
-                }
-            }
-            if (!isTrue) {
-                original.getPreguntas().get(i).removerCartilla(original);
-                tamPo = original.getPreguntas().size();
-            }
-        }
-        cartillaRepository.save(original);
-
-        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
-            if (cartillaRepository.save(cartilla) != null) {
+            if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
+                cartillaRepository.save(cartilla);
                 return true;
             }
         }
         return false;
+
     }
+//
+//    private boolean guardarMayorIgualPreguntas(int tamPc, int tamPo, Cartilla cartilla, Cartilla original) {
+//
+//
+//    }
+//
+//    private boolean guardarMenosPreguntas(int tamPc, int tamPo, Cartilla cartilla, Cartilla original) {
+//
+//        List<Pregunta> sobrantes = new ArrayList<>();
+//
+//        for (int j = 0; j < tamPc; j++) {
+//            cartilla.getPreguntas().get(j).agregarCartilla(original);
+//        }
+//
+//        boolean isTrue = false;
+//        for (int i = 0; i < tamPo; i++) {
+//            isTrue = false;
+//            Pregunta p = original.getPreguntas().get(i);
+//            for (int j = 0; j < tamPc; j++) {
+//                Pregunta pc = cartilla.getPreguntas().get(j);
+//                if (pc.getIdpregunta() == p.getIdpregunta()) {
+//                    isTrue = true;
+//                    break;
+//                }
+//            }
+//            if (!isTrue) {
+//                original.getPreguntas().get(i).removerCartilla(original);
+//                tamPo = original.getPreguntas().size();
+//            }
+//        }
+//        cartillaRepository.save(original);
+//
+//        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
+//            if (cartillaRepository.save(cartilla) != null) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }

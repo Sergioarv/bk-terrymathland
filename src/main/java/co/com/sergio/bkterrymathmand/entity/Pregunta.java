@@ -49,6 +49,10 @@ public class Pregunta implements Serializable {
         cartilla.getPreguntas().remove(this);
     }
 
+    public List<Cartilla> obtenerCartillas(){
+        return this.cartillas;
+    }
+
     /**
      * Getter y Setter
      **/
