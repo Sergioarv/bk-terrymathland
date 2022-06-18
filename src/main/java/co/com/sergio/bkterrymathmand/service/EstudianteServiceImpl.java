@@ -3,7 +3,6 @@ package co.com.sergio.bkterrymathmand.service;
 import co.com.sergio.bkterrymathmand.dto.IEstudianteProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
-import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;

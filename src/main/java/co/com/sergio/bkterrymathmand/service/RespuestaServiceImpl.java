@@ -1,6 +1,5 @@
 package co.com.sergio.bkterrymathmand.service;
 
-import co.com.sergio.bkterrymathmand.dto.IDatosaGraficar;
 import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
@@ -83,9 +82,9 @@ public class RespuestaServiceImpl implements RespuestaService {
     public List<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha) {
 
         if (estudiante != null && fecha != null) {
-            return respuestaRepository.respuestasPorEstudianteYFecha(Integer.valueOf(estudiante.getIdusuario()), fecha);
+            return respuestaRepository.respuestasPorEstudianteYFecha(estudiante.getIdusuario(), fecha);
         } else if (estudiante != null) {
-            return respuestaRepository.respuestaPorEstudiante(Integer.valueOf(estudiante.getIdusuario()));
+            return respuestaRepository.respuestaPorEstudiante(estudiante.getIdusuario());
         } else if (fecha != null) {
             return respuestaRepository.obtenerRespuestasPorFecha(fecha);
         } else {

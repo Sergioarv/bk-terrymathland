@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
+import co.com.sergio.bkterrymathmand.dto.ICartillaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Cartilla;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.service.CartillaService;
@@ -43,6 +44,29 @@ public class CartillaController {
         return new ResponseEntity<>(response, status);
     }
 
+    @ApiOperation(value = "Método encargado de lista una proyeccion de cartillas para mostrar en el juego")
+    @GetMapping("/listarCartillas")
+    public ResponseEntity<GeneralResponse<List<ICartillaProyeccion>>> listarCartillas(){
+
+        GeneralResponse<List<ICartillaProyeccion>> response = new GeneralResponse<>();
+        List<ICartillaProyeccion> data;
+        HttpStatus status = HttpStatus.OK;
+
+        data = cartillaService.listarCartillas();
+
+        if( data != null){
+            response.setData(data);
+            response.setSuccess(true);
+            response.setMessage("Lista de cartillas obtenida con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("No se obtuvo la lista de cartillas");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
     @ApiOperation(value = "Método encargado de obtener la lista preguntas por filtro de cartilla", response = ResponseEntity.class)
     @GetMapping("/filtrarPreguntas")
     public ResponseEntity<GeneralResponse<List<Pregunta>>> filtrarPreguntas(
@@ -70,7 +94,7 @@ public class CartillaController {
             } else {
                 response.setData(null);
                 response.setSuccess(false);
-                response.setMessage("La cartilla no tiene preguntas o ");
+                response.setMessage("La cartilla no tiene preguntas");
             }
         }catch (NumberFormatException nfe){
             response.setData(null);
@@ -151,7 +175,7 @@ public class CartillaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de obtener la lista de preguntas de una cartillas")
+    @ApiOperation(value = "Método encargado de obtener la lista de preguntas de una cartilla para el juego")
     @GetMapping("/obtenerPreguntas")
     public ResponseEntity<GeneralResponse<List<Pregunta>>> obtenerPreguntas(@RequestParam(value = "idcartilla") int idcartilla){
         GeneralResponse<List<Pregunta>> response = new GeneralResponse<>();
@@ -161,9 +185,15 @@ public class CartillaController {
         data = cartillaService.obtenerPreguntas(idcartilla);
 
         if( data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Lista de preguntas obtenida con exito de la cartilla solicitada");
+            if(data.size() != 0){
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Lista de preguntas obtenida con exito de la cartilla solicitada");
+            }else{
+                response.setData(data);
+                response.setSuccess(false);
+                response.setMessage("Lista de preguntas de la esta vacia");
+            }
         }else{
             response.setData(null);
             response.setSuccess(false);

@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.dto.ICartillaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Cartilla;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.repository.CartillaRepository;
@@ -45,7 +46,7 @@ public class CartillaServiceImpl implements CartillaService {
     @Transactional(readOnly = true)
     public List<Pregunta> filtrarPregunta(String idcartilla) {
 
-        List<Pregunta> listResult = null;
+        List<Pregunta> listResult;
 
         if (idcartilla != null) {
             listResult = obtenerPreguntas(Integer.parseInt(idcartilla));
@@ -99,6 +100,11 @@ public class CartillaServiceImpl implements CartillaService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<ICartillaProyeccion> listarCartillas() {
+        return cartillaRepository.listarCartillas();
     }
 
     @Override

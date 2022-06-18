@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.dto.ICartillaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Cartilla;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
 
@@ -18,4 +19,6 @@ public interface CartillaService {
     Cartilla crearCartilla(Cartilla cartilla);
 
     Boolean eliminarCartilla(Cartilla cartilla);
+
+    List<ICartillaProyeccion> listarCartillas();
 }
