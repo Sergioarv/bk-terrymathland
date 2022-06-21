@@ -1,5 +1,8 @@
 package co.com.sergio.bkterrymathmand.controller;
 
+import co.com.sergio.bkterrymathmand.dto.IDatosPromedioEstudiante;
+import co.com.sergio.bkterrymathmand.dto.IDatosaGraficar;
+import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
@@ -24,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/respuesta")
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class RespuestaController {
 
     @Autowired
@@ -44,7 +47,7 @@ public class RespuestaController {
             response.setData(data);
             response.setSuccess(true);
             response.setMessage("Lista de respuestas obtenida con éxito");
-        }else {
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Hubo un error al obtener la lista de respuestas");
@@ -56,9 +59,9 @@ public class RespuestaController {
     @ApiOperation(value = "Método encargado de obtener la lista de respuestas por filtro")
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestasPorFiltro(
-            @RequestParam(value = "estudiante", required = false)Estudiante estudiante,
+            @RequestParam(value = "estudiante", required = false) Estudiante estudiante,
             @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha
-            ){
+    ) {
 
         GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
         List<Respuesta> data;
@@ -66,7 +69,7 @@ public class RespuestaController {
 
         data = respuestaService.obtenerRespuestasPorFiltro(estudiante, fecha);
 
-        if (data != null){
+        if (data != null) {
 
             response.setData(data);
             response.setSuccess(true);
@@ -79,7 +82,7 @@ public class RespuestaController {
                 response.setSuccess(false);
                 response.setMessage("No se encontro ningun respuesata");
             }
-        }else {
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Lista de resultados esta vacia");
@@ -103,7 +106,7 @@ public class RespuestaController {
             response.setData(data);
             response.setSuccess(true);
             response.setMessage("Lista de respuestas obtenida con exito");
-        }else {
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("No se encontro respuestas con el parametro de busqueda");
@@ -128,7 +131,7 @@ public class RespuestaController {
             response.setData(data);
             response.setSuccess(true);
             response.setMessage("Respuesta obtenida con exito");
-        }else {
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("No se encontraron respuesta del usuario en las fechas especificadas");
@@ -140,7 +143,7 @@ public class RespuestaController {
 
     @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante", response = ResponseEntity.class)
     @PutMapping(value = "/guardarRespuestaEstudiante", consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
-    public ResponseEntity<GeneralResponse<List<IRespuestaProyeccion>>> guardarRespuesta(@RequestBody Estudiante estudiante){
+    public ResponseEntity<GeneralResponse<List<IRespuestaProyeccion>>> guardarRespuesta(@RequestBody Estudiante estudiante) {
 
         GeneralResponse<List<IRespuestaProyeccion>> response = new GeneralResponse<>();
         List<IRespuestaProyeccion> nuevoEstudiante;
@@ -148,11 +151,11 @@ public class RespuestaController {
 
         nuevoEstudiante = respuestaService.guardarRespuestaEstudiante(estudiante);
 
-        if(nuevoEstudiante != null){
+        if (nuevoEstudiante != null) {
             response.setData(nuevoEstudiante);
             response.setSuccess(true);
             response.setMessage("Se agrego la respuesta con exito");
-        }else{
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("No se pudo agregar o actualiza la respuesta del estudiante");
@@ -161,32 +164,55 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
-//    @ApiOperation(value = "Método encargado de obtener la lista de respuestas para graficar")
-//    @GetMapping("/graficarRespuestas")
-//    public ResponseEntity<GeneralResponse<IDatosaGraficarDTO>> graficarRespuestas(
-//            @RequestParam(value = "estudiante", required = false)Estudiante estudiante,
-//            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha
-//    ){
-//
-//        GeneralResponse<IDatosaGraficarDTO> response = new GeneralResponse<>();
-//        IDatosaGraficarDTO data;
-//        HttpStatus status = HttpStatus.OK;
-//
-//        data = respuestaService.graficarRespuestas(estudiante, fecha);
-//
-//        if (data != null){
-//
-//            response.setData(data);
-//            response.setSuccess(true);
-//
-//
-//        }else {
-//            response.setData(null);
-//            response.setSuccess(false);
-//            response.setMessage("Lista de resultados esta vacia");
-//        }
-//
-//        return new ResponseEntity<>(response, status);
-//    }
+    @ApiOperation(value = "Método encargado de obtener la lista de respuestas para graficar")
+    @GetMapping("/graficarRespuestas")
+    public ResponseEntity<GeneralResponse<IDatosaGraficarDTO>> graficarRespuestas(
+            @RequestParam(value = "estudiante", required = false) Estudiante estudiante,
+            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha
+    ) {
+
+        GeneralResponse<IDatosaGraficarDTO> response = new GeneralResponse<>();
+        IDatosaGraficarDTO data;
+        HttpStatus status = HttpStatus.OK;
+
+        data = respuestaService.graficarRespuestas(estudiante, fecha);
+
+        if (data != null) {
+            if (data.getListaPromedioNotas().size() == 0) {
+                response.setData(data);
+                response.setSuccess(false);
+                response.setMessage("No se encontraron datos de respuestas para graficar");
+            } else if (verificarPromedioEstudiantes(data.getListaPromedioEstudiantes())) {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("No se encontraron datos de respuestas para la grafica de torta");
+            } else {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Se han obtenido los datos de respuestas a graficar");
+            }
+        } else {
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("Lista de resultados esta vacia");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    private boolean verificarPromedioEstudiantes(List<IDatosPromedioEstudiante> listaPromedioEstudiantes) {
+
+        float total = 0;
+
+        for (IDatosPromedioEstudiante dato : listaPromedioEstudiantes) {
+            total += dato.getPromedioestudiantes();
+        }
+
+        if (total == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
