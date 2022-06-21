@@ -1,27 +1,25 @@
 package co.com.sergio.bkterrymathmand.dto;
 
-import co.com.sergio.bkterrymathmand.entity.Respuesta;
-
 import java.util.List;
 
 public class IDatosaGraficarDTO {
 
-    public List<Respuesta> respuestas;
-    public List<IRespuestaProyeccion> respuestaFecha;
+    public List<IDatosPromedioNotas> listaPromedioNotas;
+    public List<IDatosPromedioEstudiante> listaPromedioEstudiantes;
 
-    public List<Respuesta> getRespuestas() {
-        return respuestas;
+    public List<IDatosPromedioNotas> getListaPromedioNotas() {
+        return listaPromedioNotas;
     }
 
-    public void setRespuestas(List<Respuesta> respuestas) {
-        this.respuestas = respuestas;
+    public void setListaPromedioNotas(List<IDatosPromedioNotas> listaPromedioNotas) {
+        this.listaPromedioNotas = listaPromedioNotas;
     }
 
-    public List<IRespuestaProyeccion> getRespuestaFecha() {
-        return respuestaFecha;
+    public List<IDatosPromedioEstudiante> getListaPromedioEstudiantes() {
+        return listaPromedioEstudiantes;
     }
 
-    public void setRespuestaFecha(List<IRespuestaProyeccion> respuestaFecha) {
-        this.respuestaFecha = respuestaFecha;
+    public void setListaPromedioEstudiantes(List<IDatosPromedioEstudiante> listaPromedioEstudiantes) {
+        this.listaPromedioEstudiantes = listaPromedioEstudiantes;
     }
 }

@@ -66,6 +66,11 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
 
     @Override
+    public List<IEstudianteProyeccion> obtenerIdyNombreEstudiantes() {
+        return estudianteRepository.obtenerIdyNombreEstudiantes();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public IEstudianteProyeccion estudianteByNombre(String nombre) {
         return estudianteRepository.estudianteByNombre(nombre);

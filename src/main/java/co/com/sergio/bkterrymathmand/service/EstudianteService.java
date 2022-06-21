@@ -25,4 +25,6 @@ public interface EstudianteService {
     Estudiante actualizarEstudiante(Estudiante estudiante);
 
     boolean eliminarEstudiante(Estudiante estudiante);
+
+    List<IEstudianteProyeccion> obtenerIdyNombreEstudiantes();
 }

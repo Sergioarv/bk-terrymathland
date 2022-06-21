@@ -30,4 +30,7 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Integer>
 
     @Query(value = "select * from estudiante as e inner join (select * from respuesta as r where r.fecha = :fecha) as rs on e.idusuario = rs.idusuario order by e.idusuario", nativeQuery = true)
     List<Estudiante> estudiantePorFechaRespuesta(Date fecha);
+
+    @Query(value = "select * from estudiante", nativeQuery = true)
+    List<IEstudianteProyeccion> obtenerIdyNombreEstudiantes();
 }

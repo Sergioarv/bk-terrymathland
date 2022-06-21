@@ -1,6 +1,5 @@
 package co.com.sergio.bkterrymathmand.service;
 
-import co.com.sergio.bkterrymathmand.dto.IDatosaGraficar;
 import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
@@ -45,6 +44,9 @@ public class RespuestaServiceImpl implements RespuestaService {
 
     @DateTimeFormat(pattern = "%Y-%m-%d")
     Date fechaActual;
+
+    @DateTimeFormat(pattern = "%Y-%m-%d")
+    Date fechaHoy;
 
     @Override
     @Transactional(readOnly = true)
@@ -97,13 +99,24 @@ public class RespuestaServiceImpl implements RespuestaService {
     @Transactional(readOnly = true)
     public IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha) {
 
-        if (estudiante != null) {
-            return null;
+        IDatosaGraficarDTO datosaGraficarDTO = new IDatosaGraficarDTO();
+
+        if (estudiante != null && fecha != null) {
+            datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotasPorIdFecha(estudiante.getIdusuario(), fecha));
+            datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantesPorIdFecha(estudiante.getIdusuario(), fecha));
+        } else if (estudiante != null) {
+            datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotasPorId(estudiante.getIdusuario()));
+            datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantesPoId(estudiante.getIdusuario()));
         } else if (fecha != null) {
-            return null;
+            datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotas(fecha));
+            datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantesPorFecha(fecha));
         } else {
-            return null;
+            LocalDate hoy = LocalDate.now();
+            fechaHoy = java.sql.Date.valueOf(hoy);
+            datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotas(fechaHoy));
+            datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantes());
         }
+        return datosaGraficarDTO;
     }
 
     /**

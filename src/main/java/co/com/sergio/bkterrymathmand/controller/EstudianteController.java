@@ -183,4 +183,28 @@ public class EstudianteController {
         }
         return new ResponseEntity<>(response, status);
     }
+
+    @ApiOperation(value = "Método encargado de obtener la lista unicamente id y nombre de estudiantes", response = ResponseEntity.class)
+    @GetMapping("/listarEstudiantes")
+    public ResponseEntity<GeneralResponse<List<IEstudianteProyeccion>>> obtenerIdyNombreEstudiantes(){
+
+        GeneralResponse<List<IEstudianteProyeccion>> response = new GeneralResponse<>();
+        HttpStatus status = HttpStatus.OK;
+        List<IEstudianteProyeccion> data;
+
+        data = estudianteService.obtenerIdyNombreEstudiantes();
+
+        if(data != null){
+            response.setData(data);
+            response.setSuccess(true);
+            response.setMessage("Lista de estudiantes obtenida con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("La lista de estudiantes esta vacia");
+        }
+
+        return new ResponseEntity<>(response, status);
+
+    }
 }
