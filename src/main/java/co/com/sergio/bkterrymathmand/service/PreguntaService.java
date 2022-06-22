@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,5 +25,5 @@ public interface PreguntaService {
 
     List<Pregunta> filtrarPregunta(String id, String enunciado);
 
-    Pregunta editarPregunta(Pregunta pregunta);
+    Pregunta editarPregunta(Pregunta pregunta, MultipartFile file);
 }

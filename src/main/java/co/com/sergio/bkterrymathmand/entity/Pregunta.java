@@ -24,6 +24,8 @@ public class Pregunta implements Serializable {
     private String enunciado;
 
     private String urlImg;
+    private String nombreImg;
+    private String idImg;
 
     @OneToMany(mappedBy = "pregunta")
     private List<Opcion> opciones;
@@ -91,5 +93,21 @@ public class Pregunta implements Serializable {
 
     public void setCartillas(List<Cartilla> cartillas) {
         this.cartillas = cartillas;
+    }
+
+    public String getNombreImg() {
+        return nombreImg;
+    }
+
+    public void setNombreImg(String nombreImg) {
+        this.nombreImg = nombreImg;
+    }
+
+    public String getIdImg() {
+        return idImg;
+    }
+
+    public void setIdImg(String idImg) {
+        this.idImg = idImg;
     }
 }

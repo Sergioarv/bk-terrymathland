@@ -3,12 +3,18 @@ package co.com.sergio.bkterrymathmand.controller;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.service.PreguntaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pregunta")
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class PreguntaController {
 
     @Autowired
@@ -78,7 +84,7 @@ public class PreguntaController {
                 response.setSuccess(false);
                 response.setMessage("La lista de preguntas esta vacia");
             }
-        }catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
@@ -86,32 +92,68 @@ public class PreguntaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de actualizar una pregunnta", response = ResponseEntity.class)
-    @PutMapping(consumes = { "application/json;charset=UTF-8;application/x-www-form-urlencoded; multipart/form-data"} )
-    public ResponseEntity<GeneralResponse<Pregunta>> editarPregunta(@RequestBody Pregunta pregunta){
+    @ApiOperation(value = "Método encargado de actualizar una pregunnta, sus opciones e imagen", response = ResponseEntity.class)
+    @PostMapping("/editarPregunta")
+    public ResponseEntity<GeneralResponse<Pregunta>> editarPregunta(
+            @RequestPart(value = "file", required = false) MultipartFile file, @RequestPart("pregunta") String pregunta
+    ) throws JsonProcessingException {
 
         GeneralResponse<Pregunta> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
         Pregunta data;
 
-        data = preguntaService.editarPregunta(pregunta);
+        Pregunta preguntaJson = new Pregunta();
 
-        if(data != null){
-            if(data.getOpciones() != null ) {
+        ObjectMapper obj = new ObjectMapper();
+        preguntaJson = obj.readValue(pregunta, Pregunta.class);
+
+        try {
+            if (!verificarImagen(file) && !file.isEmpty()) {
+                response.setData(preguntaJson);
+                response.setMessage("Por favor selecciona una imagen en .png o .jpg");
+                response.setSuccess(false);
+
+                return new ResponseEntity<>(response, status);
+            }
+
+            data = preguntaService.editarPregunta(preguntaJson, file);
+
+            if (data == null) {
+                response.setData(null);
+                response.setMessage("Hubo un error al editar la pregunta");
+                response.setSuccess(false);
+            } else if (data.getOpciones() == null) {
+                response.setData(data);
+                response.setMessage("Hubo un error al editar las opciones de la pregunta");
+                response.setSuccess(false);
+            } else if (data.getUrlImg() == "-1") {
+                response.setData(data);
+                response.setMessage("Hubo un error al editar la imagen de la pregunta");
+                response.setSuccess(false);
+            } else {
                 response.setData(data);
                 response.setMessage("Se edito correctamente");
                 response.setSuccess(true);
-            }else{
-                response.setData(data);
-                response.setMessage("Hubo un error al editar la opciones");
-                response.setSuccess(true);
             }
-        } else{
-            response.setData(null);
-            response.setMessage("Hubo un error al editar la pregunta");
-            response.setSuccess(false);
-        }
 
-        return new ResponseEntity<>(response, status);
+            return new ResponseEntity<>(response, status);
+
+        } catch (IOException e) {
+
+            response.setData(null);
+            response.setMessage("Hubo un error al editar la imagen de la pregunta");
+            response.setSuccess(false);
+
+            return new ResponseEntity<>(response, status);
+        }
+    }
+
+    private boolean verificarImagen(MultipartFile file) throws IOException {
+
+        BufferedImage bi = ImageIO.read(file.getInputStream());
+        if (bi == null) {
+            return false;
+        }
+        return true;
     }
 }
