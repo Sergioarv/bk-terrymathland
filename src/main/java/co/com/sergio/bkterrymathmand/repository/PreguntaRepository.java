@@ -19,9 +19,9 @@ public interface PreguntaRepository extends JpaRepository<Pregunta, Integer> {
     @Query(value = "select * from pregunta as p where p.idpregunta = :id", nativeQuery = true)
     List<Pregunta> filtrarPorId(int id);
 
-    @Query(value = "select * from pregunta as p where p.enunciado like %:filtro%", nativeQuery = true)
+    @Query(value = "select * from pregunta as p where p.enunciado like %:filtro% order by p.idpregunta", nativeQuery = true)
     List<Pregunta> filtrarPor(String filtro);
 
-    @Query(value = "select * from pregunta as p where p.idpregunta = :id or p.enunciado like %:filtro%", nativeQuery = true)
+    @Query(value = "select * from pregunta as p where p.idpregunta = :id or p.enunciado like %:filtro% order by p.idpregunta", nativeQuery = true)
     List<Pregunta> filtrarPorIdOEnunciado(int id, String filtro);
 }

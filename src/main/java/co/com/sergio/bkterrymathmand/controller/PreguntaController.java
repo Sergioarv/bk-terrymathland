@@ -92,10 +92,60 @@ public class PreguntaController {
         return new ResponseEntity<>(response, status);
     }
 
+    @ApiOperation(value = "Método encargado de crear y guardar una pregunta nueva")
+    @PostMapping
+    public ResponseEntity<GeneralResponse<Pregunta>> crearPregunta(
+            @RequestPart(value = "file", required = false) MultipartFile file, @RequestParam("pregunta") String pregunta
+    ) throws JsonProcessingException {
+        GeneralResponse<Pregunta> response = new GeneralResponse<>();
+        HttpStatus status = HttpStatus.OK;
+        Pregunta data;
+
+        Pregunta preguntaJson = new Pregunta();
+
+        ObjectMapper obj = new ObjectMapper();
+        preguntaJson = obj.readValue(pregunta, Pregunta.class);
+
+        try {
+            if (!verificarImagen(file) && file != null) {
+                response.setData(preguntaJson);
+                response.setMessage("Por favor selecciona una imagen en .png o .jpg");
+                response.setSuccess(false);
+
+                return new ResponseEntity<>(response, status);
+            }
+
+            data = preguntaService.crearPregunta(preguntaJson, file);
+
+            if (data == null) {
+                response.setData(null);
+                response.setMessage("Hubo un error al crear la pregunta");
+                response.setSuccess(false);
+            } else if (data.getOpciones() == null) {
+                response.setData(data);
+                response.setMessage("Hubo un error al crear las opciones de la pregunta");
+                response.setSuccess(false);
+            } else {
+                response.setData(data);
+                response.setMessage("Se creo la pregunta correctamente");
+                response.setSuccess(true);
+            }
+
+            return new ResponseEntity<>(response, status);
+
+        } catch (IOException e) {
+            response.setData(null);
+            response.setMessage("Hubo un error al crear la imagen de la pregunta");
+            response.setSuccess(false);
+
+            return new ResponseEntity<>(response, status);
+        }
+    }
+
     @ApiOperation(value = "Método encargado de actualizar una pregunnta, sus opciones e imagen", response = ResponseEntity.class)
     @PostMapping("/editarPregunta")
     public ResponseEntity<GeneralResponse<Pregunta>> editarPregunta(
-            @RequestPart(value = "file", required = false) MultipartFile file, @RequestPart("pregunta") String pregunta
+            @RequestPart(value = "file", required = false) MultipartFile file, @RequestParam("pregunta") String pregunta
     ) throws JsonProcessingException {
 
         GeneralResponse<Pregunta> response = new GeneralResponse<>();
@@ -108,7 +158,7 @@ public class PreguntaController {
         preguntaJson = obj.readValue(pregunta, Pregunta.class);
 
         try {
-            if (!verificarImagen(file) && !file.isEmpty()) {
+            if (!verificarImagen(file) && file != null) {
                 response.setData(preguntaJson);
                 response.setMessage("Por favor selecciona una imagen en .png o .jpg");
                 response.setSuccess(false);
@@ -150,9 +200,11 @@ public class PreguntaController {
 
     private boolean verificarImagen(MultipartFile file) throws IOException {
 
-        BufferedImage bi = ImageIO.read(file.getInputStream());
-        if (bi == null) {
-            return false;
+        if (file != null) {
+            BufferedImage bi = ImageIO.read(file.getInputStream());
+            if (bi == null) {
+                return false;
+            }
         }
         return true;
     }

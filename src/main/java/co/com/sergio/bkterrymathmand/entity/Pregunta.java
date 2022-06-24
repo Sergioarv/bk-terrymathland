@@ -17,14 +17,18 @@ import java.util.List;
 public class Pregunta implements Serializable {
 
     @Id
+    @Column(name = "idpregunta", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idpregunta;
 
     @Column(nullable = false)
     private String enunciado;
 
+    @Column(nullable = false)
     private String urlImg;
+    @Column(nullable = false)
     private String nombreImg;
+    @Column(nullable = false)
     private String idImg;
 
     @OneToMany(mappedBy = "pregunta")

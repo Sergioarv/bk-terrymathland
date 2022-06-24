@@ -26,4 +26,6 @@ public interface PreguntaService {
     List<Pregunta> filtrarPregunta(String id, String enunciado);
 
     Pregunta editarPregunta(Pregunta pregunta, MultipartFile file);
+
+    Pregunta crearPregunta(Pregunta preguntaJson, MultipartFile file);
 }

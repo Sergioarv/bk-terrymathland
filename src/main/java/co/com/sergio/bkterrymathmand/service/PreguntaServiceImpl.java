@@ -5,6 +5,7 @@ import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.repository.OpcionRepository;
 import co.com.sergio.bkterrymathmand.repository.PreguntaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +36,7 @@ public class PreguntaServiceImpl implements PreguntaService {
     @Override
     @Transactional(readOnly = true)
     public List<Pregunta> obtenerPreguntas() {
-        return preguntaRepository.findAll();
+        return preguntaRepository.findAll(Sort.by(Sort.Direction.ASC, "idpregunta"));
     }
 
     @Override
@@ -110,7 +111,7 @@ public class PreguntaServiceImpl implements PreguntaService {
                             preguntaEditada.setNombreImg("");
                             preguntaEditada.setIdImg("");
                         } else if (preguntaEditada.getUrlImg() != "" && preguntaEditada.getIdImg() != "") {
-                            if (!file.isEmpty()) {
+                            if (file != null) {
                                 Map borrado = cloudinaryService.eliminarImagen(preguntaEditada.getIdImg());
                                 if (!("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
                                     preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg());
@@ -124,8 +125,8 @@ public class PreguntaServiceImpl implements PreguntaService {
                                     preguntaEditada.setIdImg((String) imagen.get("public_id"));
                                 }
                             }
-                        } else if (preguntaEditada.getUrlImg() == "" && preguntaEditada.getUrlImg() == "") {
-                            if (!file.isEmpty()) {
+                        } else if (preguntaEditada.getUrlImg() == "" && preguntaEditada.getIdImg() == "") {
+                            if (file != null) {
                                 Map imagen = cloudinaryService.cargarImagen(file);
                                 preguntaEditada.setUrlImg((String) imagen.get("url"));
                                 preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
@@ -140,5 +141,51 @@ public class PreguntaServiceImpl implements PreguntaService {
             }
         }
         return preguntaEditada;
+    }
+
+    @Override
+    @Transactional
+    public Pregunta crearPregunta(Pregunta pregunta, MultipartFile file) {
+
+        List<Opcion> opciones;
+        Pregunta preguntaGuardada = new Pregunta();
+        Pregunta preguntaAGuardar = new Pregunta();
+
+        preguntaAGuardar.setEnunciado(pregunta.getEnunciado());
+        preguntaAGuardar.setUrlImg(pregunta.getUrlImg());
+        preguntaAGuardar.setIdImg(pregunta.getIdImg());
+        preguntaAGuardar.setNombreImg(pregunta.getNombreImg());
+
+        preguntaGuardada = preguntaRepository.save(preguntaAGuardar);
+        preguntaAGuardar.setIdpregunta(preguntaGuardada.getIdpregunta());
+
+        if (preguntaGuardada != null) {
+            for (int i = 0; i < pregunta.getOpciones().size(); i++) {
+                pregunta.getOpciones().get(i).setIdopcion(0);
+                pregunta.getOpciones().get(i).setPregunta(preguntaAGuardar);
+            }
+            opciones = opcionRepository.saveAll(pregunta.getOpciones());
+            preguntaAGuardar.setOpciones(opciones);
+
+            if (opciones != null) {
+
+                preguntaGuardada = preguntaRepository.save(preguntaAGuardar);
+
+                if (preguntaGuardada != null) {
+                    try {
+                        if (file != null) {
+                            Map imagen = cloudinaryService.cargarImagen(file);
+                            preguntaGuardada.setUrlImg((String) imagen.get("url"));
+                            preguntaGuardada.setNombreImg((String) imagen.get("original_filename"));
+                            preguntaGuardada.setIdImg((String) imagen.get("public_id"));
+                        }
+                        preguntaRepository.save(preguntaGuardada);
+                    } catch (IOException e) {
+                        preguntaGuardada = null;
+                    }
+                }
+            }
+        }
+        return preguntaGuardada;
     }
 }
