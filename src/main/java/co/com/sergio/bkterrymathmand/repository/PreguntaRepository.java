@@ -24,4 +24,7 @@ public interface PreguntaRepository extends JpaRepository<Pregunta, Integer> {
 
     @Query(value = "select * from pregunta as p where p.idpregunta = :id or p.enunciado like %:filtro% order by p.idpregunta", nativeQuery = true)
     List<Pregunta> filtrarPorIdOEnunciado(int id, String filtro);
+
+    @Query(value = "select max(idpregunta) from pregunta",nativeQuery = true)
+    int ultimoId();
 }

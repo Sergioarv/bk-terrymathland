@@ -81,7 +81,7 @@ public class PreguntaServiceImpl implements PreguntaService {
     public Pregunta editarPregunta(Pregunta pregunta, MultipartFile file) {
 
         List<Opcion> opciones;
-        Pregunta preguntaGuardada = null;
+        Pregunta preguntaGuardada;
         Pregunta preguntaEditada = null;
 
         preguntaGuardada = preguntaRepository.findById(pregunta.getIdpregunta()).orElse(null);
@@ -99,7 +99,7 @@ public class PreguntaServiceImpl implements PreguntaService {
 
                 if (preguntaEditada != null) {
                     try {
-                        if (preguntaEditada.getUrlImg() == "" && preguntaEditada.getIdImg() != "") {
+                        if (preguntaEditada.getUrlImg().equals("") && !preguntaEditada.getIdImg().equals("")) {
                             Map borrado = cloudinaryService.eliminarImagen(preguntaEditada.getIdImg());
                             if (!("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
                                 preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg());
@@ -110,7 +110,7 @@ public class PreguntaServiceImpl implements PreguntaService {
                             preguntaEditada.setUrlImg("");
                             preguntaEditada.setNombreImg("");
                             preguntaEditada.setIdImg("");
-                        } else if (preguntaEditada.getUrlImg() != "" && preguntaEditada.getIdImg() != "") {
+                        } else if (!preguntaEditada.getUrlImg().equals("") && !preguntaEditada.getIdImg().equals("")) {
                             if (file != null) {
                                 Map borrado = cloudinaryService.eliminarImagen(preguntaEditada.getIdImg());
                                 if (!("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
@@ -125,7 +125,7 @@ public class PreguntaServiceImpl implements PreguntaService {
                                     preguntaEditada.setIdImg((String) imagen.get("public_id"));
                                 }
                             }
-                        } else if (preguntaEditada.getUrlImg() == "" && preguntaEditada.getIdImg() == "") {
+                        } else if (preguntaEditada.getUrlImg().equals("") && preguntaEditada.getIdImg().equals("")) {
                             if (file != null) {
                                 Map imagen = cloudinaryService.cargarImagen(file);
                                 preguntaEditada.setUrlImg((String) imagen.get("url"));
@@ -145,47 +145,45 @@ public class PreguntaServiceImpl implements PreguntaService {
 
     @Override
     @Transactional
-    public Pregunta crearPregunta(Pregunta pregunta, MultipartFile file) {
+    public Pregunta crearPregunta(Pregunta pregunta, MultipartFile file) throws Exception {
 
-        List<Opcion> opciones;
-        Pregunta preguntaGuardada = new Pregunta();
-        Pregunta preguntaAGuardar = new Pregunta();
+        try {
+            List<Opcion> opciones;
+            Pregunta preguntaGuardada = new Pregunta();
 
-        preguntaAGuardar.setEnunciado(pregunta.getEnunciado());
-        preguntaAGuardar.setUrlImg(pregunta.getUrlImg());
-        preguntaAGuardar.setIdImg(pregunta.getIdImg());
-        preguntaAGuardar.setNombreImg(pregunta.getNombreImg());
+            preguntaGuardada = preguntaRepository.save(pregunta);
 
-        preguntaGuardada = preguntaRepository.save(preguntaAGuardar);
-        preguntaAGuardar.setIdpregunta(preguntaGuardada.getIdpregunta());
 
-        if (preguntaGuardada != null) {
-            for (int i = 0; i < pregunta.getOpciones().size(); i++) {
-                pregunta.getOpciones().get(i).setIdopcion(0);
-                pregunta.getOpciones().get(i).setPregunta(preguntaAGuardar);
-            }
-            opciones = opcionRepository.saveAll(pregunta.getOpciones());
-            preguntaAGuardar.setOpciones(opciones);
+            if (preguntaGuardada != null) {
+                for (int i = 0; i < pregunta.getOpciones().size(); i++) {
+                    pregunta.getOpciones().get(i).setIdopcion(0);
+                    pregunta.getOpciones().get(i).setPregunta(preguntaGuardada);
+                }
+                opciones = opcionRepository.saveAll(pregunta.getOpciones());
+                preguntaGuardada.setOpciones(opciones);
 
-            if (opciones != null) {
+                if (opciones != null) {
 
-                preguntaGuardada = preguntaRepository.save(preguntaAGuardar);
+                    preguntaGuardada = preguntaRepository.save(preguntaGuardada);
 
-                if (preguntaGuardada != null) {
-                    try {
-                        if (file != null) {
-                            Map imagen = cloudinaryService.cargarImagen(file);
-                            preguntaGuardada.setUrlImg((String) imagen.get("url"));
-                            preguntaGuardada.setNombreImg((String) imagen.get("original_filename"));
-                            preguntaGuardada.setIdImg((String) imagen.get("public_id"));
+                    if (preguntaGuardada != null) {
+                        try {
+                            if (file != null) {
+                                Map imagen = cloudinaryService.cargarImagen(file);
+                                preguntaGuardada.setUrlImg((String) imagen.get("url"));
+                                preguntaGuardada.setNombreImg((String) imagen.get("original_filename"));
+                                preguntaGuardada.setIdImg((String) imagen.get("public_id"));
+                            }
+                            preguntaRepository.save(preguntaGuardada);
+                        } catch (IOException e) {
+                            preguntaGuardada = null;
                         }
-                        preguntaRepository.save(preguntaGuardada);
-                    } catch (IOException e) {
-                        preguntaGuardada = null;
                     }
                 }
             }
+            return preguntaGuardada;
+        } catch (Exception pe) {
+            throw new Exception("Error llave duplicada");
         }
-        return preguntaGuardada;
     }
 }

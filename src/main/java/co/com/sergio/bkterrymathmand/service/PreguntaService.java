@@ -27,5 +27,5 @@ public interface PreguntaService {
 
     Pregunta editarPregunta(Pregunta pregunta, MultipartFile file);
 
-    Pregunta crearPregunta(Pregunta preguntaJson, MultipartFile file);
+    Pregunta crearPregunta(Pregunta preguntaJson, MultipartFile file) throws Exception;
 }

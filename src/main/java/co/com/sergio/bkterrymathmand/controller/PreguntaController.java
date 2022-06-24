@@ -139,6 +139,12 @@ public class PreguntaController {
             response.setSuccess(false);
 
             return new ResponseEntity<>(response, status);
+        } catch (Exception e) {
+            response.setData(null);
+            response.setMessage(e.getLocalizedMessage());
+            response.setSuccess(false);
+
+            return new ResponseEntity<>(response, status);
         }
     }
 

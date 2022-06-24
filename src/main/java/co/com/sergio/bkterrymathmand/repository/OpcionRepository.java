@@ -19,4 +19,7 @@ public interface OpcionRepository extends JpaRepository<Opcion, Integer> {
 
     @Query(value = "select * from opcion as o where o.idpregunta = :idpregunta", nativeQuery = true)
     List<Opcion> obtenerOpcionesDePregunta(int idpregunta);
+
+    @Query(value = "select max(idopcion) from opcion", nativeQuery = true)
+    int ultimoId();
 }
