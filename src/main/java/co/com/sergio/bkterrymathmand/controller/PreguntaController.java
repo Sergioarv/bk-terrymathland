@@ -204,6 +204,39 @@ public class PreguntaController {
         }
     }
 
+    @ApiOperation(value = "Método encargado de eliminar una pregunta")
+    @DeleteMapping
+    public ResponseEntity<GeneralResponse<Boolean>> eliminarPregunta(@RequestBody Pregunta pregunta) {
+
+        GeneralResponse<Boolean> response = new GeneralResponse<>();
+        Boolean data;
+        HttpStatus status = HttpStatus.OK;
+
+
+        try {
+            data = preguntaService.eliminarPregunta(pregunta);
+
+            if (data) {
+                response.setData(true);
+                response.setSuccess(true);
+                response.setMessage("Pregunta eliminada con exito");
+            } else {
+                response.setData(false);
+                response.setSuccess(false);
+                response.setMessage("No se pudo eliminar la pregunta");
+            }
+
+            return new ResponseEntity<>(response, status);
+
+        } catch (Exception e) {
+            response.setData(false);
+            response.setSuccess(false);
+            response.setMessage("Error al eliminar la pregunta");
+
+            return new ResponseEntity<>(response, status);
+        }
+    }
+
     private boolean verificarImagen(MultipartFile file) throws IOException {
 
         if (file != null) {

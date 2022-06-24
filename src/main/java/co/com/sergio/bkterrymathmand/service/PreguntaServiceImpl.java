@@ -1,5 +1,6 @@
 package co.com.sergio.bkterrymathmand.service;
 
+import co.com.sergio.bkterrymathmand.entity.Cartilla;
 import co.com.sergio.bkterrymathmand.entity.Opcion;
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.repository.OpcionRepository;
@@ -184,6 +185,34 @@ public class PreguntaServiceImpl implements PreguntaService {
             return preguntaGuardada;
         } catch (Exception pe) {
             throw new Exception("Error llave duplicada");
+        }
+    }
+
+    @Override
+    public Boolean eliminarPregunta(Pregunta pregunta) throws Exception {
+
+        try {
+
+            Pregunta pOriginal = preguntaRepository.findById(pregunta.getIdpregunta()).orElse(null);
+
+            if(pOriginal == null){
+                return false;
+            }
+
+            List<Cartilla> cartillas = pOriginal.obtenerCartillas();
+            if(cartillas.size() == 0){
+                for (int i = 0; i < pregunta.getOpciones().size(); i++) {
+                    pregunta.getOpciones().get(i).setPregunta(null);
+                }
+                opcionRepository.deleteAll(pregunta.getOpciones());
+                preguntaRepository.delete(pregunta);
+
+                return true;
+            }else{
+                throw new Exception("No se puede eliminar la pregunta, primero debe eliminar la pregunta de las cartillas");
+            }
+        }catch (Exception e){
+            throw new Exception("Error al eliminar la pregunta");
         }
     }
 }
