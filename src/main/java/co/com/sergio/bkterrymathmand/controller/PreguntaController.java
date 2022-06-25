@@ -231,7 +231,7 @@ public class PreguntaController {
         } catch (Exception e) {
             response.setData(false);
             response.setSuccess(false);
-            response.setMessage("Error al eliminar la pregunta");
+            response.setMessage(e.getMessage());
 
             return new ResponseEntity<>(response, status);
         }

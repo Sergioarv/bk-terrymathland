@@ -102,19 +102,27 @@ public class PreguntaServiceImpl implements PreguntaService {
                     try {
                         if (preguntaEditada.getUrlImg().equals("") && !preguntaEditada.getIdImg().equals("")) {
                             Map borrado = cloudinaryService.eliminarImagen(preguntaEditada.getIdImg());
-                            if (!("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
+                            if (("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
                                 preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg());
                                 preguntaRepository.save(preguntaEditada);
                                 preguntaEditada.setUrlImg("-1");
                                 return preguntaEditada;
+                            }else{
+                                if (file != null) {
+                                    Map imagen = cloudinaryService.cargarImagen(file);
+                                    preguntaEditada.setUrlImg((String) imagen.get("url"));
+                                    preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
+                                    preguntaEditada.setIdImg((String) imagen.get("public_id"));
+                                }else{
+                                    preguntaEditada.setUrlImg("");
+                                    preguntaEditada.setNombreImg("");
+                                    preguntaEditada.setIdImg("");
+                                }
                             }
-                            preguntaEditada.setUrlImg("");
-                            preguntaEditada.setNombreImg("");
-                            preguntaEditada.setIdImg("");
                         } else if (!preguntaEditada.getUrlImg().equals("") && !preguntaEditada.getIdImg().equals("")) {
                             if (file != null) {
                                 Map borrado = cloudinaryService.eliminarImagen(preguntaEditada.getIdImg());
-                                if (!("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
+                                if (("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
                                     preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg());
                                     preguntaRepository.save(preguntaEditada);
                                     preguntaEditada.setUrlImg("-1");
@@ -194,6 +202,7 @@ public class PreguntaServiceImpl implements PreguntaService {
         try {
 
             Pregunta pOriginal = preguntaRepository.findById(pregunta.getIdpregunta()).orElse(null);
+            String idImagen = pOriginal.getIdImg();
 
             if(pOriginal == null){
                 return false;
@@ -201,10 +210,20 @@ public class PreguntaServiceImpl implements PreguntaService {
 
             List<Cartilla> cartillas = pOriginal.obtenerCartillas();
             if(cartillas.size() == 0){
+
+                Map borrado = cloudinaryService.eliminarImagen(idImagen);
+                if (("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
+                    pregunta.setUrlImg(pOriginal.getUrlImg());
+                    return false;
+                }
+
                 for (int i = 0; i < pregunta.getOpciones().size(); i++) {
                     pregunta.getOpciones().get(i).setPregunta(null);
                 }
+
                 opcionRepository.deleteAll(pregunta.getOpciones());
+
+                pregunta.setOpciones(null);
                 preguntaRepository.delete(pregunta);
 
                 return true;
@@ -212,7 +231,7 @@ public class PreguntaServiceImpl implements PreguntaService {
                 throw new Exception("No se puede eliminar la pregunta, primero debe eliminar la pregunta de las cartillas");
             }
         }catch (Exception e){
-            throw new Exception("Error al eliminar la pregunta");
+            throw new Exception(e.getCause());
         }
     }
 }
