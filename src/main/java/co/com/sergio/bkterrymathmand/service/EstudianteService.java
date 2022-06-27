@@ -2,6 +2,8 @@ package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.dto.IEstudianteProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +22,7 @@ public interface EstudianteService {
 
     IEstudianteProyeccion estudianteByNombre(String nombre);
 
-    List<Estudiante> filtrarEstudiante(String nombre, Date fecha);
+    Page<Estudiante> filtrarEstudiante(String nombre, Date fecha, PageRequest pageable);
 
     Estudiante actualizarEstudiante(Estudiante estudiante);
 

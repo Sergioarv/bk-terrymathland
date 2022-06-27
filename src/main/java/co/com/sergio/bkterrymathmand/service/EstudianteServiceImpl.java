@@ -5,6 +5,8 @@ import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,16 +79,16 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Estudiante> filtrarEstudiante(String nombre, Date fecha) {
+    public Page<Estudiante> filtrarEstudiante(String nombre, Date fecha, PageRequest pageable) {
 
         if(nombre != null && fecha != null){
-            return estudianteRepository.estudiantePorNombreYFecha(nombre, fecha);
+            return estudianteRepository.estudiantePorNombreYFecha(nombre, fecha, pageable);
         } else if( nombre != null ){
-            return estudianteRepository.estudiantePorFiltro(nombre);
+            return estudianteRepository.estudiantePorFiltro(nombre, pageable);
         } else if (fecha != null){
-            return estudianteRepository.estudiantePorFechaRespuesta(fecha);
+            return estudianteRepository.estudiantePorFechaRespuesta(fecha, pageable);
         } else{
-            return estudianteRepository.findAll(Sort.by(Sort.Direction.ASC, "idusuario"));
+            return estudianteRepository.findAll(pageable);
         }
     }
 }

@@ -6,6 +6,9 @@ import co.com.sergio.bkterrymathmand.service.EstudianteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -147,24 +150,29 @@ public class EstudianteController {
 
     @ApiOperation(value = "Método encargado de obtener al lista de estudiantes por filtros (nombre. fecha)", response = ResponseEntity.class)
     @GetMapping("/filtrar")
-    public ResponseEntity<GeneralResponse<List<Estudiante>>> filtrar(
+    public ResponseEntity<GeneralResponse<Page<Estudiante>>> filtrar(
             @RequestParam(value = "nombre", required = false) String nombre,
-            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
+            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
+            @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
+            @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int cantPagina
+            ) {
 
-        GeneralResponse<List<Estudiante>> response = new GeneralResponse<>();
+        GeneralResponse<Page<Estudiante>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
-        List<Estudiante> data;
+        Page<Estudiante> data;
 
         try {
-            data = estudianteService.filtrarEstudiante(nombre, fecha);
+            PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
+
+            data = estudianteService.filtrarEstudiante(nombre, fecha, pageable);
 
             if (data != null) {
                 response.setData(data);
                 response.setSuccess(true);
 
-                if (data.size() > 1) {
+                if (data.getContent().size() > 1) {
                     response.setMessage("Lista de estudiantes obtenida con exito");
-                } else if (data.size() == 1) {
+                } else if (data.getContent().size() == 1) {
                     response.setMessage("Estudiante obtenido con exito");
                 } else {
                     response.setSuccess(false);
