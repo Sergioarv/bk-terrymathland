@@ -6,6 +6,8 @@ import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.repository.OpcionRepository;
 import co.com.sergio.bkterrymathmand.repository.PreguntaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,38 +42,38 @@ public class PreguntaServiceImpl implements PreguntaService {
         return preguntaRepository.findAll(Sort.by(Sort.Direction.ASC, "idpregunta"));
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Pregunta> filtrarPorId(int id) {
-        return preguntaRepository.filtrarPorId(id);
-    }
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<Pregunta> filtrarPorId(int id) {
+//        return preguntaRepository.filtrarPorId(id);
+//    }
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<Pregunta> filtrarPor(String filtro) {
+//        return preguntaRepository.filtrarPor(filtro);
+//    }
+
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado) {
+//        return preguntaRepository.filtrarPorIdOEnunciado(id, enunciado);
+//    }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Pregunta> filtrarPor(String filtro) {
-        return preguntaRepository.filtrarPor(filtro);
-    }
+    public Page<Pregunta> filtrarPregunta(String id, String enunciado, Pageable pageable) {
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado) {
-        return preguntaRepository.filtrarPorIdOEnunciado(id, enunciado);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<Pregunta> filtrarPregunta(String id, String enunciado) {
-
-        List<Pregunta> listResult;
+        Page<Pregunta> listResult;
 
         if (id != null && enunciado != null) {
-            listResult = filtrarPorIdOEnunciado(Integer.parseInt(id), enunciado);
+            listResult = preguntaRepository.filtrarPorIdOEnunciado(Integer.parseInt(id), enunciado, pageable);
         } else if (id != null) {
-            listResult = filtrarPorId(Integer.parseInt(id));
+            listResult = preguntaRepository.filtrarPorId(Integer.parseInt(id), pageable);
         } else if (enunciado != null) {
-            listResult = filtrarPor(enunciado);
+            listResult = preguntaRepository.filtrarPor(enunciado, pageable);
         } else {
-            listResult = obtenerPreguntas();
+            listResult = preguntaRepository.findAll(pageable);
         }
 
         return listResult;

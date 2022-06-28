@@ -1,6 +1,8 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Pregunta;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,13 +19,13 @@ public interface PreguntaService {
 
     List<Pregunta> obtenerPreguntas();
 
-    List<Pregunta> filtrarPorId(int id);
+//    List<Pregunta> filtrarPorId(int id);
+//
+//    List<Pregunta> filtrarPor(String filtro);
+//
+//    List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado);
 
-    List<Pregunta> filtrarPor(String filtro);
-
-    List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado);
-
-    List<Pregunta> filtrarPregunta(String id, String enunciado);
+    Page<Pregunta> filtrarPregunta(String id, String enunciado, Pageable pageable);
 
     Pregunta editarPregunta(Pregunta pregunta, MultipartFile file);
 

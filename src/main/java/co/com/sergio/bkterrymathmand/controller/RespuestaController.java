@@ -10,6 +10,10 @@ import co.com.sergio.bkterrymathmand.service.RespuestaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,25 +62,29 @@ public class RespuestaController {
 
     @ApiOperation(value = "Método encargado de obtener la lista de respuestas por filtro")
     @GetMapping("/filtrar")
-    public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestasPorFiltro(
+    public ResponseEntity<GeneralResponse<Page<Respuesta>>> obtenerRespuestasPorFiltro(
             @RequestParam(value = "estudiante", required = false) Estudiante estudiante,
-            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha
+            @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
+            @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
+            @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int cantPagina
     ) {
 
-        GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
-        List<Respuesta> data;
+        GeneralResponse<Page<Respuesta>> response = new GeneralResponse<>();
+        Page<Respuesta> data;
         HttpStatus status = HttpStatus.OK;
 
-        data = respuestaService.obtenerRespuestasPorFiltro(estudiante, fecha);
+        Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("fecha").descending());
+
+        data = respuestaService.obtenerRespuestasPorFiltro(estudiante, fecha, pageable);
 
         if (data != null) {
 
             response.setData(data);
             response.setSuccess(true);
 
-            if (data.size() > 1) {
+            if (data.getContent().size() > 1) {
                 response.setMessage("Lista de respuestas obtenida con exito");
-            } else if (data.size() == 1) {
+            } else if (data.getContent().size() == 1) {
                 response.setMessage("Respuesta obtenido con exito");
             } else {
                 response.setSuccess(false);
@@ -91,29 +99,29 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha", response = ResponseEntity.class)
-    @GetMapping("/fecha")
-    public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestaPorFecha(
-            @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
-
-        GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
-        HttpStatus status = HttpStatus.OK;
-        List<Respuesta> data;
-
-        data = respuestaService.obtenerRespuestaPorFecha(fecha);
-
-        if (data != null) {
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Lista de respuestas obtenida con exito");
-        } else {
-            response.setData(null);
-            response.setSuccess(false);
-            response.setMessage("No se encontro respuestas con el parametro de busqueda");
-        }
-
-        return new ResponseEntity<>(response, status);
-    }
+//    @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha", response = ResponseEntity.class)
+//    @GetMapping("/fecha")
+//    public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestaPorFecha(
+//            @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
+//
+//        GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
+//        HttpStatus status = HttpStatus.OK;
+//        List<Respuesta> data;
+//
+//        data = respuestaService.obtenerRespuestaPorFecha(fecha);
+//
+//        if (data != null) {
+//            response.setData(data);
+//            response.setSuccess(true);
+//            response.setMessage("Lista de respuestas obtenida con exito");
+//        } else {
+//            response.setData(null);
+//            response.setSuccess(false);
+//            response.setMessage("No se encontro respuestas con el parametro de busqueda");
+//        }
+//
+//        return new ResponseEntity<>(response, status);
+//    }
 
     @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha y estudiante", response = ResponseEntity.class)
     @GetMapping("/fechaUsuario")

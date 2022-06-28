@@ -4,6 +4,8 @@ import co.com.sergio.bkterrymathmand.dto.IDatosPromedioEstudiante;
 import co.com.sergio.bkterrymathmand.dto.IDatosPromedioNotas;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -22,16 +24,16 @@ import java.util.List;
 public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
 
     @Query(value = "select * from respuesta r where r.fecha = :fecha", nativeQuery = true)
-    List<Respuesta> obtenerRespuestasPorFecha(Date fecha);
+    Page<Respuesta> obtenerRespuestasPorFecha(Date fecha, Pageable pageable);
 
     @Query(value = "select * from respuesta r where r.fecha = :fechaS and r.idusuario = :idusuario", nativeQuery = true)
     Respuesta obtenerRespuestaPorFechaYidUsuario(Date fechaS, int idusuario);
 
     @Query(value = "select * from (select * from respuesta as r where r.fecha = :fecha) as c2 inner join (select * from estudiante as e where e.idusuario = :idusuario) as c1 on c1.idusuario = c2.idusuario", nativeQuery = true)
-    List<Respuesta> respuestasPorEstudianteYFecha(int idusuario, Date fecha);
+    Page<Respuesta> respuestasPorEstudianteYFecha(int idusuario, Date fecha, Pageable pageable);
 
     @Query(value = "select * from respuesta as r where r.idusuario = :idusuario order by r.fecha", nativeQuery = true)
-    List<Respuesta> respuestaPorEstudiante(int idusuario);
+    Page<Respuesta> respuestaPorEstudiante(int idusuario, Pageable pageable);
 
     @Query(value = "select * from respuesta as r where r.idusuario = :idusuario order by r.fecha desc limit 3", nativeQuery = true)
     List<IRespuestaProyeccion> respuestaGuardadaPorEstudiante(int idusuario);

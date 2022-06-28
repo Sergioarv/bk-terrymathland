@@ -7,6 +7,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,24 +60,30 @@ public class PreguntaController {
 
     @ApiOperation(value = "Método encargado de obtener la lista de preguntas por filtro (id, enunciado)", response = ResponseEntity.class)
     @GetMapping("/filtrar")
-    public ResponseEntity<GeneralResponse<List<Pregunta>>> filtrar(
+    public ResponseEntity<GeneralResponse<Page<Pregunta>>> filtrar(
             @RequestParam(value = "id", required = false) String id,
-            @RequestParam(value = "enunciado", required = false) String enunciado) {
+            @RequestParam(value = "enunciado", required = false) String enunciado,
+            @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
+            @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int cantPagina
+    ) {
 
-        GeneralResponse<List<Pregunta>> response = new GeneralResponse<>();
+        GeneralResponse<Page<Pregunta>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
-        List<Pregunta> data;
+        Page<Pregunta> data;
 
         try {
-            data = preguntaService.filtrarPregunta(id, enunciado);
+
+            Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("idpregunta").ascending());
+
+            data = preguntaService.filtrarPregunta(id, enunciado, pageable);
 
             if (data != null) {
                 response.setData(data);
                 response.setSuccess(true);
 
-                if (data.size() > 1) {
+                if (data.getContent().size() > 1) {
                     response.setMessage("Lista de preguntas obtenida con exito");
-                } else if (data.size() == 1) {
+                } else if (data.getContent().size() == 1) {
                     response.setMessage("Pregunta obtenida con exito");
                 } else {
                     response.setSuccess(false);

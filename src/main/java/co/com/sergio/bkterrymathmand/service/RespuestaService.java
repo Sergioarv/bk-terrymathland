@@ -4,6 +4,8 @@ import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Respuesta;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
@@ -19,13 +21,13 @@ public interface RespuestaService {
 
     List<Respuesta> obtenerRespuestas();
 
-    List<Respuesta> obtenerRespuestaPorFecha(Date fecha);
+//    List<Respuesta> obtenerRespuestaPorFecha(Date fecha);
 
     Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario);
 
     Respuesta saveRespuesta(Respuesta respuesta);
 
-    List<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha);
+    Page<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha, Pageable pageable);
 
     public List<IRespuestaProyeccion> guardarRespuestaEstudiante(Estudiante estudiante);
 

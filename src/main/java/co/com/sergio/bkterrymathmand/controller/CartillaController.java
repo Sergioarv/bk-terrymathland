@@ -7,6 +7,10 @@ import co.com.sergio.bkterrymathmand.service.CartillaService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -69,23 +73,28 @@ public class CartillaController {
 
     @ApiOperation(value = "Método encargado de obtener la lista preguntas por filtro de cartilla", response = ResponseEntity.class)
     @GetMapping("/filtrarPreguntas")
-    public ResponseEntity<GeneralResponse<List<Pregunta>>> filtrarPreguntas(
-            @RequestParam(value = "idcartilla", required = false) String idcartilla) {
+    public ResponseEntity<GeneralResponse<Page<Pregunta>>> filtrarPreguntas(
+            @RequestParam(value = "idcartilla", required = false) String idcartilla,
+            @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
+            @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int catnPagina
+            ) {
 
-        GeneralResponse<List<Pregunta>> response = new GeneralResponse<>();
+        GeneralResponse<Page<Pregunta>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
-        List<Pregunta> data;
+        Page<Pregunta> data;
 
         try {
-            data = cartillaService.filtrarPregunta(idcartilla);
+            Pageable pageable = PageRequest.of(pagina, catnPagina, Sort.by("idpregunta").ascending());
+
+            data = cartillaService.filtrarPregunta(idcartilla, pageable);
 
             if (data != null) {
                 response.setData(data);
                 response.setSuccess(true);
 
-                if (data.size() > 1) {
+                if (data.getContent().size() > 1) {
                     response.setMessage("Preguntas de la cartilla obtenida con exito");
-                } else if (data.size() == 1) {
+                } else if (data.getContent().size() == 1) {
                     response.setMessage("Pregunta de la cartilla obtenida con exito");
                 } else {
                     response.setSuccess(false);
@@ -152,7 +161,7 @@ public class CartillaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de crear una cartilla con sus preguntas")
+    @ApiOperation(value = "Método encargado de eliminar una cartilla")
     @DeleteMapping
     public ResponseEntity<GeneralResponse<Boolean>> eliminarCartilla(@RequestBody Cartilla cartilla){
 

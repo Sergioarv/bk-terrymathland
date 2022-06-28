@@ -6,6 +6,9 @@ import co.com.sergio.bkterrymathmand.entity.Pregunta;
 import co.com.sergio.bkterrymathmand.repository.CartillaRepository;
 import co.com.sergio.bkterrymathmand.repository.PreguntaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +29,7 @@ public class CartillaServiceImpl implements CartillaService {
     @Override
     @Transactional(readOnly = true)
     public List<Cartilla> obtenerCartillas() {
-        return cartillaRepository.findAll();
+        return cartillaRepository.findAll(Sort.by("nombre").ascending());
     }
 
     @Override
@@ -44,14 +47,14 @@ public class CartillaServiceImpl implements CartillaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Pregunta> filtrarPregunta(String idcartilla) {
+    public Page<Pregunta> filtrarPregunta(String idcartilla, Pageable pageable) {
 
-        List<Pregunta> listResult;
+        Page<Pregunta> listResult;
 
         if (idcartilla != null) {
-            listResult = obtenerPreguntas(Integer.parseInt(idcartilla));
+            listResult = cartillaRepository.obtenerPreguntasPorId(Integer.parseInt(idcartilla), pageable);
         } else {
-            listResult = preguntaRepository.findAll();
+            listResult = preguntaRepository.findAll(pageable);
         }
         return listResult;
     }

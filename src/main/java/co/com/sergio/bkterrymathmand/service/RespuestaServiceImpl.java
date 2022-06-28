@@ -10,7 +10,8 @@ import co.com.sergio.bkterrymathmand.repository.PreguntaRepository;
 import co.com.sergio.bkterrymathmand.repository.RespuestaRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,11 +55,11 @@ public class RespuestaServiceImpl implements RespuestaService {
         return respuestaRepository.findAll();
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<Respuesta> obtenerRespuestaPorFecha(Date fecha) {
-        return respuestaRepository.obtenerRespuestasPorFecha(fecha);
-    }
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<Respuesta> obtenerRespuestaPorFecha(Date fecha) {
+//        return respuestaRepository.obtenerRespuestasPorFecha(fecha, pageable);
+//    }
 
     @Override
     @Transactional(readOnly = true)
@@ -82,16 +83,16 @@ public class RespuestaServiceImpl implements RespuestaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha) {
+    public Page<Respuesta> obtenerRespuestasPorFiltro(Estudiante estudiante, Date fecha, Pageable pageable) {
 
         if (estudiante != null && fecha != null) {
-            return respuestaRepository.respuestasPorEstudianteYFecha(estudiante.getIdusuario(), fecha);
+            return respuestaRepository.respuestasPorEstudianteYFecha(estudiante.getIdusuario(), fecha, pageable);
         } else if (estudiante != null) {
-            return respuestaRepository.respuestaPorEstudiante(estudiante.getIdusuario());
+            return respuestaRepository.respuestaPorEstudiante(estudiante.getIdusuario(), pageable);
         } else if (fecha != null) {
-            return respuestaRepository.obtenerRespuestasPorFecha(fecha);
+            return respuestaRepository.obtenerRespuestasPorFecha(fecha, pageable);
         } else {
-            return respuestaRepository.findAll(Sort.by(Sort.Direction.DESC, "fecha"));
+            return respuestaRepository.findAll(pageable);
         }
     }
 
