@@ -33,4 +33,10 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Integer>
 
     @Query(value = "select * from estudiante", nativeQuery = true)
     List<IEstudianteProyeccion> obtenerIdyNombreEstudiantes();
+
+    @Query(value = "select * from estudiante as e where lower(e.nombre) = lower(:nombre)", nativeQuery = true)
+    Estudiante obtenerEstudiantePorNombre(String nombre);
+
+    @Query(value = "select * from estudiante as e where e.documento = :documento", nativeQuery = true)
+    Estudiante existePorDocumento(String documento);
 }

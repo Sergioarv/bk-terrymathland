@@ -2,15 +2,21 @@ package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.dto.IEstudianteProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
+import co.com.sergio.bkterrymathmand.entity.Rol;
 import co.com.sergio.bkterrymathmand.repository.EstudianteRepository;
 import co.com.sergio.bkterrymathmand.repository.SolucionRepository;
+import co.com.sergio.bkterrymathmand.security.enums.RolNombre;
+import co.com.sergio.bkterrymathmand.security.service.RolServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @project bk-terrymathmand
@@ -31,6 +37,16 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Autowired
     private PreguntaService preguntaService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    RolServiceImpl rolService;
+
+    public EstudianteServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
     @Override
     @Transactional(readOnly = true)
     public List<Estudiante> getAllEstudiantes() {
@@ -38,12 +54,20 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
 
     @Override
-    public Estudiante agregarEstudiante(Estudiante estudiante){
+    @Transactional
+    public Estudiante agregarEstudiante(Estudiante estudiante) {
 
-        IEstudianteProyeccion result = estudianteRepository.estudianteByNombre(estudiante.getNombre());
+        if (estudianteRepository.obtenerEstudiantePorNombre(estudiante.getNombre()) == null) {
+            if (estudianteRepository.existePorDocumento(estudiante.getDocumento()) == null) {
 
-        if(result == null){
-            return estudianteRepository.save(estudiante);
+                Set<Rol> roles = new HashSet<>();
+                roles.add(rolService.getByRolNombre(RolNombre.ROL_ESTUDIANTE).get());
+                estudiante.setRoles(roles);
+
+                estudiante.setDocumento(passwordEncoder.encode(estudiante.getDocumento()));
+
+                return estudianteRepository.save(estudiante);
+            }
         }
 
         return null;
@@ -65,6 +89,11 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
 
     @Override
+    public Estudiante obtenerEstudiantePorNombre(String nombre) {
+        return estudianteRepository.obtenerEstudiantePorNombre(nombre);
+    }
+
+    @Override
     public List<IEstudianteProyeccion> obtenerIdyNombreEstudiantes() {
         return estudianteRepository.obtenerIdyNombreEstudiantes();
     }
@@ -79,13 +108,13 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Transactional(readOnly = true)
     public List<Estudiante> filtrarEstudiante(String nombre, Date fecha) {
 
-        if(nombre != null && fecha != null){
+        if (nombre != null && fecha != null) {
             return estudianteRepository.estudiantePorNombreYFecha(nombre, fecha);
-        } else if( nombre != null ){
+        } else if (nombre != null) {
             return estudianteRepository.estudiantePorFiltro(nombre);
-        } else if (fecha != null){
+        } else if (fecha != null) {
             return estudianteRepository.estudiantePorFechaRespuesta(fecha);
-        } else{
+        } else {
             return estudianteRepository.findAll(Sort.by(Sort.Direction.ASC, "idusuario"));
         }
     }

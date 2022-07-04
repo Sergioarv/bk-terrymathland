@@ -26,5 +26,7 @@ public interface EstudianteService {
 
     boolean eliminarEstudiante(Estudiante estudiante);
 
+    Estudiante obtenerEstudiantePorNombre(String nombre);
+
     List<IEstudianteProyeccion> obtenerIdyNombreEstudiantes();
 }
