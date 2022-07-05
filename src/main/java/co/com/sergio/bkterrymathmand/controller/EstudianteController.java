@@ -53,28 +53,28 @@ public class EstudianteController {
 
     }
 
-    @ApiOperation(value = "Método encargado de agregar un nuevo estudiante", response = ResponseEntity.class)
-    @PostMapping
-    public ResponseEntity<GeneralResponse<Estudiante>> agregarEstudiante(@RequestBody Estudiante estudiante){
-
-        GeneralResponse<Estudiante> response = new GeneralResponse<>();
-        Estudiante nuevoEstudiante;
-        HttpStatus status = HttpStatus.OK;
-
-        nuevoEstudiante = estudianteService.agregarEstudiante(estudiante);
-
-        if(nuevoEstudiante != null){
-            response.setData(nuevoEstudiante);
-            response.setSuccess(true);
-            response.setMessage("Estudiante agregado con exito");
-        }else{
-            response.setData(null);
-            response.setSuccess(false);
-            response.setMessage("No se pudo agregar o ya existe el estudiante");
-        }
-
-        return new ResponseEntity<>(response, status);
-    }
+//    @ApiOperation(value = "Método encargado de agregar un nuevo estudiante", response = ResponseEntity.class)
+//    @PostMapping
+//    public ResponseEntity<GeneralResponse<Estudiante>> agregarEstudiante(@RequestBody Estudiante estudiante){
+//
+//        GeneralResponse<Estudiante> response = new GeneralResponse<>();
+//        Estudiante nuevoEstudiante;
+//        HttpStatus status = HttpStatus.OK;
+//
+//        nuevoEstudiante = estudianteService.agregarEstudiante(estudiante);
+//
+//        if(nuevoEstudiante != null){
+//            response.setData(nuevoEstudiante);
+//            response.setSuccess(true);
+//            response.setMessage("Estudiante agregado con exito");
+//        }else{
+//            response.setData(null);
+//            response.setSuccess(false);
+//            response.setMessage("No se pudo agregar o ya existe el estudiante");
+//        }
+//
+//        return new ResponseEntity<>(response, status);
+//    }
 
     @ApiOperation(value = "Método encargado de actualizar un estudiante", response = ResponseEntity.class)
     @PutMapping
