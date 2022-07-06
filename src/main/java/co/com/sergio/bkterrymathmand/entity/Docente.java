@@ -2,6 +2,7 @@ package co.com.sergio.bkterrymathmand.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 /**
  * @project bk-terrymathmand
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
  **/
 
 @Entity
+@PrimaryKeyJoinColumn(name = "idusuario")
 public class Docente extends Usuario {
 
   @Column(nullable = false)

@@ -24,6 +24,8 @@ public class UsuarioRolServiceImpl implements UserDetailsService {
             return UsuarioPrincipal.build(usuario);
         }catch (UsernameNotFoundException e){
             throw  new UsernameNotFoundException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }
