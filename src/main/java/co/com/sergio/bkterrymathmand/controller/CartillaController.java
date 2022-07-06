@@ -84,7 +84,7 @@ public class CartillaController {
         Page<Pregunta> data;
 
         try {
-            Pageable pageable = PageRequest.of(pagina, catnPagina, Sort.by("idpregunta").ascending());
+            Pageable pageable = PageRequest.of(pagina, catnPagina);
 
             data = cartillaService.filtrarPregunta(idcartilla, pageable);
 

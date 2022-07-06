@@ -20,6 +20,6 @@ public interface CartillaRepository extends JpaRepository<Cartilla, Integer> {
     @Query(value = "select * from cartilla as c order by c.nombre", nativeQuery = true)
     List<ICartillaProyeccion> listarCartillas();
 
-    @Query(value = "select p.* from pregunta as p inner join (select * from cartilla_pregunta as cp where cp.idcartilla = :idcartilla) as c1 on p.idpregunta = c1.idpregunta", nativeQuery = true)
+    @Query("select p from Cartilla cp join cp.preguntas p WHERE cp.idcartilla = :idcartilla")
     Page<Pregunta> obtenerPreguntasPorId(int idcartilla, Pageable pageable);
 }
