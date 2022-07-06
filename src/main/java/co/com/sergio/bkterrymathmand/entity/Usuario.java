@@ -20,7 +20,7 @@ public class Usuario implements Serializable {
 
     @Id
     @Column(name = "idusuario")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private int idusuario;
 
     @Column(nullable = false)

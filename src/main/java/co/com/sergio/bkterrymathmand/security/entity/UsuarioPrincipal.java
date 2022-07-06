@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class EstudiantePrincipal implements UserDetails {
+public class UsuarioPrincipal implements UserDetails {
 
     private String nombre;
 
@@ -18,17 +18,17 @@ public class EstudiantePrincipal implements UserDetails {
 
     private Collection<? extends GrantedAuthority> autoridades;
 
-    public EstudiantePrincipal(String nombre, String documento, Collection<? extends GrantedAuthority> autoridades) {
+    public UsuarioPrincipal(String nombre, String documento, Collection<? extends GrantedAuthority> autoridades) {
         this.nombre = nombre;
         this.documento = documento;
         this.autoridades = autoridades;
     }
 
-    public static EstudiantePrincipal build(Estudiante estudiante){
-        List<GrantedAuthority> autoridades = estudiante.getRoles().stream().map(rol -> new SimpleGrantedAuthority(
+    public static UsuarioPrincipal build(Usuario usuario){
+        List<GrantedAuthority> autoridades = usuario.getRoles().stream().map(rol -> new SimpleGrantedAuthority(
                 rol.getRolNombre().name())).collect(Collectors.toList());
 
-        return new EstudiantePrincipal(estudiante.getNombre(), estudiante.getDocumento(), autoridades);
+        return new UsuarioPrincipal(usuario.getNombre(), usuario.getDocumento(), autoridades);
     }
 
     @Override

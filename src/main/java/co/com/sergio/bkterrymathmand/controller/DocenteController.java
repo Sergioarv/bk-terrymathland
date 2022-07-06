@@ -50,29 +50,6 @@ public class DocenteController {
 
     }
 
-    @ApiOperation(value = "Método encargado de agregar un docente", response = ResponseEntity.class)
-    @PostMapping(consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
-    public ResponseEntity<GeneralResponse<Docente>> agregarDocente(@RequestBody Docente docente){
-
-        GeneralResponse<Docente> response = new GeneralResponse<>();
-        Docente nuevoDocente;
-        HttpStatus status = HttpStatus.OK;
-
-        nuevoDocente = docenteService.agregarDocente(docente);
-
-        if(nuevoDocente != null){
-            response.setData(nuevoDocente);
-            response.setSuccess(true);
-            response.setMessage("Docente agregado con exito");
-        }else{
-            response.setData(null);
-            response.setSuccess(true);
-            response.setMessage("Hubo un error al agregar el docente");
-        }
-
-        return new ResponseEntity<>(response, status);
-    }
-
     @ApiOperation(value = "Método encargado de buscar un docente por nombre", response = ResponseEntity.class)
     @GetMapping("/docentenombre")
     public ResponseEntity<GeneralResponse<Docente>> docentePorNombre(@RequestParam(value = "nombre") String nombre) {

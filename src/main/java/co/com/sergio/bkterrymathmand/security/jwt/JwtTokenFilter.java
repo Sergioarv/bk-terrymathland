@@ -1,6 +1,6 @@
 package co.com.sergio.bkterrymathmand.security.jwt;
 
-import co.com.sergio.bkterrymathmand.security.service.EstudianteRolServiceImpl;
+import co.com.sergio.bkterrymathmand.security.service.UsuarioRolServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,15 +23,15 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     private JwtProvider jwtProvider;
 
     @Autowired
-    private EstudianteRolServiceImpl estudianteRolService;
+    private UsuarioRolServiceImpl usuarioRolService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = getToken(req);
             if(token != null && jwtProvider.validateToken(token)){
-                String nombreUsuario = jwtProvider.getNombreEstudiantePorToken(token);
-                UserDetails userDetails = estudianteRolService.loadUserByUsername(nombreUsuario);
+                String nombreUsuario = jwtProvider.getNombreUsuarioPorToken(token);
+                UserDetails userDetails = usuarioRolService.loadUserByUsername(nombreUsuario);
                 UsernamePasswordAuthenticationToken auth =
                         new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);

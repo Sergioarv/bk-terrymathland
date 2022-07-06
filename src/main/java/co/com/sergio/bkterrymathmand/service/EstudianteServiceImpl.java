@@ -37,14 +37,9 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Autowired
     private PreguntaService preguntaService;
 
-//    private PasswordEncoder passwordEncoder;
-
     @Autowired
     RolServiceImpl rolService;
 
-//    public EstudianteServiceImpl(PasswordEncoder passwordEncoder) {
-//        this.passwordEncoder = passwordEncoder;
-//    }
 
     @Override
     @Transactional(readOnly = true)
@@ -57,16 +52,12 @@ public class EstudianteServiceImpl implements EstudianteService {
     public Estudiante agregarEstudiante(Estudiante estudiante) {
 
         if (estudianteRepository.existePorDocumento(estudiante.getDocumento()) == null) {
-
             Set<Rol> roles = new HashSet<>();
             roles.add(rolService.getByRolNombre(RolNombre.ROL_ESTUDIANTE).get());
             estudiante.setRoles(roles);
 
-//                estudiante.setDocumento(passwordEncoder.encode(estudiante.getDocumento()));
-
             return estudianteRepository.save(estudiante);
         }
-
         return null;
     }
 

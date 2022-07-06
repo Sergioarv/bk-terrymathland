@@ -1,28 +1,27 @@
 package co.com.sergio.bkterrymathmand.security.service;
 
-import co.com.sergio.bkterrymathmand.entity.Estudiante;
-import co.com.sergio.bkterrymathmand.security.entity.EstudiantePrincipal;
-import co.com.sergio.bkterrymathmand.service.EstudianteService;
+import co.com.sergio.bkterrymathmand.entity.Usuario;
+import co.com.sergio.bkterrymathmand.security.entity.UsuarioPrincipal;
+import co.com.sergio.bkterrymathmand.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class EstudianteRolServiceImpl implements UserDetailsService {
+@Transactional
+public class UsuarioRolServiceImpl implements UserDetailsService {
 
-    private EstudianteService estudianteService;
-
-    public EstudianteRolServiceImpl(EstudianteService estudianteService) {
-        this.estudianteService = estudianteService;
-    }
+    @Autowired
+    private UsuarioService usuarioService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            Estudiante estudiante = estudianteService.obtenerEstudiantePorNombre(username);
-            return EstudiantePrincipal.build(estudiante);
+            Usuario usuario = usuarioService.obtenerUsuarioPorNombre(username);
+            return UsuarioPrincipal.build(usuario);
         }catch (UsernameNotFoundException e){
             throw  new UsernameNotFoundException(e.getMessage());
         }

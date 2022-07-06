@@ -2,7 +2,7 @@ package co.com.sergio.bkterrymathmand.security;
 
 import co.com.sergio.bkterrymathmand.security.jwt.JwtEntryPoint;
 import co.com.sergio.bkterrymathmand.security.jwt.JwtTokenFilter;
-import co.com.sergio.bkterrymathmand.security.service.EstudianteRolServiceImpl;
+import co.com.sergio.bkterrymathmand.security.service.UsuarioRolServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class MainSecurity extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    EstudianteRolServiceImpl estudianteRolService;
+    UsuarioRolServiceImpl usuarioRolService;
 
     @Autowired
     private JwtEntryPoint jwtEntryPoint;
@@ -41,7 +41,7 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(estudianteRolService).passwordEncoder(passwordEncoder());
+        auth.userDetailsService(usuarioRolService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -59,8 +59,7 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/estudiante").permitAll()
+                .antMatchers(HttpMethod.POST,"/auth/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtEntryPoint)

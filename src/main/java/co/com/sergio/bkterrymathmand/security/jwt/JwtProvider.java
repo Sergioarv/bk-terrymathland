@@ -1,8 +1,6 @@
 package co.com.sergio.bkterrymathmand.security.jwt;
 
-import co.com.sergio.bkterrymathmand.entity.Estudiante;
-import co.com.sergio.bkterrymathmand.security.dto.JwtDto;
-import co.com.sergio.bkterrymathmand.security.entity.EstudiantePrincipal;
+import co.com.sergio.bkterrymathmand.security.entity.UsuarioPrincipal;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 
 @Component
 public class JwtProvider {
@@ -26,16 +22,16 @@ public class JwtProvider {
     private long expiration;
 
     public String generateToken(Authentication authentication) {
-        EstudiantePrincipal estudiantePrincipal = (EstudiantePrincipal) authentication.getPrincipal();
+        UsuarioPrincipal usuarioPrincipal = (UsuarioPrincipal) authentication.getPrincipal();
         return Jwts.builder()
-                .setSubject(estudiantePrincipal.getUsername())
+                .setSubject(usuarioPrincipal.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration * 1000 ))
+                .setExpiration(new Date(new Date().getTime() + expiration * 1000))
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes())
                 .compact();
     }
 
-    public String getNombreEstudiantePorToken(String token) {
+    public String getNombreUsuarioPorToken(String token) {
         return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token)
                 .getBody().getSubject();
     }
@@ -44,15 +40,15 @@ public class JwtProvider {
         try {
             Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token);
             return true;
-        }catch (MalformedJwtException e){
+        } catch (MalformedJwtException e) {
             logger.error("Token mal formado");
-        }catch (UnsupportedJwtException e){
+        } catch (UnsupportedJwtException e) {
             logger.error("Token no soportado");
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e) {
             logger.error("Token expirado");
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             logger.error("Token vacío");
-        }catch (SignatureException e){
+        } catch (SignatureException e) {
             logger.error("Fallo con la firma");
         }
         return false;
