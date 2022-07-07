@@ -55,9 +55,15 @@ public class CartillaController {
         data = cartillaService.listarCartillas();
 
         if( data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Lista de cartillas obtenida con exito");
+            if(data.size() > 0) {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Lista de cartillas obtenida con exito");
+            }else{
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("La lista de cartillas esta vacia");
+            }
         }else{
             response.setData(null);
             response.setSuccess(false);

@@ -2,5 +2,5 @@ package co.com.sergio.bkterrymathmand.security.enums;
 
 public enum RolNombre {
 
-    ROL_DOCENTE, ROL_ESTUDIANTE
+    ROLE_ADMIN, ROLE_DOCENTE, ROLE_ESTUDIANTE
 }

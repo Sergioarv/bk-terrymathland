@@ -2,12 +2,14 @@ package co.com.sergio.bkterrymathmand.security.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Docente;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
+import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.security.dto.JwtDto;
 import co.com.sergio.bkterrymathmand.security.dto.LoginUsuario;
 import co.com.sergio.bkterrymathmand.security.jwt.JwtProvider;
 import co.com.sergio.bkterrymathmand.security.service.RolServiceImpl;
 import co.com.sergio.bkterrymathmand.service.DocenteService;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
+import co.com.sergio.bkterrymathmand.service.UsuarioService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -35,15 +37,18 @@ public class AuthController {
 
     private final DocenteService docenteService;
 
+    private final UsuarioService usuarioService;
+
     private final RolServiceImpl rolService;
 
     private final JwtProvider jwtProvider;
 
-    public AuthController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, EstudianteService estudianteService, DocenteService docenteService, RolServiceImpl rolService, JwtProvider jwtProvider) {
+    public AuthController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, EstudianteService estudianteService, DocenteService docenteService, UsuarioService usuarioService, RolServiceImpl rolService, JwtProvider jwtProvider) {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.estudianteService = estudianteService;
         this.docenteService = docenteService;
+        this.usuarioService = usuarioService;
         this.rolService = rolService;
         this.jwtProvider = jwtProvider;
     }
@@ -66,6 +71,30 @@ public class AuthController {
         response.setMessage("Acceso concedido");
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/agregarAdministrador")
+    public ResponseEntity<GeneralResponse<Usuario>> agregarAdministrador(@RequestBody Usuario admin){
+
+        GeneralResponse<Usuario> response = new GeneralResponse<>();
+        Usuario nuevoEstudiante;
+        HttpStatus status = HttpStatus.OK;
+
+        admin.setDocumento(passwordEncoder.encode(admin.getDocumento()));
+
+        nuevoEstudiante = usuarioService.agregarAdministrador(admin);
+
+        if(nuevoEstudiante != null){
+            response.setData(nuevoEstudiante);
+            response.setSuccess(true);
+            response.setMessage("Administrador agregado con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("No se pudo agregar o ya existe el administrador");
+        }
+
+        return new ResponseEntity<>(response, status);
     }
 
     @ApiOperation(value = "Método encargado de agregar un estudiante", response = ResponseEntity.class)

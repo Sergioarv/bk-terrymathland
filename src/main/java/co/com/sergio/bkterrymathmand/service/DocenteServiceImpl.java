@@ -42,7 +42,7 @@ public class DocenteServiceImpl implements DocenteService {
     public Docente agregarDocente(Docente docente) {
         if (docenteRepository.existePorDocumento(docente.getDocumento()) == null) {
             Set<Rol> roles = new HashSet<>();
-            roles.add(rolService.getByRolNombre(RolNombre.ROL_DOCENTE).get());
+            roles.add(rolService.getByRolNombre(RolNombre.ROLE_DOCENTE).get());
             docente.setRoles(roles);
 
             return docenteRepository.save(docente);

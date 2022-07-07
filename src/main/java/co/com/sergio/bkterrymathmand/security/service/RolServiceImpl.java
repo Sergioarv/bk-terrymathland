@@ -24,4 +24,7 @@ public class RolServiceImpl {
         return  rolRepository.findByRolNombre(rolNombre);
     }
 
+    public void crearRol(Rol rol) {
+        rolRepository.save(rol);
+    }
 }

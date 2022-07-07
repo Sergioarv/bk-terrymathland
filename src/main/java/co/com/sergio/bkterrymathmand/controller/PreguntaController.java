@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,6 +56,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de obtener la lista de preguntas por filtro (id, enunciado)", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<List<Pregunta>>> filtrar(
             @RequestParam(value = "id", required = false) String id,

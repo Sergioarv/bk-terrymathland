@@ -52,7 +52,7 @@ public class EstudianteServiceImpl implements EstudianteService {
 
         if (estudianteRepository.existePorDocumento(estudiante.getDocumento()) == null) {
             Set<Rol> roles = new HashSet<>();
-            roles.add(rolService.getByRolNombre(RolNombre.ROL_ESTUDIANTE).get());
+            roles.add(rolService.getByRolNombre(RolNombre.ROLE_ESTUDIANTE).get());
             estudiante.setRoles(roles);
 
             return estudianteRepository.save(estudiante);
