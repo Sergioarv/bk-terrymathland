@@ -63,7 +63,13 @@ public class EstudianteServiceImpl implements EstudianteService {
     @Override
     @Transactional
     public Estudiante actualizarEstudiante(Estudiante estudiante) {
-        return estudianteRepository.save(estudiante);
+        List<Estudiante> result = estudianteRepository.getAllDocumento(estudiante.getDocumento());
+        if (result.size() == 1) {
+            if(result.get(0).getIdusuario() == estudiante.getIdusuario()){
+                return estudianteRepository.save(estudiante);
+            }
+        }
+        return null;
     }
 
     @Override

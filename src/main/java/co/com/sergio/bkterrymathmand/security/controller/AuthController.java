@@ -151,6 +151,7 @@ public class AuthController {
     }
 
     @ApiOperation(value = "Método encargado de agregar un docente", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/agregarDocente")
     public ResponseEntity<GeneralResponse<Docente>> agregarDocente(@RequestBody Docente docente){
 
@@ -161,6 +162,32 @@ public class AuthController {
         docente.setContrasenia(passwordEncoder.encode(docente.getDocumento()));
 
         nuevoDocente = docenteService.agregarDocente(docente);
+
+        if(nuevoDocente != null){
+            response.setData(nuevoDocente);
+            response.setSuccess(true);
+            response.setMessage("Docente agregado con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(true);
+            response.setMessage("Hubo un error al agregar el docente");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ApiOperation(value = "Método encargado de editar un docente", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/editarDocente")
+    public ResponseEntity<GeneralResponse<Docente>> editarDocente(@RequestBody Docente docente){
+
+        GeneralResponse<Docente> response = new GeneralResponse<>();
+        Docente nuevoDocente;
+        HttpStatus status = HttpStatus.OK;
+
+        docente.setContrasenia(passwordEncoder.encode(docente.getDocumento()));
+
+        nuevoDocente = docenteService.editarDocente(docente);
 
         if(nuevoDocente != null){
             response.setData(nuevoDocente);

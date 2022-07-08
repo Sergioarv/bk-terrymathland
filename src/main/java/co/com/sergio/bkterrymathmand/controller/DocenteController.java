@@ -1,6 +1,7 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Docente;
+import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.service.DocenteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
@@ -49,27 +50,66 @@ public class DocenteController {
         }
 
         return new ResponseEntity<>(response, status);
-
     }
 
-    @ApiOperation(value = "Método encargado de buscar un docente por nombre", response = ResponseEntity.class)
-    @GetMapping("/docentenombre")
-    public ResponseEntity<GeneralResponse<Docente>> docentePorNombre(@RequestParam(value = "nombre") String nombre) {
+    @ApiOperation(value = "Método encargado de obtener la lista de docentes por filtros (nombre, correo)", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/filtrar")
+    public ResponseEntity<GeneralResponse<List<Docente>>> filtrar(
+            @RequestParam(value = "nombre", required = false) String nombre,
+            @RequestParam(value = "correo", required = false) String correo) {
 
-        GeneralResponse<Docente> response = new GeneralResponse<>();
+        GeneralResponse<List<Docente>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
-        Docente data;
+        List<Docente> data;
 
-        data = docenteService.docentePorNombre(nombre);
+        try {
+            data = docenteService.filtrarEstudiante(nombre, correo);
 
-        if(data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Docente obtenido con exito");
-        }else{
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+
+                if (data.size() > 1) {
+                    response.setMessage("Lista de docentes obtenida con exito");
+                } else if (data.size() == 1) {
+                    response.setMessage("Docente obtenido con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("No se encontro ningun docente");
+                }
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("La lista de docentes esta vacia");
+            }
+        }catch (NumberFormatException nfe){
             response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
+        }
+        return new ResponseEntity<>(response, status);
+    }
+
+    @ApiOperation(value = "Método encargado de eliminar un docente", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping
+    public ResponseEntity<GeneralResponse<Boolean>> eliminarDocente(@RequestBody Docente docente){
+
+        GeneralResponse<Boolean> response = new GeneralResponse<>();
+        boolean data;
+        HttpStatus status = HttpStatus.OK;
+
+        data = docenteService.eliminarDocente(docente);
+
+        if(data){
+            response.setData(true);
             response.setSuccess(true);
-            response.setMessage("Hubo un error al buscar el docente");
+            response.setMessage("Docente eliminado con exito");
+        }else{
+            response.setData(false);
+            response.setSuccess(false);
+            response.setMessage("No se pudo eliminar el docente");
         }
 
         return new ResponseEntity<>(response, status);

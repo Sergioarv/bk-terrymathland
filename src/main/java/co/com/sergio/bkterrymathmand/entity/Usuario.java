@@ -26,7 +26,7 @@ public class Usuario implements Serializable {
     @Column(nullable = false)
     private String nombre;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String documento;
 
     @Column(nullable = false)
