@@ -4,7 +4,7 @@ public class LoginUsuario {
 
     private String nombre;
 
-    private String documento;
+    private String contrasenia;
 
     public String getNombre() {
         return nombre;
@@ -14,11 +14,11 @@ public class LoginUsuario {
         this.nombre = nombre;
     }
 
-    public String getDocumento() {
-        return documento;
+    public String getContrasenia() {
+        return contrasenia;
     }
 
-    public void setDocumento(String documento) {
-        this.documento = documento;
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 }

@@ -95,6 +95,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de crear y guardar una pregunta nueva")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @PostMapping
     public ResponseEntity<GeneralResponse<Pregunta>> crearPregunta(
             @RequestPart(value = "file", required = false) MultipartFile file, @RequestParam("pregunta") String pregunta
@@ -151,6 +152,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de actualizar una pregunnta, sus opciones e imagen", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @PostMapping("/editarPregunta")
     public ResponseEntity<GeneralResponse<Pregunta>> editarPregunta(
             @RequestPart(value = "file", required = false) MultipartFile file, @RequestParam("pregunta") String pregunta
@@ -207,6 +209,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de eliminar una pregunta")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @DeleteMapping
     public ResponseEntity<GeneralResponse<Boolean>> eliminarPregunta(@RequestBody Pregunta pregunta) {
 

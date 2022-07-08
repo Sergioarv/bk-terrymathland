@@ -29,6 +29,9 @@ public class Usuario implements Serializable {
     @Column(nullable = false)
     private String documento;
 
+    @Column(nullable = false)
+    private String contrasenia;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "usuario_rol", joinColumns = @JoinColumn(name = "idusuario", nullable = false),
     inverseJoinColumns = @JoinColumn(name = "idrol", nullable = false))
@@ -39,9 +42,10 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String documento) {
+    public Usuario(String nombre, String documento, String contrasenia) {
         this.nombre = nombre;
         this.documento = documento;
+        this.contrasenia = contrasenia;
     }
 
     /** Getter y Setter **/
@@ -75,5 +79,13 @@ public class Usuario implements Serializable {
     }
     public void setDocumento(String documento) {
         this.documento = documento;
+    }
+
+    public String getContrasenia() {
+        return contrasenia;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
     }
 }

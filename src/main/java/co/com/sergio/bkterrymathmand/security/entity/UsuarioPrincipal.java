@@ -13,13 +13,13 @@ public class UsuarioPrincipal implements UserDetails {
 
     private String nombre;
 
-    private String documento;
+    private String contrasenia;
 
     private Collection<? extends GrantedAuthority> autoridades;
 
-    public UsuarioPrincipal(String nombre, String documento, Collection<? extends GrantedAuthority> autoridades) {
+    public UsuarioPrincipal(String nombre, String contrasenia, Collection<? extends GrantedAuthority> autoridades) {
         this.nombre = nombre;
-        this.documento = documento;
+        this.contrasenia = contrasenia;
         this.autoridades = autoridades;
     }
 
@@ -27,7 +27,7 @@ public class UsuarioPrincipal implements UserDetails {
         List<GrantedAuthority> autoridades = usuario.getRoles().stream().map(rol -> new SimpleGrantedAuthority(
                 rol.getRolNombre().name())).collect(Collectors.toList());
 
-        return new UsuarioPrincipal(usuario.getNombre(), usuario.getDocumento(), autoridades);
+        return new UsuarioPrincipal(usuario.getNombre(), usuario.getContrasenia(), autoridades);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class UsuarioPrincipal implements UserDetails {
 
     @Override
     public String getPassword() {
-        return documento;
+        return contrasenia;
     }
 
     @Override

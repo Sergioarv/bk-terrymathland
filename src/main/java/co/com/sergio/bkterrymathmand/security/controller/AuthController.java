@@ -14,6 +14,7 @@ import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -60,7 +61,7 @@ public class AuthController {
 
         Authentication authentication =
                 authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(loginUsuario.getNombre(), loginUsuario.getDocumento()));
+                        new UsernamePasswordAuthenticationToken(loginUsuario.getNombre(), loginUsuario.getContrasenia()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -80,7 +81,7 @@ public class AuthController {
         Usuario nuevoEstudiante;
         HttpStatus status = HttpStatus.OK;
 
-        admin.setDocumento(passwordEncoder.encode(admin.getDocumento()));
+        admin.setContrasenia(passwordEncoder.encode(admin.getDocumento()));
 
         nuevoEstudiante = usuarioService.agregarAdministrador(admin);
 
@@ -98,6 +99,7 @@ public class AuthController {
     }
 
     @ApiOperation(value = "Método encargado de agregar un estudiante", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @PostMapping("/agregarEstudiante")
     public ResponseEntity<GeneralResponse<Estudiante>> agregarEstudiante(@RequestBody Estudiante estudiante){
 
@@ -105,7 +107,7 @@ public class AuthController {
         Estudiante nuevoEstudiante;
         HttpStatus status = HttpStatus.OK;
 
-        estudiante.setDocumento(passwordEncoder.encode(estudiante.getDocumento()));
+        estudiante.setContrasenia(passwordEncoder.encode(estudiante.getDocumento()));
 
         nuevoEstudiante = estudianteService.agregarEstudiante(estudiante);
 
@@ -122,6 +124,32 @@ public class AuthController {
         return new ResponseEntity<>(response, status);
     }
 
+    @ApiOperation(value = "Método encargado de actualizar un estudiante", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
+    @PutMapping("/editarEstudiante")
+    public ResponseEntity<GeneralResponse<Estudiante>> actualizarEstudiante(@RequestBody Estudiante estudiante){
+
+        GeneralResponse<Estudiante> response = new GeneralResponse<>();
+        Estudiante data;
+        HttpStatus status = HttpStatus.OK;
+
+        estudiante.setContrasenia(passwordEncoder.encode(estudiante.getDocumento()));
+
+        data = estudianteService.actualizarEstudiante(estudiante);
+
+        if(data != null){
+            response.setData(data);
+            response.setSuccess(true);
+            response.setMessage("Estudiante actualizado con exito");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("No se pudo actualizar el estudiante o ya existe el documento");
+        }
+
+        return new ResponseEntity<>(response, status);
+    }
+
     @ApiOperation(value = "Método encargado de agregar un docente", response = ResponseEntity.class)
     @PostMapping("/agregarDocente")
     public ResponseEntity<GeneralResponse<Docente>> agregarDocente(@RequestBody Docente docente){
@@ -130,7 +158,7 @@ public class AuthController {
         Docente nuevoDocente;
         HttpStatus status = HttpStatus.OK;
 
-        docente.setDocumento(passwordEncoder.encode(docente.getDocumento()));
+        docente.setContrasenia(passwordEncoder.encode(docente.getDocumento()));
 
         nuevoDocente = docenteService.agregarDocente(docente);
 
