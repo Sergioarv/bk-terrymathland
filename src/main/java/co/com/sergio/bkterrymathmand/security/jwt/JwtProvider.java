@@ -65,17 +65,16 @@ public class JwtProvider {
         return false;
     }
 
-    public String refreshToken(JwtDto jwtDto) throws ParseException {
-        JWT jwt = JWTParser.parse(jwtDto.getToken());
+    public String refreshToken(JwtDto jwtDTO) throws ParseException {
+        JWT jwt = JWTParser.parse(jwtDTO.getToken());
         JWTClaimsSet claims = jwt.getJWTClaimsSet();
-        String nombreUsuario = claims.getSubject();
+        String username = claims.getSubject();
         List<String> roles = (List<String>) claims.getClaim("roles");
-
         return Jwts.builder()
-                .setSubject(nombreUsuario)
+                .setSubject(username)
                 .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + expiration))
+                .setExpiration(new Date( (new Date()).getTime() + expiration ))
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes())
                 .compact();
     }

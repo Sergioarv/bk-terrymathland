@@ -74,13 +74,14 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<GeneralResponse<JwtDto>> refresh(@RequestBody JwtDto jwtDto) throws ParseException {
+    public ResponseEntity<GeneralResponse<?>> refresh(@RequestBody JwtDto jwtDto) throws ParseException {
         GeneralResponse<JwtDto> response = new GeneralResponse<>();
 
         String token = jwtProvider.refreshToken(jwtDto);
+
         JwtDto jwt = new JwtDto(token);
 
-        response.setData(jwtDto);
+        response.setData(jwt);
         response.setSuccess(true);
         response.setMessage("Acceso concedido");
 
