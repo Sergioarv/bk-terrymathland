@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.ParseException;
 
 @RestController
 @RequestMapping("/auth")
@@ -64,6 +65,20 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtProvider.generateToken(authentication);
         JwtDto jwtDto = new JwtDto(jwt);
+
+        response.setData(jwtDto);
+        response.setSuccess(true);
+        response.setMessage("Acceso concedido");
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<GeneralResponse<JwtDto>> refresh(@RequestBody JwtDto jwtDto) throws ParseException {
+        GeneralResponse<JwtDto> response = new GeneralResponse<>();
+
+        String token = jwtProvider.refreshToken(jwtDto);
+        JwtDto jwt = new JwtDto(token);
 
         response.setData(jwtDto);
         response.setSuccess(true);
