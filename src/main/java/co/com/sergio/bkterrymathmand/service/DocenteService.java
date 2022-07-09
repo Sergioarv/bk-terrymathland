@@ -17,4 +17,10 @@ public interface DocenteService {
     Docente docentePorNombre(String nombre);
 
     Docente agregarDocente(Docente docente);
+
+    List<Docente> filtrarEstudiante(String nombre, String correo);
+
+    Docente editarDocente(Docente docente);
+
+    boolean eliminarDocente(Docente docente);
 }

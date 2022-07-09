@@ -1,7 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.dto.IDatosPromedioEstudiante;
-import co.com.sergio.bkterrymathmand.dto.IDatosaGraficar;
 import co.com.sergio.bkterrymathmand.dto.IDatosaGraficarDTO;
 import co.com.sergio.bkterrymathmand.dto.IRespuestaProyeccion;
 import co.com.sergio.bkterrymathmand.entity.Estudiante;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -124,6 +124,7 @@ public class RespuestaController {
 //    }
 
     @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha y estudiante", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE') or hasRole('ESTUDIANTE')")
     @GetMapping("/fechaUsuario")
     public ResponseEntity<GeneralResponse<Respuesta>> obtenerRespuestaPorFechaYEstudiante(
             @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
@@ -149,7 +150,7 @@ public class RespuestaController {
     }
 
 
-    @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante", response = ResponseEntity.class)
+    @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante desde el ejugo", response = ResponseEntity.class)
     @PutMapping(value = "/guardarRespuestaEstudiante", consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
     public ResponseEntity<GeneralResponse<List<IRespuestaProyeccion>>> guardarRespuesta(@RequestBody Estudiante estudiante) {
 
@@ -173,6 +174,7 @@ public class RespuestaController {
     }
 
     @ApiOperation(value = "Método encargado de obtener la lista de respuestas para graficar")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE') or hasRole('ESTUDIANTE')")
     @GetMapping("/graficarRespuestas")
     public ResponseEntity<GeneralResponse<IDatosaGraficarDTO>> graficarRespuestas(
             @RequestParam(value = "estudiante", required = false) Estudiante estudiante,

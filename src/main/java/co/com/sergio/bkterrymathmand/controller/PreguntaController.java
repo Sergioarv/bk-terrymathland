@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,6 +60,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de obtener la lista de preguntas por filtro (id, enunciado)", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<Page<Pregunta>>> filtrar(
             @RequestParam(value = "id", required = false) String id,
@@ -103,6 +105,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de crear y guardar una pregunta nueva")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @PostMapping
     public ResponseEntity<GeneralResponse<Pregunta>> crearPregunta(
             @RequestPart(value = "file", required = false) MultipartFile file, @RequestParam("pregunta") String pregunta
@@ -159,6 +162,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de actualizar una pregunnta, sus opciones e imagen", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @PostMapping("/editarPregunta")
     public ResponseEntity<GeneralResponse<Pregunta>> editarPregunta(
             @RequestPart(value = "file", required = false) MultipartFile file, @RequestParam("pregunta") String pregunta
@@ -215,6 +219,7 @@ public class PreguntaController {
     }
 
     @ApiOperation(value = "Método encargado de eliminar una pregunta")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @DeleteMapping
     public ResponseEntity<GeneralResponse<Boolean>> eliminarPregunta(@RequestBody Pregunta pregunta) {
 

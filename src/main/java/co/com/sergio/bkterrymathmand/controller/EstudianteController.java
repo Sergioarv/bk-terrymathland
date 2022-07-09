@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -56,53 +57,8 @@ public class EstudianteController {
 
     }
 
-    @ApiOperation(value = "Método encargado de agregar un nuevo estudiante", response = ResponseEntity.class)
-    @PostMapping
-    public ResponseEntity<GeneralResponse<Estudiante>> agregarEstudiante(@RequestBody Estudiante estudiante){
-
-        GeneralResponse<Estudiante> response = new GeneralResponse<>();
-        Estudiante nuevoEstudiante;
-        HttpStatus status = HttpStatus.OK;
-
-        nuevoEstudiante = estudianteService.agregarEstudiante(estudiante);
-
-        if(nuevoEstudiante != null){
-            response.setData(nuevoEstudiante);
-            response.setSuccess(true);
-            response.setMessage("Estudiante agregado con exito");
-        }else{
-            response.setData(null);
-            response.setSuccess(false);
-            response.setMessage("No se pudo agregar o ya existe el estudiante");
-        }
-
-        return new ResponseEntity<>(response, status);
-    }
-
-    @ApiOperation(value = "Método encargado de actualizar un estudiante", response = ResponseEntity.class)
-    @PutMapping
-    public ResponseEntity<GeneralResponse<Estudiante>> actualizarEstudiante(@RequestBody Estudiante estudiante){
-
-        GeneralResponse<Estudiante> response = new GeneralResponse<>();
-        Estudiante data;
-        HttpStatus status = HttpStatus.OK;
-
-        data = estudianteService.actualizarEstudiante(estudiante);
-
-        if(data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Estudiante actualizado con exito");
-        }else{
-            response.setData(null);
-            response.setSuccess(false);
-            response.setMessage("No se pudo actualizar el estudiante");
-        }
-
-        return new ResponseEntity<>(response, status);
-    }
-
     @ApiOperation(value = "Método encargado de eliminar un estudiante", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @DeleteMapping
     public ResponseEntity<GeneralResponse<Boolean>> eliminarEstudiante(@RequestBody Estudiante estudiante){
 
@@ -125,7 +81,7 @@ public class EstudianteController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de ontener un estudiante por el nombre", response = ResponseEntity.class)
+    @ApiOperation(value = "Método encargado de ontener un estudiante por el nombre para el juego", response = ResponseEntity.class)
     @GetMapping("/estudiantenombre")
     public ResponseEntity<GeneralResponse<IEstudianteProyeccion>> estudianteByNombre(@RequestParam(value = "nombre") String nombre) {
 
@@ -149,6 +105,7 @@ public class EstudianteController {
     }
 
     @ApiOperation(value = "Método encargado de obtener al lista de estudiantes por filtros (nombre. fecha)", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<Page<Estudiante>>> filtrar(
             @RequestParam(value = "nombre", required = false) String nombre,

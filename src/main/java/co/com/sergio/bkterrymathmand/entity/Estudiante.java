@@ -1,6 +1,8 @@
 package co.com.sergio.bkterrymathmand.entity;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import java.util.List;
 
 /**
@@ -11,6 +13,7 @@ import java.util.List;
  **/
 
 @Entity
+@PrimaryKeyJoinColumn(name = "idusuario")
 public class Estudiante extends Usuario{
 
   @OneToMany(mappedBy = "estudiante")

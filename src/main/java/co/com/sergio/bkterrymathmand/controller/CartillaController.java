@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class CartillaController {
     private CartillaService cartillaService;
 
     @ApiOperation(value = "Método encargado de obtener la lista de cartillas")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @GetMapping
     public ResponseEntity<GeneralResponse<List<Cartilla>>> obtenerCartillas(){
 
@@ -59,9 +61,15 @@ public class CartillaController {
         data = cartillaService.listarCartillas();
 
         if( data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Lista de cartillas obtenida con exito");
+            if(data.size() > 0) {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Lista de cartillas obtenida con exito");
+            }else{
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("La lista de cartillas esta vacia");
+            }
         }else{
             response.setData(null);
             response.setSuccess(false);
@@ -72,6 +80,7 @@ public class CartillaController {
     }
 
     @ApiOperation(value = "Método encargado de obtener la lista preguntas por filtro de cartilla", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @GetMapping("/filtrarPreguntas")
     public ResponseEntity<GeneralResponse<Page<Pregunta>>> filtrarPreguntas(
             @RequestParam(value = "idcartilla", required = false) String idcartilla,
@@ -114,6 +123,7 @@ public class CartillaController {
     }
 
     @ApiOperation(value = "Método encargado de actualizar las preguntas de la cartilla")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @PutMapping
     public ResponseEntity<GeneralResponse<Boolean>> actualizarCartilla(
             @RequestBody Cartilla cartilla
@@ -138,6 +148,7 @@ public class CartillaController {
     }
 
     @ApiOperation(value = "Método encargado de crear una cartilla con sus preguntas")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @PostMapping
     public ResponseEntity<GeneralResponse<Cartilla>> crearCartilla(
             @RequestBody Cartilla cartilla
@@ -161,7 +172,8 @@ public class CartillaController {
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de eliminar una cartilla")
+    @ApiOperation(value = "Método encargado de eliminar una cartilla con sus preguntas")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @DeleteMapping
     public ResponseEntity<GeneralResponse<Boolean>> eliminarCartilla(@RequestBody Cartilla cartilla){
 

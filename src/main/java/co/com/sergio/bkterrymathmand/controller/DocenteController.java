@@ -1,12 +1,14 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Docente;
+import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.service.DocenteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +29,7 @@ public class DocenteController {
     private DocenteService docenteService;
 
     @ApiOperation(value = "Método encargado de listar los docentes", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<GeneralResponse<List<Docente>>> obtenerDocentes(){
 
@@ -47,50 +50,66 @@ public class DocenteController {
         }
 
         return new ResponseEntity<>(response, status);
-
     }
 
-    @ApiOperation(value = "Método encargado de agregar un docente", response = ResponseEntity.class)
-    @PostMapping(consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
-    public ResponseEntity<GeneralResponse<Docente>> agregarDocente(@RequestBody Docente docente){
+    @ApiOperation(value = "Método encargado de obtener la lista de docentes por filtros (nombre, correo)", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/filtrar")
+    public ResponseEntity<GeneralResponse<List<Docente>>> filtrar(
+            @RequestParam(value = "nombre", required = false) String nombre,
+            @RequestParam(value = "correo", required = false) String correo) {
 
-        GeneralResponse<Docente> response = new GeneralResponse<>();
-        Docente nuevoDocente;
+        GeneralResponse<List<Docente>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
+        List<Docente> data;
 
-        nuevoDocente = docenteService.agregarDocente(docente);
+        try {
+            data = docenteService.filtrarEstudiante(nombre, correo);
 
-        if(nuevoDocente != null){
-            response.setData(nuevoDocente);
-            response.setSuccess(true);
-            response.setMessage("Docente agregado con exito");
-        }else{
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+
+                if (data.size() > 1) {
+                    response.setMessage("Lista de docentes obtenida con exito");
+                } else if (data.size() == 1) {
+                    response.setMessage("Docente obtenido con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("No se encontro ningun docente");
+                }
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("La lista de docentes esta vacia");
+            }
+        }catch (NumberFormatException nfe){
             response.setData(null);
-            response.setSuccess(true);
-            response.setMessage("Hubo un error al agregar el docente");
+            response.setSuccess(false);
+            response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
         }
-
         return new ResponseEntity<>(response, status);
     }
 
-    @ApiOperation(value = "Método encargado de buscar un docente por nombre", response = ResponseEntity.class)
-    @GetMapping("/docentenombre")
-    public ResponseEntity<GeneralResponse<Docente>> docentePorNombre(@RequestParam(value = "nombre") String nombre) {
+    @ApiOperation(value = "Método encargado de eliminar un docente", response = ResponseEntity.class)
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping
+    public ResponseEntity<GeneralResponse<Boolean>> eliminarDocente(@RequestBody Docente docente){
 
-        GeneralResponse<Docente> response = new GeneralResponse<>();
+        GeneralResponse<Boolean> response = new GeneralResponse<>();
+        boolean data;
         HttpStatus status = HttpStatus.OK;
-        Docente data;
 
-        data = docenteService.docentePorNombre(nombre);
+        data = docenteService.eliminarDocente(docente);
 
-        if(data != null){
-            response.setData(data);
+        if(data){
+            response.setData(true);
             response.setSuccess(true);
-            response.setMessage("Docente obtenido con exito");
+            response.setMessage("Docente eliminado con exito");
         }else{
-            response.setData(null);
-            response.setSuccess(true);
-            response.setMessage("Hubo un error al buscar el docente");
+            response.setData(false);
+            response.setSuccess(false);
+            response.setMessage("No se pudo eliminar el docente");
         }
 
         return new ResponseEntity<>(response, status);
