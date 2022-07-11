@@ -62,6 +62,8 @@ public class MainSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/auth/login").permitAll()
                 .antMatchers(HttpMethod.POST,"/auth/refresh").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth/agregarAdministrador").permitAll()
+                .antMatchers("/v3/api-docs/**","/v2/api-docs/**", "/swagger-ui/**",
+                        "/swagger-resources/**","/configuration/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/cartilla/listarCartillas").permitAll()
                 .antMatchers(HttpMethod.GET, "/estudiante/estudiantenombre").permitAll()
                 .antMatchers(HttpMethod.GET, "/cartilla/obtenerPreguntas").permitAll()

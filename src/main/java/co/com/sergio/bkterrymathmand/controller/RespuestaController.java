@@ -99,30 +99,6 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
-//    @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha", response = ResponseEntity.class)
-//    @GetMapping("/fecha")
-//    public ResponseEntity<GeneralResponse<List<Respuesta>>> obtenerRespuestaPorFecha(
-//            @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
-//
-//        GeneralResponse<List<Respuesta>> response = new GeneralResponse<>();
-//        HttpStatus status = HttpStatus.OK;
-//        List<Respuesta> data;
-//
-//        data = respuestaService.obtenerRespuestaPorFecha(fecha);
-//
-//        if (data != null) {
-//            response.setData(data);
-//            response.setSuccess(true);
-//            response.setMessage("Lista de respuestas obtenida con exito");
-//        } else {
-//            response.setData(null);
-//            response.setSuccess(false);
-//            response.setMessage("No se encontro respuestas con el parametro de busqueda");
-//        }
-//
-//        return new ResponseEntity<>(response, status);
-//    }
-
     @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha y estudiante", response = ResponseEntity.class)
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE') or hasRole('ESTUDIANTE')")
     @GetMapping("/fechaUsuario")
