@@ -1,12 +1,13 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Docente;
-import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.entity.Rol;
 import co.com.sergio.bkterrymathmand.repository.DocenteRepository;
 import co.com.sergio.bkterrymathmand.security.enums.RolNombre;
 import co.com.sergio.bkterrymathmand.security.service.RolServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,15 +59,15 @@ public class DocenteServiceImpl implements DocenteService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Docente> filtrarEstudiante(String nombre, String correo) {
+    public Page<Docente> filtrarEstudiante(String nombre, String correo, PageRequest pageable) {
         if (nombre != null && correo != null) {
-            return docenteRepository.estudiantePorNombreYCorreo(nombre);
+            return docenteRepository.docentePorNombreYCorreo(nombre, pageable);
         } else if (nombre != null) {
-            return docenteRepository.estudiantePorFiltro(nombre);
+            return docenteRepository.docentePorFiltro(nombre, pageable);
         } else if (correo != null) {
-            return docenteRepository.estudiantePorCorreo(correo);
+            return docenteRepository.docentePorCorreo(correo, pageable);
         } else {
-            return docenteRepository.findAll(Sort.by(Sort.Direction.ASC, "idusuario"));
+            return docenteRepository.findAll(pageable);
         }
     }
 

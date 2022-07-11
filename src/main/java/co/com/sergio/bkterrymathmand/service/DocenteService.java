@@ -1,6 +1,8 @@
 package co.com.sergio.bkterrymathmand.service;
 
 import co.com.sergio.bkterrymathmand.entity.Docente;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -18,7 +20,7 @@ public interface DocenteService {
 
     Docente agregarDocente(Docente docente);
 
-    List<Docente> filtrarEstudiante(String nombre, String correo);
+    Page<Docente> filtrarEstudiante(String nombre, String correo, PageRequest pageable);
 
     Docente editarDocente(Docente docente);
 

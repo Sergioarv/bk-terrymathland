@@ -1,7 +1,9 @@
 package co.com.sergio.bkterrymathmand.repository;
 
 import co.com.sergio.bkterrymathmand.entity.Docente;
-import co.com.sergio.bkterrymathmand.entity.Estudiante;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,14 +26,14 @@ public interface DocenteRepository extends JpaRepository<Docente, Integer> {
     @Query(value = "select * from usuario as u where u.documento = :documento", nativeQuery = true)
     Docente existePorDocumento(String documento);
 
-    @Query(value = "select * from usuario as u where u.nombre like %:nombre%", nativeQuery = true)
-    List<Docente> estudiantePorNombreYCorreo(String nombre);
+    @Query(value = "select * from usuario as u where lower(u.nombre) like lower(concat('%',:nombre,'%'))", nativeQuery = true)
+    Page<Docente> docentePorNombreYCorreo(String nombre, Pageable pageable);
 
-    @Query(value = "select * from usuario as u where u.nombre like %:nombre%", nativeQuery = true)
-    List<Docente> estudiantePorFiltro(String nombre);
+    @Query(value = "select * from usuario as u where lower(u.nombre) like lower(concat('%',:nombre,'%'))", nativeQuery = true)
+    Page<Docente> docentePorFiltro(String nombre, Pageable pageable);
 
     @Query(value = "select * from usuario as u where u.correo like %:correo%", nativeQuery = true)
-    List<Docente> estudiantePorCorreo(String correo);
+    Page<Docente> docentePorCorreo(String correo, Pageable pageable);
 
 
     @Query(value = "select * from usuario as u where u.documento = :documento", nativeQuery = true)

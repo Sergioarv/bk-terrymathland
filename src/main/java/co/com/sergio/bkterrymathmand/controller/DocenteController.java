@@ -6,6 +6,9 @@ import co.com.sergio.bkterrymathmand.service.DocenteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -55,24 +58,29 @@ public class DocenteController {
     @ApiOperation(value = "Método encargado de obtener la lista de docentes por filtros (nombre, correo)", response = ResponseEntity.class)
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/filtrar")
-    public ResponseEntity<GeneralResponse<List<Docente>>> filtrar(
+    public ResponseEntity<GeneralResponse<Page<Docente>>> filtrar(
             @RequestParam(value = "nombre", required = false) String nombre,
-            @RequestParam(value = "correo", required = false) String correo) {
+            @RequestParam(value = "correo", required = false) String correo,
+            @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
+            @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int cantPagina
+    ) {
 
-        GeneralResponse<List<Docente>> response = new GeneralResponse<>();
+        GeneralResponse<Page<Docente>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
-        List<Docente> data;
+        Page<Docente> data;
 
         try {
-            data = docenteService.filtrarEstudiante(nombre, correo);
+
+            PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
+            data = docenteService.filtrarEstudiante(nombre, correo, pageable);
 
             if (data != null) {
                 response.setData(data);
                 response.setSuccess(true);
 
-                if (data.size() > 1) {
+                if (data.getContent().size() > 1) {
                     response.setMessage("Lista de docentes obtenida con exito");
-                } else if (data.size() == 1) {
+                } else if (data.getContent().size() == 1) {
                     response.setMessage("Docente obtenido con exito");
                 } else {
                     response.setSuccess(false);
