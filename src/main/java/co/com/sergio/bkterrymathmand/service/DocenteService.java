@@ -20,7 +20,7 @@ public interface DocenteService {
 
     Docente agregarDocente(Docente docente);
 
-    Page<Docente> filtrarEstudiante(String nombre, String correo, PageRequest pageable);
+    Page<Docente> filtrarDocente(String nombre, String correo, PageRequest pageable);
 
     Docente editarDocente(Docente docente);
 

@@ -58,13 +58,13 @@ public class DocenteServiceImpl implements DocenteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Docente> filtrarEstudiante(String nombre, String correo, PageRequest pageable) {
-        if (nombre != null && correo != null) {
-            return docenteRepository.docentePorNombreYCorreo(nombre, pageable);
+    public Page<Docente> filtrarDocente(String nombre, String documento, PageRequest pageable) {
+        if (nombre != null && documento != null) {
+            return docenteRepository.docentePorNombreYDocumento(nombre, documento, pageable);
         } else if (nombre != null) {
             return docenteRepository.docentePorFiltro(nombre, pageable);
-        } else if (correo != null) {
-            return docenteRepository.docentePorCorreo(correo, pageable);
+        } else if (documento != null) {
+            return docenteRepository.docentePorDocumento(documento, pageable);
         } else {
             return docenteRepository.findAll(pageable);
         }

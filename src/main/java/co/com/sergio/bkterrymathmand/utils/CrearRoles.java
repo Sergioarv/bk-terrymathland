@@ -23,15 +23,23 @@ public class CrearRoles implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+        Rol admin;
+        Rol docente;
+        Rol estudiante;
 
         if (!rolService.getByRolNombre(RolNombre.ROLE_ADMIN).isPresent()) {
-            Rol r1 = new Rol(RolNombre.ROLE_ADMIN);
-            Rol r2 = new Rol(RolNombre.ROLE_DOCENTE);
-            Rol r3 = new Rol(RolNombre.ROLE_ESTUDIANTE);
+            admin = new Rol(RolNombre.ROLE_ADMIN);
+            rolService.crearRol(admin);
+        }
 
-            rolService.crearRol(r1);
-            rolService.crearRol(r2);
-            rolService.crearRol(r3);
+        if (!rolService.getByRolNombre(RolNombre.ROLE_DOCENTE).isPresent()) {
+            docente = new Rol(RolNombre.ROLE_DOCENTE);
+            rolService.crearRol(docente);
+        }
+
+        if (!rolService.getByRolNombre(RolNombre.ROLE_ESTUDIANTE).isPresent()) {
+            estudiante = new Rol(RolNombre.ROLE_ESTUDIANTE);
+            rolService.crearRol(estudiante);
         }
     }
 }

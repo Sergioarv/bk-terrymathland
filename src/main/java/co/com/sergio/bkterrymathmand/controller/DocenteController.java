@@ -77,7 +77,7 @@ public class DocenteController {
 
         try {
             PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
-            data = docenteService.filtrarEstudiante(nombre, correo, pageable);
+            data = docenteService.filtrarDocente(nombre, correo, pageable);
 
             if (data != null) {
                 response.setData(data);
