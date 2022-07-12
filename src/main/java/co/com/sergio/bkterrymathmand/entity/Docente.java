@@ -15,16 +15,4 @@ import javax.persistence.PrimaryKeyJoinColumn;
 @PrimaryKeyJoinColumn(name = "idusuario")
 public class Docente extends Usuario {
 
-  @Column(nullable = false)
-  private String correo;
-
-  /* Getter y Setter */
-
-  public String getCorreo() {
-    return correo;
-  }
-
-  public void setCorreo(String correo) {
-    this.correo = correo;
-  }
 }
