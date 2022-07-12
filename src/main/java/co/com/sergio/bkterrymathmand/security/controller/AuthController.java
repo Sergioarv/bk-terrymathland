@@ -6,7 +6,6 @@ import co.com.sergio.bkterrymathmand.entity.Usuario;
 import co.com.sergio.bkterrymathmand.security.dto.JwtDto;
 import co.com.sergio.bkterrymathmand.security.dto.LoginUsuario;
 import co.com.sergio.bkterrymathmand.security.jwt.JwtProvider;
-import co.com.sergio.bkterrymathmand.security.service.RolServiceImpl;
 import co.com.sergio.bkterrymathmand.service.DocenteService;
 import co.com.sergio.bkterrymathmand.service.EstudianteService;
 import co.com.sergio.bkterrymathmand.service.UsuarioService;
@@ -40,17 +39,14 @@ public class AuthController {
 
     private final UsuarioService usuarioService;
 
-    private final RolServiceImpl rolService;
-
     private final JwtProvider jwtProvider;
 
-    public AuthController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, EstudianteService estudianteService, DocenteService docenteService, UsuarioService usuarioService, RolServiceImpl rolService, JwtProvider jwtProvider) {
+    public AuthController(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, EstudianteService estudianteService, DocenteService docenteService, UsuarioService usuarioService, JwtProvider jwtProvider) {
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.estudianteService = estudianteService;
         this.docenteService = docenteService;
         this.usuarioService = usuarioService;
-        this.rolService = rolService;
         this.jwtProvider = jwtProvider;
     }
 

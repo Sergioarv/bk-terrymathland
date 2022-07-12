@@ -19,12 +19,6 @@ public interface PreguntaService {
 
     List<Pregunta> obtenerPreguntas();
 
-//    List<Pregunta> filtrarPorId(int id);
-//
-//    List<Pregunta> filtrarPor(String filtro);
-//
-//    List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado);
-
     Page<Pregunta> filtrarPregunta(String id, String enunciado, Pageable pageable);
 
     Pregunta editarPregunta(Pregunta pregunta, MultipartFile file);

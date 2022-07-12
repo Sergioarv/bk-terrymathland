@@ -22,7 +22,7 @@ public class CrearRoles implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
 
         if (!rolService.getByRolNombre(RolNombre.ROLE_ADMIN).isPresent()) {
             Rol r1 = new Rol(RolNombre.ROLE_ADMIN);

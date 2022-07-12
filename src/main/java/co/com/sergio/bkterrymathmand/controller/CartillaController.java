@@ -25,6 +25,7 @@ public class CartillaController {
     @Autowired
     private CartillaService cartillaService;
 
+
     @ApiOperation(value = "Método encargado de obtener la lista de cartillas")
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @GetMapping
@@ -37,9 +38,15 @@ public class CartillaController {
         data = cartillaService.obtenerCartillas();
 
         if( data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Lista de cartillas obtenida con exito");
+            if(data.size() > 0) {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Lista de cartillas obtenida con exito");
+            }else{
+                response.setData(data);
+                response.setSuccess(false);
+                response.setMessage("La lista de cartillas esta vacia");
+            }
         }else{
             response.setData(null);
             response.setSuccess(false);
@@ -205,19 +212,20 @@ public class CartillaController {
         data = cartillaService.obtenerPreguntas(idcartilla);
 
         if( data != null){
-            if(data.size() != 0){
-                response.setData(data);
-                response.setSuccess(true);
+            response.setData(data);
+            response.setSuccess(true);
+            if (data.size() > 1) {
                 response.setMessage("Lista de preguntas obtenida con exito de la cartilla solicitada");
-            }else{
-                response.setData(data);
+            } else if (data.size() == 1) {
+                response.setMessage("Pregunta de la cartilla obtenida con exito");
+            } else {
                 response.setSuccess(false);
-                response.setMessage("Lista de preguntas de la esta vacia");
+                response.setMessage("No se encontro ninguna pregunta con esta cartilla");
             }
         }else{
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("No se obtuvo la lista de preguntas de la cartilla");
+            response.setMessage("No se pudo obtener la lista de preguntas de la cartilla");
         }
 
         return new ResponseEntity<>(response, status);

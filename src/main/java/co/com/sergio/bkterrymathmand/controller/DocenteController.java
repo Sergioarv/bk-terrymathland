@@ -1,7 +1,6 @@
 package co.com.sergio.bkterrymathmand.controller;
 
 import co.com.sergio.bkterrymathmand.entity.Docente;
-import co.com.sergio.bkterrymathmand.entity.Estudiante;
 import co.com.sergio.bkterrymathmand.service.DocenteService;
 import co.com.sergio.bkterrymathmand.utils.GeneralResponse;
 import io.swagger.annotations.ApiOperation;
@@ -45,11 +44,18 @@ public class DocenteController {
         if(data != null){
             response.setData(data);
             response.setSuccess(true);
-            response.setMessage("Lista de docentes obtenida con exito");
+            if(data.size() > 1){
+                response.setMessage("Lista de docentes obtenida con exito");
+            }else if(data.size() == 1){
+                response.setMessage("Docente obtenida con exito");
+            }else{
+                response.setSuccess(false);
+                response.setMessage("La lista de docentes esta vacia");
+            }
         }else{
             response.setData(null);
             response.setSuccess(true);
-            response.setMessage("La lista de docentes esta vacia");
+            response.setMessage("Hubo un error al obtner la lista de docentes");
         }
 
         return new ResponseEntity<>(response, status);
@@ -70,7 +76,6 @@ public class DocenteController {
         Page<Docente> data;
 
         try {
-
             PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
             data = docenteService.filtrarEstudiante(nombre, correo, pageable);
 

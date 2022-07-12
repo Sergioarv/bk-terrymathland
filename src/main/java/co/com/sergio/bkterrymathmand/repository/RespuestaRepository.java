@@ -103,48 +103,4 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
             "(select nota from respuesta where idusuario = :idusuario and fecha = :fecha group by idusuario, nota) as c1 " +
             "where nota < 3", nativeQuery = true)
     List<IDatosPromedioEstudiante> graficarRespuestasEstudiantesPorIdFecha(int idusuario, Date fecha);
-
-//    @Query(value = "(select fecha, notas, cast(avg(promedio) as decimal(10,1)) as n1, 0 as n2, 0 as n3, 0 as n4 from (select cast(avg(nota) " +
-//            "as decimal(10,1)) as promedio, count(nota) as notas, fecha from respuesta group by fecha) as c1 where promedio = 5 group by fecha, " +
-//            "notas) union all (select fecha, notas, 0 as n1, cast(avg(promedio) as decimal(10,1)) as n2, 0 as n3, 0 as n4 from (select " +
-//            "cast(avg(nota) as decimal(10,1)) as promedio, count(nota) as notas, fecha from respuesta group by fecha) as c1 where promedio < 5 " +
-//            "and promedio >= 4 group by fecha, notas) union all (select fecha, notas, 0 as n1, 0 as n2, cast(avg(promedio) as decimal(10,1)) " +
-//            "as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, count(nota) as notas, fecha from respuesta group by fecha) " +
-//            "as c1 where promedio < 4 and promedio >= 3 group by fecha, notas) union all (select fecha, notas, 0 as n1, 0 as n2, 0 as n3, " +
-//            "cast(avg(promedio) as decimal(10,1)) as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, count(nota) as notas, " +
-//            "fecha from respuesta group by fecha) as c1 where promedio < 3 group by fecha, notas) order by fecha desc limit 7", nativeQuery = true)
-//    List<IDatosPromedioFecha> graficarRespuestas();
-
-//    @Query(value = "(select fecha, cast(avg(promedio) as decimal(10,1)) as n1, 0 as n2, 0 as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, \n" +
-//            "fecha from respuesta where fecha <= :fecha group by  fecha) as c1 where promedio = 5 group by fecha) \n" +
-//            "union all (select fecha, 0 as n1, cast(avg(promedio) as decimal(10,1)) as n2, 0 as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, \n" +
-//            " fecha from respuesta where fecha <= :fecha group by  fecha) as c1 where promedio < 5 and promedio >= 4 \n" +
-//            "group by fecha) union all (select fecha, 0 as n1, 0 as n2, cast(avg(promedio) as decimal(10,1)) as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) \n" +
-//            "as promedio, fecha from respuesta where fecha <= :fecha group by  fecha) as c1 where promedio < 4 and promedio >= 3 \n" +
-//            "group by fecha) union all (select fecha, 0 as n1, 0 as n2, 0 as n3, cast(avg(promedio) as decimal(10,1)) as n4 from (select cast(avg(nota) as decimal(10,1)) \n" +
-//            "as promedio, fecha from respuesta where fecha <= :fecha group by fecha) as c1 where promedio < 3 group by fecha) \n" +
-//            "order by fecha desc limit 7;", nativeQuery = true)
-//    List<IDatosaGraficar> graficarRespuestasPorFecha(Date fecha);
-//
-//    @Query(value = "(select fecha, cast(avg(promedio) as decimal(10,1)) as n1, 0 as n2, 0 as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, " +
-//            "idusuario, fecha from respuesta where idusuario = :idusuario group by idusuario, fecha) as c1 where promedio = 5 group by fecha)" +
-//            "union all (select fecha, 0 as n1, cast(avg(promedio) as decimal(10,1)) as n2, 0 as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, " +
-//            "idusuario, fecha from respuesta where idusuario = :idusuario group by idusuario, fecha) as c1 where promedio < 5 and promedio >= 4 group by fecha)" +
-//            "union all (select fecha, 0 as n1, 0 as n2, cast(avg(promedio) as decimal(10,1)) as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, " +
-//            "idusuario, fecha from respuesta where idusuario = :idusuario group by idusuario, fecha) as c1 where promedio < 4 and promedio >= 3 group by fecha)" +
-//            "union all (select fecha, 0 as n1, 0 as n2, 0 as n3, cast(avg(promedio) as decimal(10,1)) as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, " +
-//            "idusuario, fecha from respuesta where idusuario = :idusuario group by idusuario, fecha) as c1 where promedio < 3 group by fecha) " +
-//            "order by fecha desc limit 7", nativeQuery = true)
-//    List<IDatosaGraficar> graficarRespuestasPorEstudiante(int idusuario);
-//
-//    @Query(value = "(select fecha, count(promedio) as n1, 0 as n2, 0 as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, " +
-//            "idusuario, fecha from respuesta where fecha <= :fecha and idusuario = :idusuario group by idusuario, fecha) as c1 where promedio = 5 " +
-//            "group by fecha) union all (select fecha, 0 as n1, count(promedio) as n2, 0 as n3, 0 as n4 from (select cast(avg(nota) as decimal(10,1)) " +
-//            "as promedio, idusuario, fecha from respuesta where fecha <= :fecha and idusuario = :idusuario group by idusuario, fecha) as c1 where " +
-//            "promedio < 5 and promedio >= 4 group by fecha) union all (select fecha, 0 as n1, 0 as n2, count(promedio) as n3, 0 as n4 from " +
-//            "(select cast(avg(nota) as decimal(10,1)) as promedio, idusuario, fecha from respuesta where fecha <= :fecha and idusuario = :idusuario " +
-//            "group by idusuario, fecha) as c1 where promedio < 4 and promedio >= 3 group by fecha) union all (select fecha, 0 as n1, 0 as n2, 0 as n3, " +
-//            "count(promedio) as n4 from (select cast(avg(nota) as decimal(10,1)) as promedio, idusuario, fecha from respuesta where fecha <= :fecha " +
-//            "and idusuario = :idusuario group by idusuario, fecha) as c1 where promedio < 3 group by fecha) order by fecha desc limit 7", nativeQuery = true)
-//    List<IDatosaGraficar> graficarRespuestasFechaEstudiante(Date fecha, int idusuario);
 }

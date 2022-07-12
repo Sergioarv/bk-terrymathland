@@ -42,24 +42,6 @@ public class PreguntaServiceImpl implements PreguntaService {
         return preguntaRepository.findAll(Sort.by(Sort.Direction.ASC, "idpregunta"));
     }
 
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<Pregunta> filtrarPorId(int id) {
-//        return preguntaRepository.filtrarPorId(id);
-//    }
-
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<Pregunta> filtrarPor(String filtro) {
-//        return preguntaRepository.filtrarPor(filtro);
-//    }
-
-//    @Override
-//    @Transactional(readOnly = true)
-//    public List<Pregunta> filtrarPorIdOEnunciado(int id, String enunciado) {
-//        return preguntaRepository.filtrarPorIdOEnunciado(id, enunciado);
-//    }
-
     @Override
     @Transactional(readOnly = true)
     public Page<Pregunta> filtrarPregunta(String id, String enunciado, Pageable pageable) {
@@ -160,7 +142,7 @@ public class PreguntaServiceImpl implements PreguntaService {
 
         try {
             List<Opcion> opciones;
-            Pregunta preguntaGuardada = new Pregunta();
+            Pregunta preguntaGuardada;
 
             preguntaGuardada = preguntaRepository.save(pregunta);
 
@@ -199,6 +181,7 @@ public class PreguntaServiceImpl implements PreguntaService {
     }
 
     @Override
+    @Transactional
     public Boolean eliminarPregunta(Pregunta pregunta) throws Exception {
 
         try {

@@ -27,7 +27,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/estudiante")
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class EstudianteController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class EstudianteController {
 
     @ApiOperation(value = "Método encargado de obtener la lista de estudiantes", response = ResponseEntity.class)
     @GetMapping
-    public ResponseEntity<GeneralResponse<List<Estudiante>>> obtenerEstudiantes(){
+    public ResponseEntity<GeneralResponse<List<Estudiante>>> obtenerEstudiantes() {
 
         GeneralResponse<List<Estudiante>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
@@ -43,11 +43,19 @@ public class EstudianteController {
 
         data = estudianteService.getAllEstudiantes();
 
-        if(data != null){
+        if (data != null) {
             response.setData(data);
             response.setSuccess(true);
-            response.setMessage("Lista de estudiantes obtenida con exito");
-        }else{
+
+            if (data.size() > 1) {
+                response.setMessage("Lista de estudiantes obtenida con exito");
+            } else if (data.size() == 1) {
+                response.setMessage("Estudiante obtenido con exito");
+            } else {
+                response.setSuccess(false);
+                response.setMessage("No se encontro ningun estudiante");
+            }
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("La lista de estudiantes esta vacia");
@@ -60,7 +68,7 @@ public class EstudianteController {
     @ApiOperation(value = "Método encargado de eliminar un estudiante", response = ResponseEntity.class)
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @DeleteMapping
-    public ResponseEntity<GeneralResponse<Boolean>> eliminarEstudiante(@RequestBody Estudiante estudiante){
+    public ResponseEntity<GeneralResponse<Boolean>> eliminarEstudiante(@RequestBody Estudiante estudiante) {
 
         GeneralResponse<Boolean> response = new GeneralResponse<>();
         boolean data;
@@ -68,11 +76,11 @@ public class EstudianteController {
 
         data = estudianteService.eliminarEstudiante(estudiante);
 
-        if(data){
+        if (data) {
             response.setData(true);
             response.setSuccess(true);
             response.setMessage("Estudiante eliminado con exito");
-        }else{
+        } else {
             response.setData(false);
             response.setSuccess(false);
             response.setMessage("No se pudo eliminar el estudiante");
@@ -91,11 +99,11 @@ public class EstudianteController {
 
         data = estudianteService.estudianteByNombre(nombre);
 
-        if(data != null){
+        if (data != null) {
             response.setData(data);
             response.setSuccess(true);
             response.setMessage("Busqueda realizada con exito");
-        }else{
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("El nombre buscado no existe en la base de datos, por favor verificar");
@@ -112,45 +120,39 @@ public class EstudianteController {
             @RequestParam(value = "fecha", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
             @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
             @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int cantPagina
-            ) {
+    ) {
 
         GeneralResponse<Page<Estudiante>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
         Page<Estudiante> data;
 
-        try {
-            PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
+        PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
 
-            data = estudianteService.filtrarEstudiante(nombre, fecha, pageable);
+        data = estudianteService.filtrarEstudiante(nombre, fecha, pageable);
 
-            if (data != null) {
-                response.setData(data);
-                response.setSuccess(true);
+        if (data != null) {
+            response.setData(data);
+            response.setSuccess(true);
 
-                if (data.getContent().size() > 1) {
-                    response.setMessage("Lista de estudiantes obtenida con exito");
-                } else if (data.getContent().size() == 1) {
-                    response.setMessage("Estudiante obtenido con exito");
-                } else {
-                    response.setSuccess(false);
-                    response.setMessage("No se encontro ningun estudiante");
-                }
+            if (data.getContent().size() > 1) {
+                response.setMessage("Lista de estudiantes obtenida con exito");
+            } else if (data.getContent().size() == 1) {
+                response.setMessage("Estudiante obtenido con exito");
             } else {
-                response.setData(null);
                 response.setSuccess(false);
-                response.setMessage("La lista de estudiantes esta vacia");
+                response.setMessage("No se encontro ningun estudiante");
             }
-        }catch (NumberFormatException nfe){
+        } else {
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
+            response.setMessage("La lista de estudiantes esta vacia");
         }
         return new ResponseEntity<>(response, status);
     }
 
     @ApiOperation(value = "Método encargado de obtener la lista unicamente id y nombre de estudiantes", response = ResponseEntity.class)
     @GetMapping("/listarEstudiantes")
-    public ResponseEntity<GeneralResponse<List<IEstudianteProyeccion>>> obtenerIdyNombreEstudiantes(){
+    public ResponseEntity<GeneralResponse<List<IEstudianteProyeccion>>> obtenerIdyNombreEstudiantes() {
 
         GeneralResponse<List<IEstudianteProyeccion>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
@@ -158,11 +160,11 @@ public class EstudianteController {
 
         data = estudianteService.obtenerIdyNombreEstudiantes();
 
-        if(data != null){
+        if (data != null) {
             response.setData(data);
             response.setSuccess(true);
             response.setMessage("Lista de estudiantes obtenida con exito");
-        }else{
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("La lista de estudiantes esta vacia");

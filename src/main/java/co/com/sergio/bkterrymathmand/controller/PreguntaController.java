@@ -50,11 +50,18 @@ public class PreguntaController {
         if (data != null) {
             response.setData(data);
             response.setSuccess(true);
-            response.setMessage("Lista de preguntas obtenida con exito");
+            if (data.size() > 1) {
+                response.setMessage("Lista de preguntas obtenida con exito");
+            } else if (data.size() == 1) {
+                response.setMessage("Pregunta obtenida con exito");
+            } else {
+                response.setSuccess(false);
+                response.setMessage("La lista de preguntas esta vacia");
+            }
         } else {
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("La lista de preguntas esta vacia");
+            response.setMessage("Hubo un error al obtener la lista de preguntas");
         }
         return new ResponseEntity<>(response, status);
     }
@@ -73,34 +80,28 @@ public class PreguntaController {
         HttpStatus status = HttpStatus.OK;
         Page<Pregunta> data;
 
-        try {
+        Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("idpregunta").ascending());
 
-            Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("idpregunta").ascending());
+        data = preguntaService.filtrarPregunta(id, enunciado, pageable);
 
-            data = preguntaService.filtrarPregunta(id, enunciado, pageable);
+        if (data != null) {
+            response.setData(data);
+            response.setSuccess(true);
 
-            if (data != null) {
-                response.setData(data);
-                response.setSuccess(true);
-
-                if (data.getContent().size() > 1) {
-                    response.setMessage("Lista de preguntas obtenida con exito");
-                } else if (data.getContent().size() == 1) {
-                    response.setMessage("Pregunta obtenida con exito");
-                } else {
-                    response.setSuccess(false);
-                    response.setMessage("No se encontro ninguna pregunta");
-                }
+            if (data.getContent().size() > 1) {
+                response.setMessage("Lista de preguntas obtenida con exito");
+            } else if (data.getContent().size() == 1) {
+                response.setMessage("Pregunta obtenida con exito");
             } else {
-                response.setData(null);
                 response.setSuccess(false);
                 response.setMessage("La lista de preguntas esta vacia");
             }
-        } catch (NumberFormatException nfe) {
+        } else {
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
+            response.setMessage("Hubo un error al obtener la lista de preguntas");
         }
+
         return new ResponseEntity<>(response, status);
     }
 
@@ -114,7 +115,7 @@ public class PreguntaController {
         HttpStatus status = HttpStatus.OK;
         Pregunta data;
 
-        Pregunta preguntaJson = new Pregunta();
+        Pregunta preguntaJson;
 
         ObjectMapper obj = new ObjectMapper();
         preguntaJson = obj.readValue(pregunta, Pregunta.class);
@@ -154,7 +155,7 @@ public class PreguntaController {
             return new ResponseEntity<>(response, status);
         } catch (Exception e) {
             response.setData(null);
-            response.setMessage(e.getLocalizedMessage());
+            response.setMessage(e.getMessage());
             response.setSuccess(false);
 
             return new ResponseEntity<>(response, status);
@@ -172,7 +173,7 @@ public class PreguntaController {
         HttpStatus status = HttpStatus.OK;
         Pregunta data;
 
-        Pregunta preguntaJson = new Pregunta();
+        Pregunta preguntaJson;
 
         ObjectMapper obj = new ObjectMapper();
         preguntaJson = obj.readValue(pregunta, Pregunta.class);
@@ -196,7 +197,7 @@ public class PreguntaController {
                 response.setData(data);
                 response.setMessage("Hubo un error al editar las opciones de la pregunta");
                 response.setSuccess(false);
-            } else if (data.getUrlImg() == "-1") {
+            } else if (data.getUrlImg().equalsIgnoreCase("-1")){
                 response.setData(data);
                 response.setMessage("Hubo un error al editar la imagen de la pregunta");
                 response.setSuccess(false);
@@ -226,7 +227,6 @@ public class PreguntaController {
         GeneralResponse<Boolean> response = new GeneralResponse<>();
         Boolean data;
         HttpStatus status = HttpStatus.OK;
-
 
         try {
             data = preguntaService.eliminarPregunta(pregunta);

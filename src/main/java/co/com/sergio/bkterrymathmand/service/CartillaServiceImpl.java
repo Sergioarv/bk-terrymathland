@@ -54,7 +54,7 @@ public class CartillaServiceImpl implements CartillaService {
         if (idcartilla != null) {
             listResult = cartillaRepository.obtenerPreguntasPorId(Integer.parseInt(idcartilla), pageable);
         } else {
-            listResult = preguntaRepository.findAll(pageable);
+            listResult = null;
         }
         return listResult;
     }
@@ -69,7 +69,8 @@ public class CartillaServiceImpl implements CartillaService {
         for (int j = 0; j < cartilla.getPreguntas().size(); j++) {
             Pregunta pcartilla = preguntaRepository.getById(cartilla.getPreguntas().get(j).getIdpregunta());
             cartilla.getPreguntas().get(j).agregarCartilla(result);
-            List<Cartilla> listFinal = Stream.concat(cartilla.getPreguntas().get(j).obtenerCartillas().stream(), pcartilla.obtenerCartillas().stream())
+            List<Cartilla> listFinal = Stream.concat(cartilla.getPreguntas().get(j).obtenerCartillas().stream(),
+                            pcartilla.obtenerCartillas().stream())
                     .distinct()
                     .collect(Collectors.toList());
             cartilla.getPreguntas().get(j).setCartillas(listFinal);
@@ -98,7 +99,7 @@ public class CartillaServiceImpl implements CartillaService {
             if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
                 cartillaRepository.delete(cartilla);
             } else {
-                return null;
+                return false;
             }
             return true;
         }
@@ -131,7 +132,7 @@ public class CartillaServiceImpl implements CartillaService {
                 cartilla.getPreguntas().get(j).setCartillas(listFinal);
             }
 
-            boolean isTrue = false;
+            boolean isTrue;
             for (int i = 0; i < tamPo; i++) {
                 isTrue = false;
                 Pregunta p = original.getPreguntas().get(i);
@@ -159,45 +160,5 @@ public class CartillaServiceImpl implements CartillaService {
             }
         }
         return false;
-
     }
-//
-//    private boolean guardarMayorIgualPreguntas(int tamPc, int tamPo, Cartilla cartilla, Cartilla original) {
-//
-//
-//    }
-//
-//    private boolean guardarMenosPreguntas(int tamPc, int tamPo, Cartilla cartilla, Cartilla original) {
-//
-//        List<Pregunta> sobrantes = new ArrayList<>();
-//
-//        for (int j = 0; j < tamPc; j++) {
-//            cartilla.getPreguntas().get(j).agregarCartilla(original);
-//        }
-//
-//        boolean isTrue = false;
-//        for (int i = 0; i < tamPo; i++) {
-//            isTrue = false;
-//            Pregunta p = original.getPreguntas().get(i);
-//            for (int j = 0; j < tamPc; j++) {
-//                Pregunta pc = cartilla.getPreguntas().get(j);
-//                if (pc.getIdpregunta() == p.getIdpregunta()) {
-//                    isTrue = true;
-//                    break;
-//                }
-//            }
-//            if (!isTrue) {
-//                original.getPreguntas().get(i).removerCartilla(original);
-//                tamPo = original.getPreguntas().size();
-//            }
-//        }
-//        cartillaRepository.save(original);
-//
-//        if (preguntaRepository.saveAll(cartilla.getPreguntas()) != null) {
-//            if (cartillaRepository.save(cartilla) != null) {
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
 }

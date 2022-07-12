@@ -100,7 +100,6 @@ public class RespuestaController {
     }
 
     @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha y estudiante", response = ResponseEntity.class)
-    @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE') or hasRole('ESTUDIANTE')")
     @GetMapping("/fechaUsuario")
     public ResponseEntity<GeneralResponse<Respuesta>> obtenerRespuestaPorFechaYEstudiante(
             @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
@@ -194,11 +193,7 @@ public class RespuestaController {
             total += dato.getPromedioestudiantes();
         }
 
-        if (total == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return total == 0;
     }
 
 }

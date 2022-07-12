@@ -10,7 +10,6 @@ import co.com.sergio.bkterrymathmand.security.service.RolServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -82,11 +81,13 @@ public class EstudianteServiceImpl implements EstudianteService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Estudiante obtenerEstudiantePorNombre(String nombre) {
         return estudianteRepository.obtenerEstudiantePorNombre(nombre);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<IEstudianteProyeccion> obtenerIdyNombreEstudiantes() {
         return estudianteRepository.obtenerIdyNombreEstudiantes();
     }
