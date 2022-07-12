@@ -85,6 +85,7 @@ public class DocenteServiceImpl implements DocenteService {
     @Override
     @Transactional
     public boolean eliminarDocente(Docente docente) {
+        docente.setRoles(null);
         docenteRepository.delete(docente);
         return true;
     }
