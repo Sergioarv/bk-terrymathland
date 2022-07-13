@@ -134,25 +134,28 @@ public class RespuestaServiceImpl implements RespuestaService {
         fechaActual = java.sql.Date.valueOf(hoy);
 
         Respuesta data = respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fechaActual, estudiante.getIdusuario());
+        Estudiante estudianteGuardado = estudianteRepository.getById(estudiante.getIdusuario());
 
         estudiante.getRespuestas().get(0).setFecha(fechaActual);
 
         int tamSe = estudiante.getRespuestas().get(0).getSoluciones().size();
-        int tamSd = data.getSoluciones().size();
 
         if (data != null) {
+
+            int tamSd = data.getSoluciones().size();
+
             if (estudiante.getRespuestas().get(0).getNota() >= data.getNota()) {
                 if (tamSe < tamSd) {
-                    guardarMenosSoluciones(tamSe, tamSd, estudiante, data);
+                    guardarMenosSoluciones(tamSe, tamSd, estudiante, data, estudianteGuardado);
                 } else if (tamSe > tamSd) {
-                    guardarMasSoluciones(tamSe, tamSd, estudiante, data);
+                    guardarMasSoluciones(tamSe, tamSd, estudiante, data, estudianteGuardado);
                 } else {
-                    guardarMismaSoluciones(tamSd, estudiante, data);
+                    guardarMismaSoluciones(tamSd, estudiante, data, estudianteGuardado);
                 }
             }
         } else {
             estudiante.getRespuestas().get(0).setIdrespuesta(0);
-            estudiante.getRespuestas().get(0).setUsuario(estudiante);
+            estudiante.getRespuestas().get(0).setUsuario(estudianteGuardado);
 
             Respuesta res = respuestaRepository.save(estudiante.getRespuestas().get(0));
 
@@ -162,12 +165,14 @@ public class RespuestaServiceImpl implements RespuestaService {
             }
 
             estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
-            estudianteRepository.save(estudiante);
+            estudiante.getRespuestas().get(0).setCantidadPreguntas(estudiante.getRespuestas().get(0).getSoluciones().size());
+            estudiante.getRespuestas().get(0).setIntentos(1);
+            respuestaRepository.save(estudiante.getRespuestas().get(0));
         }
-        return respuestaRepository.respuestaGuardadaPorEstudiante(estudiante.getIdusuario());
+        return respuestaRepository.respuestaGuardadaPorEstudiante(estudianteGuardado.getIdusuario());
     }
 
-    private void guardarMismaSoluciones(int tamSd, Estudiante estudiante, Respuesta data) {
+    private void guardarMismaSoluciones(int tamSd, Estudiante estudiante, Respuesta data, Estudiante estudianteGuardado) {
 
         for (int i = 0; i < tamSd; i++) {
             estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(data.getSoluciones().get(i).getIdsolucion());
@@ -175,14 +180,15 @@ public class RespuestaServiceImpl implements RespuestaService {
         }
 
         estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
-
         estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
-        estudiante.getRespuestas().get(0).setUsuario(estudiante);
+        estudiante.getRespuestas().get(0).setUsuario(estudianteGuardado);
+        estudiante.getRespuestas().get(0).setCantidadPreguntas(estudiante.getRespuestas().get(0).getSoluciones().size());
+        estudiante.getRespuestas().get(0).setIntentos(estudiante.getRespuestas().get(0).getIntentos() + 1);
 
         respuestaRepository.save(estudiante.getRespuestas().get(0));
     }
 
-    private void guardarMasSoluciones(int tamSe, int tamSd, Estudiante estudiante, Respuesta data) {
+    private void guardarMasSoluciones(int tamSe, int tamSd, Estudiante estudiante, Respuesta data, Estudiante estudianteGuardado) {
 
         for (int i = 0; i < tamSd; i++) {
             estudiante.getRespuestas().get(0).getSoluciones().get(i).setIdsolucion(data.getSoluciones().get(i).getIdsolucion());
@@ -195,14 +201,15 @@ public class RespuestaServiceImpl implements RespuestaService {
         }
 
         estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
-
         estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
-        estudiante.getRespuestas().get(0).setUsuario(estudiante);
+        estudiante.getRespuestas().get(0).setUsuario(estudianteGuardado);
+        estudiante.getRespuestas().get(0).setCantidadPreguntas(estudiante.getRespuestas().get(0).getSoluciones().size());
+        estudiante.getRespuestas().get(0).setIntentos(estudiante.getRespuestas().get(0).getIntentos() + 1);
 
         respuestaRepository.save(estudiante.getRespuestas().get(0));
     }
 
-    private void guardarMenosSoluciones(int tamSe, int tamSd, Estudiante estudiante, Respuesta data) {
+    private void guardarMenosSoluciones(int tamSe, int tamSd, Estudiante estudiante, Respuesta data, Estudiante estudianteGuardado) {
 
         List<Solucion> sobrantes = new ArrayList<>();
 
@@ -218,9 +225,10 @@ public class RespuestaServiceImpl implements RespuestaService {
         solucionRepository.deleteAll(sobrantes);
 
         estudiante.getRespuestas().get(0).setSoluciones(solucionRepository.saveAll(estudiante.getRespuestas().get(0).getSoluciones()));
-
         estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
-        estudiante.getRespuestas().get(0).setUsuario(estudiante);
+        estudiante.getRespuestas().get(0).setUsuario(estudianteGuardado);
+        estudiante.getRespuestas().get(0).setCantidadPreguntas(estudiante.getRespuestas().get(0).getSoluciones().size());
+        estudiante.getRespuestas().get(0).setIntentos(estudiante.getRespuestas().get(0).getIntentos() + 1);
 
         respuestaRepository.save(estudiante.getRespuestas().get(0));
     }

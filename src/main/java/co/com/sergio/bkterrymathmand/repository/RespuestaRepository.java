@@ -29,7 +29,8 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
     @Query(value = "select * from respuesta r where r.fecha = :fechaS and r.idusuario = :idusuario", nativeQuery = true)
     Respuesta obtenerRespuestaPorFechaYidUsuario(Date fechaS, int idusuario);
 
-    @Query(value = "select * from (select * from respuesta as r where r.fecha = :fecha) as c2 inner join (select * from estudiante as e where e.idusuario = :idusuario) as c1 on c1.idusuario = c2.idusuario", nativeQuery = true)
+//    @Query(value = "select * from (select * from respuesta as r where r.fecha = :fecha) as c2 inner join (select * from estudiante as e where e.idusuario = :idusuario) as c1 on c1.idusuario = c2.idusuario", nativeQuery = true)
+    @Query(value = "select * from respuesta as r where r.fecha = :fecha and r.idusuario = :idusuario", nativeQuery = true)
     Page<Respuesta> respuestasPorEstudianteYFecha(int idusuario, Date fecha, Pageable pageable);
 
     @Query(value = "select * from respuesta as r where r.idusuario = :idusuario order by r.fecha", nativeQuery = true)

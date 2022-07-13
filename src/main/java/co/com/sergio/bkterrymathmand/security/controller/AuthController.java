@@ -205,7 +205,7 @@ public class AuthController {
             response.setMessage("Docente agregado con exito");
         }else{
             response.setData(null);
-            response.setSuccess(true);
+            response.setSuccess(false);
             response.setMessage("Hubo un error al agregar el docente");
         }
 

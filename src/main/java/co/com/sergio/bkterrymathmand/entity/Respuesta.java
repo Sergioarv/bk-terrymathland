@@ -31,6 +31,12 @@ public class Respuesta implements Serializable {
 
     private int acertadas;
 
+    @Column(nullable = true)
+    private int intentos;
+
+    @Column(nullable = true)
+    private int cantidadPreguntas;
+
     private float nota;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -77,6 +83,22 @@ public class Respuesta implements Serializable {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public int getIntentos() {
+        return intentos;
+    }
+
+    public void setIntentos(int intentos) {
+        this.intentos = intentos;
+    }
+
+    public int getCantidadPreguntas() {
+        return cantidadPreguntas;
+    }
+
+    public void setCantidadPreguntas(int cantidadPreguntas) {
+        this.cantidadPreguntas = cantidadPreguntas;
     }
 
     public void setUsuario(Estudiante estudiante) {
