@@ -88,6 +88,8 @@ public class PreguntaServiceImpl implements PreguntaService {
                             Map borrado = cloudinaryService.eliminarImagen(preguntaEditada.getIdImg());
                             if (("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
                                 preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg());
+                                String imgUrl = preguntaEditada.getUrlImg();
+                                preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                                 preguntaRepository.save(preguntaEditada);
                                 preguntaEditada.setUrlImg("-1");
                                 return preguntaEditada;
@@ -97,6 +99,8 @@ public class PreguntaServiceImpl implements PreguntaService {
                                     preguntaEditada.setUrlImg((String) imagen.get("url"));
                                     preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
                                     preguntaEditada.setIdImg((String) imagen.get("public_id"));
+                                    String imgUrl = preguntaEditada.getUrlImg();
+                                    preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                                 }else{
                                     preguntaEditada.setUrlImg("");
                                     preguntaEditada.setNombreImg("");
@@ -108,6 +112,8 @@ public class PreguntaServiceImpl implements PreguntaService {
                                 Map borrado = cloudinaryService.eliminarImagen(preguntaEditada.getIdImg());
                                 if (("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
                                     preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg());
+                                    String imgUrl = preguntaEditada.getUrlImg();
+                                    preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                                     preguntaRepository.save(preguntaEditada);
                                     preguntaEditada.setUrlImg("-1");
                                     return preguntaEditada;
@@ -116,6 +122,8 @@ public class PreguntaServiceImpl implements PreguntaService {
                                     preguntaEditada.setUrlImg((String) imagen.get("url"));
                                     preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
                                     preguntaEditada.setIdImg((String) imagen.get("public_id"));
+                                    String imgUrl = preguntaEditada.getUrlImg();
+                                    preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                                 }
                             }
                         } else if (preguntaEditada.getUrlImg().equals("") && preguntaEditada.getIdImg().equals("")) {
@@ -124,10 +132,10 @@ public class PreguntaServiceImpl implements PreguntaService {
                                 preguntaEditada.setUrlImg((String) imagen.get("url"));
                                 preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
                                 preguntaEditada.setIdImg((String) imagen.get("public_id"));
+                                String imgUrl = preguntaEditada.getUrlImg();
+                                preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                             }
                         }
-                        String imgUrl = preguntaEditada.getUrlImg();
-                        preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                         preguntaRepository.save(preguntaEditada);
                     } catch (IOException e) {
                         preguntaEditada = null;
@@ -168,9 +176,9 @@ public class PreguntaServiceImpl implements PreguntaService {
                                 preguntaGuardada.setUrlImg((String) imagen.get("url"));
                                 preguntaGuardada.setNombreImg((String) imagen.get("original_filename"));
                                 preguntaGuardada.setIdImg((String) imagen.get("public_id"));
+                                String imgUrl = preguntaGuardada.getUrlImg();
+                                preguntaGuardada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                             }
-                            String imgUrl = preguntaGuardada.getUrlImg();
-                            preguntaGuardada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                             preguntaRepository.save(preguntaGuardada);
                         } catch (IOException e) {
                             preguntaGuardada = null;
