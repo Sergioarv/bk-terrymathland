@@ -126,6 +126,8 @@ public class PreguntaServiceImpl implements PreguntaService {
                                 preguntaEditada.setIdImg((String) imagen.get("public_id"));
                             }
                         }
+                        String imgUrl = preguntaEditada.getUrlImg();
+                        preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                         preguntaRepository.save(preguntaEditada);
                     } catch (IOException e) {
                         preguntaEditada = null;
@@ -167,6 +169,8 @@ public class PreguntaServiceImpl implements PreguntaService {
                                 preguntaGuardada.setNombreImg((String) imagen.get("original_filename"));
                                 preguntaGuardada.setIdImg((String) imagen.get("public_id"));
                             }
+                            String imgUrl = preguntaGuardada.getUrlImg();
+                            preguntaGuardada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                             preguntaRepository.save(preguntaGuardada);
                         } catch (IOException e) {
                             preguntaGuardada = null;
