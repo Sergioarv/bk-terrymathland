@@ -99,8 +99,6 @@ public class PreguntaServiceImpl implements PreguntaService {
                                     preguntaEditada.setUrlImg((String) imagen.get("url"));
                                     preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
                                     preguntaEditada.setIdImg((String) imagen.get("public_id"));
-                                    String imgUrl = preguntaEditada.getUrlImg();
-                                    preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                                 }else{
                                     preguntaEditada.setUrlImg("");
                                     preguntaEditada.setNombreImg("");
@@ -122,8 +120,6 @@ public class PreguntaServiceImpl implements PreguntaService {
                                     preguntaEditada.setUrlImg((String) imagen.get("url"));
                                     preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
                                     preguntaEditada.setIdImg((String) imagen.get("public_id"));
-                                    String imgUrl = preguntaEditada.getUrlImg();
-                                    preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                                 }
                             }
                         } else if (preguntaEditada.getUrlImg().equals("") && preguntaEditada.getIdImg().equals("")) {
@@ -132,9 +128,11 @@ public class PreguntaServiceImpl implements PreguntaService {
                                 preguntaEditada.setUrlImg((String) imagen.get("url"));
                                 preguntaEditada.setNombreImg((String) imagen.get("original_filename"));
                                 preguntaEditada.setIdImg((String) imagen.get("public_id"));
-                                String imgUrl = preguntaEditada.getUrlImg();
-                                preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                             }
+                        }
+                        String imgUrl = preguntaEditada.getUrlImg();
+                        if(imgUrl != null || !imgUrl.equalsIgnoreCase("")) {
+                            preguntaEditada.setUrlImg(preguntaGuardada.getUrlImg().replace("http", "https"));
                         }
                         preguntaRepository.save(preguntaEditada);
                     } catch (IOException e) {
