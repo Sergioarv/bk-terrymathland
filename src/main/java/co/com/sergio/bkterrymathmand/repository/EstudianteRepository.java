@@ -21,8 +21,10 @@ import java.util.List;
 @Repository
 public interface EstudianteRepository extends JpaRepository<Estudiante, Integer> {
 
-    @Query(value = "select * from usuario as e where lower(e.nombre) = lower(:nombre)", nativeQuery = true)
-    IEstudianteProyeccion estudianteByNombre(String nombre);
+//    @Query(value = "select * from usuario as e where e.documento = :documento", nativeQuery = true)
+//    IEstudianteProyeccion estudianteByDocumento(String documento);
+
+    IEstudianteProyeccion findByDocumento(String documento);
 
     @Query(value = "select * from usuario as e where lower(e.nombre) like lower(concat('%',:nombre,'%'))", nativeQuery = true)
     Page<Estudiante> estudiantePorFiltro(String nombre, Pageable pageable);

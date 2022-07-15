@@ -183,7 +183,7 @@ public class RespuestaServiceImpl implements RespuestaService {
         estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
         estudiante.getRespuestas().get(0).setUsuario(estudianteGuardado);
         estudiante.getRespuestas().get(0).setCantidadPreguntas(estudiante.getRespuestas().get(0).getSoluciones().size());
-        estudiante.getRespuestas().get(0).setIntentos(estudiante.getRespuestas().get(0).getIntentos() + 1);
+        estudiante.getRespuestas().get(0).setIntentos(data.getIntentos() + 1);
 
         respuestaRepository.save(estudiante.getRespuestas().get(0));
     }
@@ -204,7 +204,7 @@ public class RespuestaServiceImpl implements RespuestaService {
         estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
         estudiante.getRespuestas().get(0).setUsuario(estudianteGuardado);
         estudiante.getRespuestas().get(0).setCantidadPreguntas(estudiante.getRespuestas().get(0).getSoluciones().size());
-        estudiante.getRespuestas().get(0).setIntentos(estudiante.getRespuestas().get(0).getIntentos() + 1);
+        estudiante.getRespuestas().get(0).setIntentos(data.getIntentos() + 1);
 
         respuestaRepository.save(estudiante.getRespuestas().get(0));
     }
@@ -228,7 +228,7 @@ public class RespuestaServiceImpl implements RespuestaService {
         estudiante.getRespuestas().get(0).setIdrespuesta(data.getIdrespuesta());
         estudiante.getRespuestas().get(0).setUsuario(estudianteGuardado);
         estudiante.getRespuestas().get(0).setCantidadPreguntas(estudiante.getRespuestas().get(0).getSoluciones().size());
-        estudiante.getRespuestas().get(0).setIntentos(estudiante.getRespuestas().get(0).getIntentos() + 1);
+        estudiante.getRespuestas().get(0).setIntentos(data.getIntentos() + 1);
 
         respuestaRepository.save(estudiante.getRespuestas().get(0));
     }

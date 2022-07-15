@@ -34,15 +34,18 @@ public class JwtProvider {
         List<String> roles = usuarioPrincipal.getAuthorities()
                 .stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         return Jwts.builder()
-                .setSubject(usuarioPrincipal.getUsername())
+                .setSubject(usuarioPrincipal.getDocumento())
                 .claim("roles", roles)
+                .claim("id", usuarioPrincipal.getId())
+                .claim("nombre", usuarioPrincipal.getUsername())
+                .claim("documento", usuarioPrincipal.getDocumento())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + expiration * 180))
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes())
                 .compact();
     }
 
-    public String getNombreUsuarioPorToken(String token) {
+    public String getDocumentoUsuarioPorToken(String token) {
         return Jwts.parser().setSigningKey(secret.getBytes()).parseClaimsJws(token)
                 .getBody().getSubject();
     }
@@ -65,16 +68,31 @@ public class JwtProvider {
         return false;
     }
 
+    public boolean validateName(Authentication authentication, String nombre) {
+        UsuarioPrincipal usuarioPrincipal = (UsuarioPrincipal) authentication.getPrincipal();
+
+        if (usuarioPrincipal.getUsername().equalsIgnoreCase(nombre)) {
+            return true;
+        }
+        return false;
+    }
+
     public String refreshToken(JwtDto jwtDTO) throws ParseException {
         JWT jwt = JWTParser.parse(jwtDTO.getToken());
         JWTClaimsSet claims = jwt.getJWTClaimsSet();
         String username = claims.getSubject();
         List<String> roles = (List<String>) claims.getClaim("roles");
+        long id = (long) claims.getClaim("id");
+        String nombre = (String) claims.getClaim("nombre");
+        String documento = (String) claims.getClaim("documento");
         return Jwts.builder()
                 .setSubject(username)
                 .claim("roles", roles)
+                .claim("id", id)
+                .claim("nombre", nombre)
+                .claim("documento", documento)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date( (new Date()).getTime() + expiration * 180 ))
+                .setExpiration(new Date((new Date()).getTime() + expiration * 180))
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes())
                 .compact();
     }

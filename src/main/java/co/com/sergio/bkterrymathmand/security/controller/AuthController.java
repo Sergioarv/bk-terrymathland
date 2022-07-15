@@ -57,14 +57,21 @@ public class AuthController {
 
         Authentication authentication =
                 authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(loginUsuario.getNombre(), loginUsuario.getContrasenia()));
+                        new UsernamePasswordAuthenticationToken(loginUsuario.getContrasenia(), loginUsuario.getContrasenia()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtProvider.generateToken(authentication);
-        JwtDto jwtDto = new JwtDto(jwt);
 
-        response.setData(jwtDto);
-        response.setSuccess(true);
-        response.setMessage("Acceso concedido");
+        if(jwtProvider.validateName(authentication, loginUsuario.getNombre())){
+            String jwt = jwtProvider.generateToken(authentication);
+            JwtDto jwtDto = new JwtDto(jwt);
+
+            response.setData(jwtDto);
+            response.setSuccess(true);
+            response.setMessage("Acceso concedido");
+        }else{
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("Acceso no concedido, el nombre no es valido");
+        }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

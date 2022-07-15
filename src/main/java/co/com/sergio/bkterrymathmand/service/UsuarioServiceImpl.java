@@ -22,8 +22,8 @@ public class UsuarioServiceImpl implements UsuarioService {
     private RolServiceImpl rolService;
 
     @Override
-    public Usuario obtenerUsuarioPorNombre(String username) throws Exception {
-        Optional<Usuario> u = usuarioRepository.findByNombre(username);
+    public Usuario obtenerUsuarioPorDocumento(String documento) throws Exception {
+        Optional<Usuario> u = usuarioRepository.findByDocumento(documento);
         if(u.isPresent()){
             return u.get();
         }

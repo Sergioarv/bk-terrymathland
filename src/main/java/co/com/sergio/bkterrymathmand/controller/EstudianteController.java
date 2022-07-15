@@ -90,14 +90,14 @@ public class EstudianteController {
     }
 
     @ApiOperation(value = "Método encargado de ontener un estudiante por el nombre para el juego", response = ResponseEntity.class)
-    @GetMapping("/estudiantenombre")
-    public ResponseEntity<GeneralResponse<IEstudianteProyeccion>> estudianteByNombre(@RequestParam(value = "nombre") String nombre) {
+    @GetMapping("/estudiantedocumento")
+    public ResponseEntity<GeneralResponse<IEstudianteProyeccion>> estudianteByDocumento(@RequestParam(value = "documento") String documento) {
 
         GeneralResponse<IEstudianteProyeccion> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
         IEstudianteProyeccion data;
 
-        data = estudianteService.estudianteByNombre(nombre);
+        data = estudianteService.estudianteByDocumento(documento);
 
         if (data != null) {
             response.setData(data);
@@ -106,7 +106,7 @@ public class EstudianteController {
         } else {
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("El nombre buscado no existe en la base de datos, por favor verificar");
+            response.setMessage("El documento buscado no existe en la base de datos, por favor verificar");
         }
 
         return new ResponseEntity<>(response, status);

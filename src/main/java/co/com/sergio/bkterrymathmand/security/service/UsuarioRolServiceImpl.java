@@ -20,7 +20,7 @@ public class UsuarioRolServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            Usuario usuario = usuarioService.obtenerUsuarioPorNombre(username);
+            Usuario usuario = usuarioService.obtenerUsuarioPorDocumento(username);
             return UsuarioPrincipal.build(usuario);
         }catch (UsernameNotFoundException e){
             throw  new UsernameNotFoundException(e.getMessage());

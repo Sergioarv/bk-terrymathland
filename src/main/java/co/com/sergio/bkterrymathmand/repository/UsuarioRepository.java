@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 
-    Optional<Usuario> findByNombre(String nombre);
+    Optional<Usuario> findByDocumento(String nombre);
 
     @Query(value = "select * from usuario as e where e.documento = :documento", nativeQuery = true)
     Usuario existePorDocumento(String documento);

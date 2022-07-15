@@ -78,17 +78,13 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
     List<IDatosPromedioEstudiante> graficarRespuestasEstudiantesPorFecha(Date fecha);
 
     @Query(value = "select count(nota) as promedioestudiantes from " +
-            "(select  nota from respuesta where idusuario = :idusuario group by idusuario, nota) as c1 " +
-            "where nota = 5  union all " +
-            "select count(nota) as promedioestudiantes from " +
-            "(select nota from respuesta where idusuario = :idusuario  group by idusuario, nota) as c1 " +
-            "where nota < 5 and nota >= 4 union all " +
-            "select count(nota) as promedioestudiantes from " +
-            "(select nota from respuesta where idusuario = :idusuario  group by idusuario, nota) as c1 " +
-            "where nota < 4 and nota >= 3 union all " +
-            "select count(nota) as promedioestudiantes from " +
-            "(select nota from respuesta where idusuario = :idusuario group by idusuario, nota) as c1 " +
-            "where nota < 3", nativeQuery = true)
+            "(select cast(avg(nota) as decimal(10,1)) as nota from respuesta as r where r.idusuario = :idusuario and r.nota = 5) as c1 " +
+            " union all select count(nota) as promedioestudiantes from " +
+            "(select cast(avg(nota) as decimal(10,1)) as nota from respuesta as r where r.idusuario = :idusuario and r.nota < 5 and r.nota >= 4) as c1 " +
+            "union all select count(nota) as promedioestudiantes from " +
+            "(select cast(avg(nota) as decimal(10,1)) as nota from respuesta as r where r.idusuario = :idusuario and r.nota < 4 and r.nota >= 3) as c1 " +
+            "union all  select count(nota) as promedioestudiantes from " +
+            "(select cast(avg(nota) as decimal(10,1)) as nota from respuesta as r where r.idusuario = :idusuario and r.nota < 3) as c1", nativeQuery = true)
     List<IDatosPromedioEstudiante> graficarRespuestasEstudiantesPoId(int idusuario);
 
     @Query(value = "select count(nota) as promedioestudiantes from " +

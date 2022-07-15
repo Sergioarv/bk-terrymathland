@@ -20,7 +20,7 @@ public interface EstudianteService {
 
     Estudiante agregarEstudiante(Estudiante estudiante);
 
-    IEstudianteProyeccion estudianteByNombre(String nombre);
+    IEstudianteProyeccion estudianteByDocumento(String nombre);
 
     Page<Estudiante> filtrarEstudiante(String nombre, Date fecha, PageRequest pageable);
 

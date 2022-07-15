@@ -31,10 +31,8 @@ public class Respuesta implements Serializable {
 
     private int acertadas;
 
-    @Column(nullable = true)
     private int intentos;
 
-    @Column(nullable = true)
     private int cantidadPreguntas;
 
     private float nota;

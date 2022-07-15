@@ -95,8 +95,8 @@ public class EstudianteServiceImpl implements EstudianteService {
 
     @Override
     @Transactional(readOnly = true)
-    public IEstudianteProyeccion estudianteByNombre(String nombre) {
-        return estudianteRepository.estudianteByNombre(nombre);
+    public IEstudianteProyeccion estudianteByDocumento(String documento) {
+        return estudianteRepository.findByDocumento(documento);
     }
 
     @Override
