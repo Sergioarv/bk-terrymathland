@@ -136,7 +136,7 @@ public class RespuestaServiceImpl implements RespuestaService {
         Respuesta data = respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fechaActual, estudiante.getIdusuario());
         Estudiante estudianteGuardado = estudianteRepository.getById(estudiante.getIdusuario());
 
-        estudiante.getRespuestas().get(0).setFecha(fechaActual);
+        estudiante.getRespuestas().get(0).setFecha(hoy);
 
         int tamSe = estudiante.getRespuestas().get(0).getSoluciones().size();
 

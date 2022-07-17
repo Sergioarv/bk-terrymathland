@@ -80,7 +80,7 @@ public class PreguntaController {
         HttpStatus status = HttpStatus.OK;
         Page<Pregunta> data;
 
-        Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("idpregunta").ascending());
+        Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("idpregunta").descending());
 
         data = preguntaService.filtrarPregunta(id, enunciado, pageable);
 
