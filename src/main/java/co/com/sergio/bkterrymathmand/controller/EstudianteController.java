@@ -41,26 +41,31 @@ public class EstudianteController {
         HttpStatus status = HttpStatus.OK;
         List<Estudiante> data;
 
-        data = estudianteService.getAllEstudiantes();
+        try {
+            data = estudianteService.getAllEstudiantes();
 
-        if (data != null) {
-            response.setData(data);
-            response.setSuccess(true);
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
 
-            if (data.size() > 1) {
-                response.setMessage("Lista de estudiantes obtenida con exito");
-            } else if (data.size() == 1) {
-                response.setMessage("Estudiante obtenido con exito");
+                if (data.size() > 1) {
+                    response.setMessage("Lista de estudiantes obtenida con exito");
+                } else if (data.size() == 1) {
+                    response.setMessage("Estudiante obtenido con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("No se encontro ningun estudiante");
+                }
             } else {
+                response.setData(null);
                 response.setSuccess(false);
-                response.setMessage("No se encontro ningun estudiante");
+                response.setMessage("La lista de estudiantes esta vacia");
             }
-        } else {
+        }catch (Exception e){
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("La lista de estudiantes esta vacia");
+            response.setMessage("Hubo un error al obtener la lista de estudiantes");
         }
-
         return new ResponseEntity<>(response, status);
 
     }
@@ -74,18 +79,23 @@ public class EstudianteController {
         boolean data;
         HttpStatus status = HttpStatus.OK;
 
-        data = estudianteService.eliminarEstudiante(estudiante);
+        try {
+            data = estudianteService.eliminarEstudiante(estudiante);
 
-        if (data) {
-            response.setData(true);
-            response.setSuccess(true);
-            response.setMessage("Estudiante eliminado con exito");
-        } else {
-            response.setData(false);
+            if (data) {
+                response.setData(true);
+                response.setSuccess(true);
+                response.setMessage("Estudiante eliminado con exito");
+            } else {
+                response.setData(false);
+                response.setSuccess(false);
+                response.setMessage("No se pudo eliminar el estudiante");
+            }
+        }catch (Exception e){
+            response.setData(null);
             response.setSuccess(false);
-            response.setMessage("No se pudo eliminar el estudiante");
+            response.setMessage("No se puede eliminar el estudiante");
         }
-
         return new ResponseEntity<>(response, status);
     }
 
@@ -97,18 +107,23 @@ public class EstudianteController {
         HttpStatus status = HttpStatus.OK;
         IEstudianteProyeccion data;
 
-        data = estudianteService.estudianteByDocumento(documento);
+        try {
+            data = estudianteService.estudianteByDocumento(documento);
 
-        if (data != null) {
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Busqueda realizada con exito");
-        } else {
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Busqueda realizada con exito");
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("El documento buscado no existe en la base de datos, por favor verificar");
+            }
+        }catch (Exception e){
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("El documento buscado no existe en la base de datos, por favor verificar");
+            response.setMessage("Ha ocurrido un error el buscar el usuario");
         }
-
         return new ResponseEntity<>(response, status);
     }
 
@@ -126,26 +141,32 @@ public class EstudianteController {
         HttpStatus status = HttpStatus.OK;
         Page<Estudiante> data;
 
-        PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
+        try {
+            PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
 
-        data = estudianteService.filtrarEstudiante(nombre, fecha, pageable);
+            data = estudianteService.filtrarEstudiante(nombre, fecha, pageable);
 
-        if (data != null) {
-            response.setData(data);
-            response.setSuccess(true);
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
 
-            if (data.getContent().size() > 1) {
-                response.setMessage("Lista de estudiantes obtenida con exito");
-            } else if (data.getContent().size() == 1) {
-                response.setMessage("Estudiante obtenido con exito");
+                if (data.getContent().size() > 1) {
+                    response.setMessage("Lista de estudiantes obtenida con exito");
+                } else if (data.getContent().size() == 1) {
+                    response.setMessage("Estudiante obtenido con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("No se encontro ningun estudiante");
+                }
             } else {
+                response.setData(null);
                 response.setSuccess(false);
-                response.setMessage("No se encontro ningun estudiante");
+                response.setMessage("La lista de estudiantes esta vacia");
             }
-        } else {
+        }catch (Exception e){
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("La lista de estudiantes esta vacia");
+            response.setMessage("Hubo un error al obtener la lista de estudiantes");
         }
         return new ResponseEntity<>(response, status);
     }
@@ -158,18 +179,23 @@ public class EstudianteController {
         HttpStatus status = HttpStatus.OK;
         List<IEstudianteProyeccion> data;
 
-        data = estudianteService.obtenerIdyNombreEstudiantes();
+        try {
+            data = estudianteService.obtenerIdyNombreEstudiantes();
 
-        if (data != null) {
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Lista de estudiantes obtenida con exito");
-        } else {
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Lista de estudiantes obtenida con exito");
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("La lista de estudiantes esta vacia");
+            }
+        }catch (Exception e){
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("La lista de estudiantes esta vacia");
+            response.setMessage("Hubo un error al obtener la lista de estudiante");
         }
-
         return new ResponseEntity<>(response, status);
 
     }

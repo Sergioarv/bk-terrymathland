@@ -55,39 +55,50 @@ public class AuthController {
 
         GeneralResponse<JwtDto> response = new GeneralResponse<>();
 
-        Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(loginUsuario.getContrasenia(), loginUsuario.getContrasenia()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        try {
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(loginUsuario.getContrasenia(), loginUsuario.getContrasenia()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        if(jwtProvider.validateName(authentication, loginUsuario.getNombre())){
-            String jwt = jwtProvider.generateToken(authentication);
-            JwtDto jwtDto = new JwtDto(jwt);
+            if (jwtProvider.validateName(authentication, loginUsuario.getNombre())) {
+                String jwt = jwtProvider.generateToken(authentication);
+                JwtDto jwtDto = new JwtDto(jwt);
 
-            response.setData(jwtDto);
-            response.setSuccess(true);
-            response.setMessage("Acceso concedido");
-        }else{
+                response.setData(jwtDto);
+                response.setSuccess(true);
+                response.setMessage("Acceso concedido");
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("Acceso no concedido, el nombre no es valido");
+            }
+        }catch (Exception e){
             response.setData(null);
             response.setSuccess(false);
-            response.setMessage("Acceso no concedido, el nombre no es valido");
+            response.setMessage(e.getMessage());
         }
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<GeneralResponse<?>> refresh(@RequestBody JwtDto jwtDto) throws ParseException {
+    public ResponseEntity<GeneralResponse<?>> refresh(@RequestBody JwtDto jwtDto){
         GeneralResponse<JwtDto> response = new GeneralResponse<>();
 
-        String token = jwtProvider.refreshToken(jwtDto);
+        try {
+            String token = jwtProvider.refreshToken(jwtDto);
 
-        JwtDto jwt = new JwtDto(token);
+            JwtDto jwt = new JwtDto(token);
 
-        response.setData(jwt);
-        response.setSuccess(true);
-        response.setMessage("Acceso concedido");
-
+            response.setData(jwt);
+            response.setSuccess(true);
+            response.setMessage("Acceso concedido");
+        }catch (ParseException pe){
+            response.setData(null);
+            response.setSuccess(true);
+            response.setMessage(pe.getMessage());
+        }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

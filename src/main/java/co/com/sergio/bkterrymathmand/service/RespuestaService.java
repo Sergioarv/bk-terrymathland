@@ -7,6 +7,7 @@ import co.com.sergio.bkterrymathmand.entity.Respuesta;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface RespuestaService {
 
 //    List<Respuesta> obtenerRespuestaPorFecha(Date fecha);
 
-    Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario);
+//    Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario);
 
     Respuesta saveRespuesta(Respuesta respuesta);
 
@@ -31,5 +32,5 @@ public interface RespuestaService {
 
     public List<IRespuestaProyeccion> guardarRespuestaEstudiante(Estudiante estudiante);
 
-    IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha);
+    IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, LocalDate fecha);
 }

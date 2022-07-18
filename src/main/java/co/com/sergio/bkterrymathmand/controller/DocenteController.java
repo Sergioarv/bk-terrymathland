@@ -39,25 +39,30 @@ public class DocenteController {
         HttpStatus status = HttpStatus.OK;
         List<Docente> data;
 
-        data = docenteService.obtenerDocentes();
+        try {
+            data = docenteService.obtenerDocentes();
 
-        if(data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            if(data.size() > 1){
-                response.setMessage("Lista de docentes obtenida con exito");
-            }else if(data.size() == 1){
-                response.setMessage("Docente obtenida con exito");
-            }else{
-                response.setSuccess(false);
-                response.setMessage("La lista de docentes esta vacia");
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+                if (data.size() > 1) {
+                    response.setMessage("Lista de docentes obtenida con exito");
+                } else if (data.size() == 1) {
+                    response.setMessage("Docente obtenida con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("La lista de docentes esta vacia");
+                }
+            } else {
+                response.setData(null);
+                response.setSuccess(true);
+                response.setMessage("Hubo un error al obtener la lista de docentes");
             }
-        }else{
+        }catch (Exception e){
             response.setData(null);
             response.setSuccess(true);
             response.setMessage("Hubo un error al obtner la lista de docentes");
         }
-
         return new ResponseEntity<>(response, status);
     }
 
@@ -66,7 +71,7 @@ public class DocenteController {
     @GetMapping("/filtrar")
     public ResponseEntity<GeneralResponse<Page<Docente>>> filtrar(
             @RequestParam(value = "nombre", required = false) String nombre,
-            @RequestParam(value = "correo", required = false) String correo,
+            @RequestParam(value = "documento", required = false) String documento,
             @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
             @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int cantPagina
     ) {
@@ -77,7 +82,7 @@ public class DocenteController {
 
         try {
             PageRequest pageable = PageRequest.of(pagina, cantPagina, Sort.by("idusuario"));
-            data = docenteService.filtrarDocente(nombre, correo, pageable);
+            data = docenteService.filtrarDocente(nombre, documento, pageable);
 
             if (data != null) {
                 response.setData(data);
@@ -113,18 +118,23 @@ public class DocenteController {
         boolean data;
         HttpStatus status = HttpStatus.OK;
 
-        data = docenteService.eliminarDocente(docente);
+        try{
+            data = docenteService.eliminarDocente(docente);
 
-        if(data){
-            response.setData(true);
+            if (data) {
+                response.setData(true);
+                response.setSuccess(true);
+                response.setMessage("Docente eliminado con exito");
+            } else {
+                response.setData(false);
+                response.setSuccess(false);
+                response.setMessage("No se pudo eliminar el docente");
+            }
+        }catch (Exception e){
+            response.setData(null);
             response.setSuccess(true);
-            response.setMessage("Docente eliminado con exito");
-        }else{
-            response.setData(false);
-            response.setSuccess(false);
-            response.setMessage("No se pudo eliminar el docente");
+            response.setMessage("No se puede eliminar el docentes");
         }
-
         return new ResponseEntity<>(response, status);
     }
 }

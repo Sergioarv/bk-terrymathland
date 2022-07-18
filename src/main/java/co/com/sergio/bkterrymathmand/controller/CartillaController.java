@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/cartilla")
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class CartillaController {
 
     @Autowired
@@ -29,25 +29,31 @@ public class CartillaController {
     @ApiOperation(value = "Método encargado de obtener la lista de cartillas")
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @GetMapping
-    public ResponseEntity<GeneralResponse<List<Cartilla>>> obtenerCartillas(){
+    public ResponseEntity<GeneralResponse<List<Cartilla>>> obtenerCartillas() {
 
         GeneralResponse<List<Cartilla>> response = new GeneralResponse<>();
         List<Cartilla> data;
         HttpStatus status = HttpStatus.OK;
 
-        data = cartillaService.obtenerCartillas();
+        try {
+            data = cartillaService.obtenerCartillas();
 
-        if( data != null){
-            if(data.size() > 0) {
-                response.setData(data);
-                response.setSuccess(true);
-                response.setMessage("Lista de cartillas obtenida con exito");
-            }else{
-                response.setData(data);
+            if (data != null) {
+                if (data.size() > 0) {
+                    response.setData(data);
+                    response.setSuccess(true);
+                    response.setMessage("Lista de cartillas obtenida con exito");
+                } else {
+                    response.setData(data);
+                    response.setSuccess(false);
+                    response.setMessage("La lista de cartillas esta vacia");
+                }
+            } else {
+                response.setData(null);
                 response.setSuccess(false);
-                response.setMessage("La lista de cartillas esta vacia");
+                response.setMessage("No se obtuvo la lista de cartillas");
             }
-        }else{
+        } catch (Exception e) {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("No se obtuvo la lista de cartillas");
@@ -58,7 +64,7 @@ public class CartillaController {
 
     @ApiOperation(value = "Método encargado de lista una proyeccion de cartillas para mostrar en el juego")
     @GetMapping("/listarCartillas")
-    public ResponseEntity<GeneralResponse<List<ICartillaProyeccion>>> listarCartillas(){
+    public ResponseEntity<GeneralResponse<List<ICartillaProyeccion>>> listarCartillas() {
 
         GeneralResponse<List<ICartillaProyeccion>> response = new GeneralResponse<>();
         List<ICartillaProyeccion> data;
@@ -66,17 +72,17 @@ public class CartillaController {
 
         data = cartillaService.listarCartillas();
 
-        if( data != null){
-            if(data.size() > 0) {
+        if (data != null) {
+            if (data.size() > 0) {
                 response.setData(data);
                 response.setSuccess(true);
                 response.setMessage("Lista de cartillas obtenida con exito");
-            }else{
+            } else {
                 response.setData(null);
                 response.setSuccess(false);
                 response.setMessage("La lista de cartillas esta vacia");
             }
-        }else{
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("No se obtuvo la lista de cartillas");
@@ -92,7 +98,7 @@ public class CartillaController {
             @RequestParam(value = "idcartilla", required = false) String idcartilla,
             @RequestParam(value = "pagina", defaultValue = "0", required = false) int pagina,
             @RequestParam(value = "cantPagina", defaultValue = "10", required = false) int catnPagina
-            ) {
+    ) {
 
         GeneralResponse<Page<Pregunta>> response = new GeneralResponse<>();
         HttpStatus status = HttpStatus.OK;
@@ -120,7 +126,7 @@ public class CartillaController {
                 response.setSuccess(false);
                 response.setMessage("La cartilla no tiene preguntas");
             }
-        }catch (NumberFormatException nfe){
+        } catch (NumberFormatException nfe) {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Hubo un error, se solicito un parametro de busca no valido");
@@ -133,23 +139,28 @@ public class CartillaController {
     @PutMapping
     public ResponseEntity<GeneralResponse<Boolean>> actualizarCartilla(
             @RequestBody Cartilla cartilla
-    ){
+    ) {
         GeneralResponse<Boolean> response = new GeneralResponse<>();
         Boolean data;
         HttpStatus status = HttpStatus.OK;
 
-        data = cartillaService.actualizarCartilla(cartilla);
+        try {
+            data = cartillaService.actualizarCartilla(cartilla);
 
-        if( data){
-            response.setData(true);
-            response.setSuccess(true);
-            response.setMessage("Se ha actualizado la lista de preguntas de la cartilla");
-        }else{
+            if (data) {
+                response.setData(true);
+                response.setSuccess(true);
+                response.setMessage("Se ha actualizado la lista de preguntas de la cartilla");
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("No se pudo editar la lista de preguntas de cartilla");
+            }
+        } catch (Exception e) {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("No se pudo editar la lista de preguntas de cartilla");
         }
-
         return new ResponseEntity<>(response, status);
     }
 
@@ -158,60 +169,69 @@ public class CartillaController {
     @PostMapping
     public ResponseEntity<GeneralResponse<Cartilla>> crearCartilla(
             @RequestBody Cartilla cartilla
-    ){
+    ) {
         GeneralResponse<Cartilla> response = new GeneralResponse<>();
         Cartilla data;
         HttpStatus status = HttpStatus.OK;
+        try {
+            data = cartillaService.crearCartilla(cartilla);
 
-        data = cartillaService.crearCartilla(cartilla);
-
-        if( data != null){
-            response.setData(data);
-            response.setSuccess(true);
-            response.setMessage("Se ha creado la cartilla con exito con exito");
-        }else{
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+                response.setMessage("Se ha creado la cartilla con exito con exito");
+            } else {
+                response.setData(null);
+                response.setSuccess(false);
+                response.setMessage("Hubo un error al crear la cartilla");
+            }
+        } catch (Exception e) {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Hubo un error al crear la cartilla");
         }
-
         return new ResponseEntity<>(response, status);
     }
 
     @ApiOperation(value = "Método encargado de eliminar una cartilla con sus preguntas")
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
     @DeleteMapping
-    public ResponseEntity<GeneralResponse<Boolean>> eliminarCartilla(@RequestBody Cartilla cartilla){
+    public ResponseEntity<GeneralResponse<Boolean>> eliminarCartilla(@RequestBody Cartilla cartilla) {
 
         GeneralResponse<Boolean> response = new GeneralResponse<>();
         Boolean data;
         HttpStatus status = HttpStatus.OK;
 
-        data = cartillaService.eliminarCartilla(cartilla);
+        try {
+            data = cartillaService.eliminarCartilla(cartilla);
 
-        if(data){
-            response.setData(true);
-            response.setSuccess(true);
-            response.setMessage("La cartilla se elimino exitosamente");
-        }else{
+            if (data) {
+                response.setData(true);
+                response.setSuccess(true);
+                response.setMessage("La cartilla se elimino exitosamente");
+            } else {
+                response.setData(false);
+                response.setSuccess(false);
+                response.setMessage("No se a podido eliminar la cartilla");
+            }
+        } catch (Exception e){
             response.setData(false);
             response.setSuccess(false);
-            response.setMessage("No he a podido eliminar la cartilla");
+            response.setMessage("No se puede eliminar la cartilla");
         }
-
         return new ResponseEntity<>(response, status);
     }
 
     @ApiOperation(value = "Método encargado de obtener la lista de preguntas de una cartilla para el juego")
     @GetMapping("/obtenerPreguntas")
-    public ResponseEntity<GeneralResponse<List<Pregunta>>> obtenerPreguntas(@RequestParam(value = "idcartilla") int idcartilla){
+    public ResponseEntity<GeneralResponse<List<Pregunta>>> obtenerPreguntas(@RequestParam(value = "idcartilla") int idcartilla) {
         GeneralResponse<List<Pregunta>> response = new GeneralResponse<>();
         List<Pregunta> data;
         HttpStatus status = HttpStatus.OK;
 
         data = cartillaService.obtenerPreguntas(idcartilla);
 
-        if( data != null){
+        if (data != null) {
             response.setData(data);
             response.setSuccess(true);
             if (data.size() > 1) {
@@ -222,7 +242,7 @@ public class CartillaController {
                 response.setSuccess(false);
                 response.setMessage("No se encontro ninguna pregunta con esta cartilla");
             }
-        }else{
+        } else {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("No se pudo obtener la lista de preguntas de la cartilla");

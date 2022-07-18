@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
     Page<Respuesta> obtenerRespuestasPorFecha(Date fecha, Pageable pageable);
 
     @Query(value = "select * from respuesta r where r.fecha = :fechaS and r.idusuario = :idusuario", nativeQuery = true)
-    Respuesta obtenerRespuestaPorFechaYidUsuario(Date fechaS, int idusuario);
+    Respuesta obtenerRespuestaPorFechaYidUsuario(LocalDate fechaS, int idusuario);
 
 //    @Query(value = "select * from (select * from respuesta as r where r.fecha = :fecha) as c2 inner join (select * from estudiante as e where e.idusuario = :idusuario) as c1 on c1.idusuario = c2.idusuario", nativeQuery = true)
     @Query(value = "select * from respuesta as r where r.fecha = :fecha and r.idusuario = :idusuario order by r.fecha desc", nativeQuery = true)
@@ -41,13 +42,13 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
 
     /** Querys para las graficas **/
     @Query( value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where fecha <= :fecha group by fecha limit 7", nativeQuery = true)
-    List<IDatosPromedioNotas> graficarRespuestasNotas(Date fecha);
+    List<IDatosPromedioNotas> graficarRespuestasNotas(LocalDate fecha);
 
     @Query( value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where idusuario = :idusuario group by fecha limit 7", nativeQuery = true)
     List<IDatosPromedioNotas> graficarRespuestasNotasPorId(int idusuario);
 
     @Query(value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where idusuario = :idusuario and fecha <= :fecha group by fecha limit 7", nativeQuery = true)
-    List<IDatosPromedioNotas> graficarRespuestasNotasPorIdFecha(int idusuario, Date fecha);
+    List<IDatosPromedioNotas> graficarRespuestasNotasPorIdFecha(int idusuario, LocalDate fecha);
 
     @Query(value = "select count(nota) as promedioestudiantes from " +
             "(select cast(avg(nota) as decimal(10,1)) as nota from respuesta group by idusuario) as c1 " +
@@ -75,7 +76,7 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
             "select count(nota) as promedioestudiantes from " +
             "(select cast(avg(nota) as decimal(10,1)) as nota from respuesta where fecha = :fecha group by idusuario ) as c1 " +
             "where nota < 3", nativeQuery = true)
-    List<IDatosPromedioEstudiante> graficarRespuestasEstudiantesPorFecha(Date fecha);
+    List<IDatosPromedioEstudiante> graficarRespuestasEstudiantesPorFecha(LocalDate fecha);
 
     @Query(value = "select count(nota) as promedioestudiantes from " +
             "(select cast(avg(nota) as decimal(10,1)) as nota from respuesta as r where r.idusuario = :idusuario and r.nota = 5) as c1 " +
@@ -99,5 +100,5 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
             "select count(nota) as promedioestudiantes from " +
             "(select nota from respuesta where idusuario = :idusuario and fecha = :fecha group by idusuario, nota) as c1 " +
             "where nota < 3", nativeQuery = true)
-    List<IDatosPromedioEstudiante> graficarRespuestasEstudiantesPorIdFecha(int idusuario, Date fecha);
+    List<IDatosPromedioEstudiante> graficarRespuestasEstudiantesPorIdFecha(int idusuario, LocalDate fecha);
 }

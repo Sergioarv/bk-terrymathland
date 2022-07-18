@@ -23,4 +23,5 @@ public interface CartillaService {
     Boolean eliminarCartilla(Cartilla cartilla);
 
     List<ICartillaProyeccion> listarCartillas();
+
 }

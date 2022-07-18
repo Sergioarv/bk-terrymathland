@@ -45,20 +45,26 @@ public class PreguntaController {
         List<Pregunta> data;
         HttpStatus status = HttpStatus.OK;
 
-        data = preguntaService.obtenerPreguntas();
+        try {
+            data = preguntaService.obtenerPreguntas();
 
-        if (data != null) {
-            response.setData(data);
-            response.setSuccess(true);
-            if (data.size() > 1) {
-                response.setMessage("Lista de preguntas obtenida con exito");
-            } else if (data.size() == 1) {
-                response.setMessage("Pregunta obtenida con exito");
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
+                if (data.size() > 1) {
+                    response.setMessage("Lista de preguntas obtenida con exito");
+                } else if (data.size() == 1) {
+                    response.setMessage("Pregunta obtenida con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("La lista de preguntas esta vacia");
+                }
             } else {
+                response.setData(null);
                 response.setSuccess(false);
-                response.setMessage("La lista de preguntas esta vacia");
+                response.setMessage("Hubo un error al obtener la lista de preguntas");
             }
-        } else {
+        } catch (Exception e) {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Hubo un error al obtener la lista de preguntas");
@@ -80,23 +86,29 @@ public class PreguntaController {
         HttpStatus status = HttpStatus.OK;
         Page<Pregunta> data;
 
-        Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("idpregunta").descending());
+        try {
+            Pageable pageable = PageRequest.of(pagina, cantPagina, Sort.by("idpregunta").descending());
 
-        data = preguntaService.filtrarPregunta(id, enunciado, pageable);
+            data = preguntaService.filtrarPregunta(id, enunciado, pageable);
 
-        if (data != null) {
-            response.setData(data);
-            response.setSuccess(true);
+            if (data != null) {
+                response.setData(data);
+                response.setSuccess(true);
 
-            if (data.getContent().size() > 1) {
-                response.setMessage("Lista de preguntas obtenida con exito");
-            } else if (data.getContent().size() == 1) {
-                response.setMessage("Pregunta obtenida con exito");
+                if (data.getContent().size() > 1) {
+                    response.setMessage("Lista de preguntas obtenida con exito");
+                } else if (data.getContent().size() == 1) {
+                    response.setMessage("Pregunta obtenida con exito");
+                } else {
+                    response.setSuccess(false);
+                    response.setMessage("La lista de preguntas esta vacia");
+                }
             } else {
+                response.setData(null);
                 response.setSuccess(false);
-                response.setMessage("La lista de preguntas esta vacia");
+                response.setMessage("Hubo un error al obtener la lista de preguntas");
             }
-        } else {
+        } catch (Exception e) {
             response.setData(null);
             response.setSuccess(false);
             response.setMessage("Hubo un error al obtener la lista de preguntas");
@@ -144,22 +156,16 @@ public class PreguntaController {
                 response.setMessage("Se creo la pregunta correctamente");
                 response.setSuccess(true);
             }
-
-            return new ResponseEntity<>(response, status);
-
         } catch (IOException e) {
             response.setData(null);
             response.setMessage("Hubo un error al crear la imagen de la pregunta");
             response.setSuccess(false);
-
-            return new ResponseEntity<>(response, status);
         } catch (Exception e) {
             response.setData(null);
-            response.setMessage(e.getMessage());
             response.setSuccess(false);
-
-            return new ResponseEntity<>(response, status);
+            response.setMessage("Hubo un error al crear la pregunta");
         }
+        return new ResponseEntity<>(response, status);
     }
 
     @ApiOperation(value = "Método encargado de actualizar una pregunnta, sus opciones e imagen", response = ResponseEntity.class)
@@ -197,7 +203,7 @@ public class PreguntaController {
                 response.setData(data);
                 response.setMessage("Hubo un error al editar las opciones de la pregunta");
                 response.setSuccess(false);
-            } else if (data.getUrlImg().equalsIgnoreCase("-1")){
+            } else if (data.getUrlImg().equalsIgnoreCase("-1")) {
                 response.setData(data);
                 response.setMessage("Hubo un error al editar la imagen de la pregunta");
                 response.setSuccess(false);
@@ -206,17 +212,16 @@ public class PreguntaController {
                 response.setMessage("Se edito correctamente");
                 response.setSuccess(true);
             }
-
-            return new ResponseEntity<>(response, status);
-
         } catch (IOException e) {
-
             response.setData(null);
             response.setMessage("Hubo un error al editar la imagen de la pregunta");
             response.setSuccess(false);
-
-            return new ResponseEntity<>(response, status);
+        } catch (Exception e) {
+            response.setData(null);
+            response.setSuccess(false);
+            response.setMessage("Hubo un error al editar la pregunta");
         }
+        return new ResponseEntity<>(response, status);
     }
 
     @ApiOperation(value = "Método encargado de eliminar una pregunta")
@@ -240,16 +245,12 @@ public class PreguntaController {
                 response.setSuccess(false);
                 response.setMessage("No se pudo eliminar la pregunta");
             }
-
-            return new ResponseEntity<>(response, status);
-
         } catch (Exception e) {
             response.setData(false);
             response.setSuccess(false);
             response.setMessage(e.getMessage());
-
-            return new ResponseEntity<>(response, status);
         }
+        return new ResponseEntity<>(response, status);
     }
 
     private boolean verificarImagen(MultipartFile file) throws IOException {

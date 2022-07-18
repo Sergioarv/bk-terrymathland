@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -43,11 +44,11 @@ public class RespuestaServiceImpl implements RespuestaService {
     @Autowired
     private PreguntaRepository preguntaRepository;
 
-    @DateTimeFormat(pattern = "%Y-%m-%d")
-    Date fechaActual;
-
-    @DateTimeFormat(pattern = "%Y-%m-%d")
-    Date fechaHoy;
+//    @DateTimeFormat(pattern = "%Y-%m-%d")
+//    Date fechaActual;
+//
+//    @DateTimeFormat(pattern = "%Y-%m-%d")
+//    Date fechaHoy;
 
     @Override
     @Transactional(readOnly = true)
@@ -61,11 +62,11 @@ public class RespuestaServiceImpl implements RespuestaService {
 //        return respuestaRepository.obtenerRespuestasPorFecha(fecha, pageable);
 //    }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario) {
-        return respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fecha, idusuario);
-    }
+//    @Override
+//    @Transactional(readOnly = true)
+//    public Respuesta obtenerRespuestaPorFechaYEstudiante(Date fecha, int idusuario) {
+//        return respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fecha, idusuario);
+//    }
 
     @Override
     public Respuesta saveRespuesta(Respuesta respuesta) {
@@ -98,7 +99,7 @@ public class RespuestaServiceImpl implements RespuestaService {
 
     @Override
     @Transactional(readOnly = true)
-    public IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, Date fecha) {
+    public IDatosaGraficarDTO graficarRespuestas(Estudiante estudiante, LocalDate fecha) {
 
         IDatosaGraficarDTO datosaGraficarDTO = new IDatosaGraficarDTO();
 
@@ -112,8 +113,9 @@ public class RespuestaServiceImpl implements RespuestaService {
             datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotas(fecha));
             datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantesPorFecha(fecha));
         } else {
-            LocalDate hoy = LocalDate.now();
-            fechaHoy = java.sql.Date.valueOf(hoy);
+//            LocalDate hoy = LocalDate.now();
+//            fechaHoy = java.sql.Date.valueOf(hoy);
+            LocalDate fechaHoy = LocalDate.now(ZoneId.of("America/Bogota"));
             datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotas(fechaHoy));
             datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantes());
         }
@@ -130,10 +132,11 @@ public class RespuestaServiceImpl implements RespuestaService {
     @Transactional
     public List<IRespuestaProyeccion> guardarRespuestaEstudiante(Estudiante estudiante) {
 
-        LocalDate hoy = LocalDate.now();
-        fechaActual = java.sql.Date.valueOf(hoy);
+        LocalDate hoy = LocalDate.now(ZoneId.of("America/Bogota"));
+//        LocalDate hoy = LocalDate.now();
+//        ZonedDateTime zdt = hoy.atStartOfDay(ZoneId.of("America/Bogota"));
 
-        Respuesta data = respuestaRepository.obtenerRespuestaPorFechaYidUsuario(fechaActual, estudiante.getIdusuario());
+        Respuesta data = respuestaRepository.obtenerRespuestaPorFechaYidUsuario(hoy, estudiante.getIdusuario());
         Estudiante estudianteGuardado = estudianteRepository.getById(estudiante.getIdusuario());
 
         estudiante.getRespuestas().get(0).setFecha(hoy);
@@ -171,6 +174,7 @@ public class RespuestaServiceImpl implements RespuestaService {
         }
         return respuestaRepository.respuestaGuardadaPorEstudiante(estudianteGuardado.getIdusuario());
     }
+
 
     private void guardarMismaSoluciones(int tamSd, Estudiante estudiante, Respuesta data, Estudiante estudianteGuardado) {
 

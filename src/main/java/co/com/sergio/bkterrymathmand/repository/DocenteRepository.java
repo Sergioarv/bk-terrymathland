@@ -31,7 +31,7 @@ public interface DocenteRepository extends JpaRepository<Docente, Integer> {
     @Query(value = "select * from usuario as u where lower(u.nombre) like lower(concat('%',:nombre,'%'))", nativeQuery = true)
     Page<Docente> docentePorFiltro(String nombre, Pageable pageable);
 
-    @Query(value = "select * from docente as u where u.documento like %:documento%", nativeQuery = true)
+    @Query(value = "select * from usuario as u where u.documento like %:documento%", nativeQuery = true)
     Page<Docente> docentePorDocumento(String documento, Pageable pageable);
 
 
