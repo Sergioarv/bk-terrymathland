@@ -206,10 +206,12 @@ public class PreguntaServiceImpl implements PreguntaService {
             List<Cartilla> cartillas = pOriginal.obtenerCartillas();
             if(cartillas.size() == 0){
 
-                Map borrado = cloudinaryService.eliminarImagen(idImagen);
-                if (("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
-                    pregunta.setUrlImg(pOriginal.getUrlImg());
-                    return false;
+                if (!idImagen.equals("")) {
+                    Map borrado = cloudinaryService.eliminarImagen(idImagen);
+                    if (("not found".equalsIgnoreCase(borrado.get("result").toString()))) {
+                        pregunta.setUrlImg(pOriginal.getUrlImg());
+                        return false;
+                    }
                 }
 
                 for (int i = 0; i < pregunta.getOpciones().size(); i++) {
@@ -223,10 +225,10 @@ public class PreguntaServiceImpl implements PreguntaService {
 
                 return true;
             }else{
-                throw new Exception("No se puede eliminar la pregunta, primero debe eliminar la pregunta de las cartillas");
+                throw new RuntimeException("No se puede eliminar la pregunta,\nprimero debe quitar la pregunta de las cartillas");
             }
         }catch (Exception e){
-            throw new Exception(e.getCause());
+            throw new RuntimeException(e.getMessage());
         }
     }
 }
