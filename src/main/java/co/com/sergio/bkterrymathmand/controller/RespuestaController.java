@@ -112,33 +112,7 @@ public class RespuestaController {
         return new ResponseEntity<>(response, status);
     }
 
-//    @ApiOperation(value = "Método encargado de obtener la lista de respuestas por fecha y estudiante", response = ResponseEntity.class)
-//    @GetMapping("/fechaUsuario")
-//    public ResponseEntity<GeneralResponse<Respuesta>> obtenerRespuestaPorFechaYEstudiante(
-//            @RequestParam(value = "fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha,
-//            @RequestParam(value = "usuario") int idusuario
-//    ) {
-//        GeneralResponse<Respuesta> response = new GeneralResponse<>();
-//        HttpStatus status = HttpStatus.OK;
-//        Respuesta data;
-//
-//        data = respuestaService.obtenerRespuestaPorFechaYEstudiante(fecha, idusuario);
-//
-//        if (data != null) {
-//            response.setData(data);
-//            response.setSuccess(true);
-//            response.setMessage("Respuesta obtenida con exito");
-//        } else {
-//            response.setData(null);
-//            response.setSuccess(false);
-//            response.setMessage("No se encontraron respuesta del usuario en las fechas especificadas");
-//        }
-//
-//        return new ResponseEntity<>(response, status);
-//    }
-
-
-    @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante desde el ejugo", response = ResponseEntity.class)
+    @ApiOperation(value = "Método encargado de agregar o actualizar una repuesta a un estudiante desde el juego", response = ResponseEntity.class)
     @PutMapping(value = "/guardarRespuestaEstudiante", consumes = "application/json;charset=UTF-8;application/x-www-form-urlencoded")
     public ResponseEntity<GeneralResponse<List<IRespuestaProyeccion>>> guardarRespuesta(@RequestBody Estudiante estudiante) {
 
