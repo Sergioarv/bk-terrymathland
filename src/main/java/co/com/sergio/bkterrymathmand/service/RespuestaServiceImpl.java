@@ -113,8 +113,6 @@ public class RespuestaServiceImpl implements RespuestaService {
             datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotas(fecha));
             datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantesPorFecha(fecha));
         } else {
-//            LocalDate hoy = LocalDate.now();
-//            fechaHoy = java.sql.Date.valueOf(hoy);
             LocalDate fechaHoy = LocalDate.now(ZoneId.of("America/Bogota"));
             datosaGraficarDTO.setListaPromedioNotas(respuestaRepository.graficarRespuestasNotas(fechaHoy));
             datosaGraficarDTO.setListaPromedioEstudiantes(respuestaRepository.graficarRespuestasEstudiantes());

@@ -41,13 +41,13 @@ public interface RespuestaRepository extends JpaRepository<Respuesta, Integer> {
     List<IRespuestaProyeccion> respuestaGuardadaPorEstudiante(int idusuario);
 
     /** Querys para las graficas **/
-    @Query( value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where fecha <= :fecha group by fecha limit 7", nativeQuery = true)
+    @Query( value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where fecha <= :fecha group by fecha order by fecha desc limit 7", nativeQuery = true)
     List<IDatosPromedioNotas> graficarRespuestasNotas(LocalDate fecha);
 
-    @Query( value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where idusuario = :idusuario group by fecha limit 7", nativeQuery = true)
+    @Query( value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where idusuario = :idusuario group by fecha order by fecha desc limit 7", nativeQuery = true)
     List<IDatosPromedioNotas> graficarRespuestasNotasPorId(int idusuario);
 
-    @Query(value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where idusuario = :idusuario and fecha <= :fecha group by fecha limit 7", nativeQuery = true)
+    @Query(value = "select cast(avg(nota) as decimal(10,1)) as promedionotas, fecha from respuesta where idusuario = :idusuario and fecha <= :fecha group by fecha order by fecha desc limit 7", nativeQuery = true)
     List<IDatosPromedioNotas> graficarRespuestasNotasPorIdFecha(int idusuario, LocalDate fecha);
 
     @Query(value = "select count(nota) as promedioestudiantes from " +
