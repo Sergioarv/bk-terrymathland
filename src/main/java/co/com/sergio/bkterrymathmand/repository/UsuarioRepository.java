@@ -7,6 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * @project bk-terrymathmand
+ * @Author Sergio Abelardo Rodríguez Vásquez
+ * @Email ingsergiorodriguezv@gmail.com
+ * @Date 19/05/2022 10:41
+ **/
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
 

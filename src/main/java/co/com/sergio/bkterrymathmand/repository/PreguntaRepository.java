@@ -24,5 +24,4 @@ public interface PreguntaRepository extends JpaRepository<Pregunta, Integer> {
 
     @Query(value = "select * from pregunta as p where p.idpregunta = :id or lower(p.enunciado) like lower(concat('%',:filtro,'%'))", nativeQuery = true)
     Page<Pregunta> filtrarPorIdOEnunciado(int id, String filtro, Pageable pageable);
-
 }

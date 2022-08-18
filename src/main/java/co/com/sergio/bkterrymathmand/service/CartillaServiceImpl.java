@@ -17,6 +17,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
+/**
+ * @Project bk-terrymathmand
+ * @Author Sergio Abelardo Rodríguez Vásquez
+ * @Email ingsergiorodriguezv@gmail.com
+ * @Date 12/06/2022 15:08
+ **/
 @Service
 public class CartillaServiceImpl implements CartillaService {
 

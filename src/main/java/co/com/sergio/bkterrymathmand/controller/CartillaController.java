@@ -17,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * @Project bk-terrymathmand
+ * @Author Sergio Abelardo Rodríguez Vásquez
+ * @Email ingsergiorodriguezv@gmail.com
+ * @Date 22/04/2022 15:08
+ **/
 @RestController
 @RequestMapping("/cartilla")
 @CrossOrigin(origins = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
@@ -24,7 +30,6 @@ public class CartillaController {
 
     @Autowired
     private CartillaService cartillaService;
-
 
     @ApiOperation(value = "Método encargado de obtener la lista de cartillas")
     @PreAuthorize("hasRole('ADMIN') or hasRole('DOCENTE')")
@@ -62,6 +67,9 @@ public class CartillaController {
         return new ResponseEntity<>(response, status);
     }
 
+    /**
+     * @return
+     */
     @ApiOperation(value = "Método encargado de lista una proyeccion de cartillas para mostrar en el juego")
     @GetMapping("/listarCartillas")
     public ResponseEntity<GeneralResponse<List<ICartillaProyeccion>>> listarCartillas() {

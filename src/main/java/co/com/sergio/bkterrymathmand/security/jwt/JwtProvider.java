@@ -18,6 +18,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @project bk-terry-math-land
+ * @Author Sergio Abelardo Rodríguez Vásquez
+ * @Email ingsergiorodriguezv@gmail.com
+ * @Date 01/07/2022 16:51
+ **/
 @Component
 public class JwtProvider {
 

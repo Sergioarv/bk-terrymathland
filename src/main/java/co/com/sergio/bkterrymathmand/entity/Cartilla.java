@@ -5,10 +5,10 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @project bk-terrymathmand
+ * @Project bk-terrymathmand
  * @Author Sergio Abelardo Rodríguez Vásquez
  * @Email ingsergiorodriguezv@gmail.com
- * @Date 12/06/2022 9:38
+ * @Date 12/06/2022 15:08
  **/
 
 @Entity

@@ -8,6 +8,12 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
+/**
+ * @Project bk-terrymathmand
+ * @Author Sergio Abelardo Rodríguez Vásquez
+ * @Email ingsergiorodriguezv@gmail.com
+ * @Date 12/06/2022 15:08
+ **/
 public interface CartillaService {
 
     List<Cartilla> obtenerCartillas();

@@ -12,8 +12,6 @@ import java.util.Set;
  * @Date 19/05/2022 10:41
  **/
 
-
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Usuario implements Serializable {

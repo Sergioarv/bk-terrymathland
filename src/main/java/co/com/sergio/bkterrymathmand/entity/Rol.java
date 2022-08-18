@@ -5,6 +5,12 @@ import co.com.sergio.bkterrymathmand.security.enums.RolNombre;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+/**
+ * @Project bk-terrymathmand
+ * @Author Sergio Abelardo Rodríguez Vásquez
+ * @Email ingsergiorodriguezv@gmail.com
+ * @Date 10/06/2022 15:08
+ **/
 @Entity
 public class Rol {
 

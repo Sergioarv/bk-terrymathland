@@ -18,9 +18,9 @@ public class UsuarioRolServiceImpl implements UserDetailsService {
     private UsuarioService usuarioService;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String documento) throws UsernameNotFoundException {
         try {
-            Usuario usuario = usuarioService.obtenerUsuarioPorDocumento(username);
+            Usuario usuario = usuarioService.obtenerUsuarioPorDocumento(documento);
             return UsuarioPrincipal.build(usuario);
         }catch (UsernameNotFoundException e){
             throw  new UsernameNotFoundException(e.getMessage());

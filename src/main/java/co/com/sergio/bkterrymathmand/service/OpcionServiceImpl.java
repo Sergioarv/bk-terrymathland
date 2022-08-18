@@ -8,13 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 /**
  * @project bk-terrymathmand
  * @Author Sergio Abelardo Rodríguez Vásquez
  * @Email ingsergiorodriguezv@gmail.com
- * @Date 4/06/2022 11:29
+ * @Date 22/04/2022 9:42
  **/
-
 @Service
 public class OpcionServiceImpl implements OpcionService {
 

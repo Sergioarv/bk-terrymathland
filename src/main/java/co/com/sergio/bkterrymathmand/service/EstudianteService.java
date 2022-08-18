@@ -12,7 +12,7 @@ import java.util.List;
  * @project bk-terrymathmand
  * @Author Sergio Abelardo Rodríguez Vásquez
  * @Email ingsergiorodriguezv@gmail.com
- * @Date 22/04/2022 11:32
+ * @Date 21/04/2022 11:44
  **/
 public interface EstudianteService {
 
